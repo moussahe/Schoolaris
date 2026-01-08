@@ -9,6 +9,7 @@ import { z } from "zod";
 import { GraduationCap, Loader2, Users, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 
 const registerSchema = z.object({
@@ -176,9 +177,8 @@ function RegisterForm() {
 
             <div className="space-y-2">
               <Label htmlFor="password">Mot de passe</Label>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 placeholder="••••••••"
                 className="h-11"
                 {...register("password")}

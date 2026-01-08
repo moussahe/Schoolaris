@@ -11,6 +11,7 @@ import { z } from "zod";
 import { GraduationCap, Loader2, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
 
 const loginSchema = z.object({
@@ -156,9 +157,8 @@ function LoginForm() {
                   Mot de passe oublie ?
                 </Link>
               </div>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 placeholder="••••••••"
                 className="h-11"
                 {...register("password")}
