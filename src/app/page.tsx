@@ -234,13 +234,13 @@ export default function HomePage() {
   const heroInView = useInView(heroRef, { once: true });
 
   return (
-    <div className="flex min-h-screen flex-col bg-white">
+    <div className="flex min-h-screen flex-col bg-background">
       {/* Navigation */}
       <motion.header
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
-        className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur-xl"
+        className="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-xl"
       >
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2">
@@ -261,7 +261,7 @@ export default function HomePage() {
               <Link
                 key={item}
                 href={`/${item.toLowerCase().replace(" ", "-")}`}
-                className="text-sm font-medium text-gray-600 hover:text-emerald-600 transition-colors"
+                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
               >
                 {item}
               </Link>
@@ -305,14 +305,14 @@ export default function HomePage() {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t bg-white"
+            className="md:hidden border-t bg-card"
           >
             <nav className="container mx-auto px-4 py-4 flex flex-col gap-4">
               {["Cours", "Professeurs", "Tarifs", "A propos"].map((item) => (
                 <Link
                   key={item}
                   href={`/${item.toLowerCase().replace(" ", "-")}`}
-                  className="text-sm font-medium text-gray-600 hover:text-emerald-600 py-2"
+                  className="text-sm font-medium text-muted-foreground hover:text-primary py-2"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {item}
@@ -360,7 +360,7 @@ export default function HomePage() {
                 {/* Headline */}
                 <motion.h1
                   variants={fadeInUp}
-                  className="mb-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl"
+                  className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
                 >
                   La reussite scolaire,{" "}
                   <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 bg-clip-text text-transparent">
@@ -371,7 +371,7 @@ export default function HomePage() {
                 {/* Subheadline */}
                 <motion.p
                   variants={fadeInUp}
-                  className="mb-8 text-lg text-gray-600 sm:text-xl max-w-lg"
+                  className="mb-8 text-lg text-muted-foreground sm:text-xl max-w-lg"
                 >
                   Des cours de qualite du CP a la Terminale. Crees par des
                   enseignants. Propulses par l&apos;IA. Un achat, un acces a
@@ -417,7 +417,7 @@ export default function HomePage() {
                 {/* Trust badges */}
                 <motion.div
                   variants={fadeInUp}
-                  className="flex flex-wrap items-center gap-6 text-sm text-gray-600"
+                  className="flex flex-wrap items-center gap-6 text-sm text-muted-foreground"
                 >
                   {[
                     { icon: CheckCircle2, text: "Profs certifies" },
@@ -453,9 +453,9 @@ export default function HomePage() {
                         />
                       ))}
                     </div>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       Rejoint par{" "}
-                      <strong className="text-gray-900">10,000+</strong>{" "}
+                      <strong className="text-foreground">10,000+</strong>{" "}
                       familles
                     </p>
                   </div>
@@ -565,9 +565,9 @@ export default function HomePage() {
 
                 {/* Floating badges */}
                 <FloatingBadge delay={0.5} className="absolute -top-4 -left-4">
-                  <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-xl shadow-amber-500/20">
+                  <div className="flex items-center gap-2 rounded-full bg-card px-4 py-2 shadow-xl shadow-amber-500/20">
                     <Flame className="h-5 w-5 text-orange-500" />
-                    <span className="font-bold text-gray-900">12 jours</span>
+                    <span className="font-bold text-foreground">12 jours</span>
                   </div>
                 </FloatingBadge>
 
@@ -575,9 +575,9 @@ export default function HomePage() {
                   delay={0.7}
                   className="absolute -bottom-4 -right-4"
                 >
-                  <div className="flex items-center gap-2 rounded-full bg-white px-4 py-2 shadow-xl shadow-emerald-500/20">
+                  <div className="flex items-center gap-2 rounded-full bg-card px-4 py-2 shadow-xl shadow-emerald-500/20">
                     <Sparkles className="h-5 w-5 text-emerald-500" />
-                    <span className="font-bold text-gray-900">+250 XP</span>
+                    <span className="font-bold text-foreground">+250 XP</span>
                   </div>
                 </FloatingBadge>
 
@@ -596,7 +596,7 @@ export default function HomePage() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-16 bg-white">
+        <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {[
@@ -616,7 +616,7 @@ export default function HomePage() {
                   <p className="text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                     <AnimatedCounter end={stat.value} suffix={stat.suffix} />
                   </p>
-                  <p className="mt-2 text-gray-600">{stat.label}</p>
+                  <p className="mt-2 text-muted-foreground">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
@@ -624,7 +624,7 @@ export default function HomePage() {
         </section>
 
         {/* Features Section */}
-        <section className="py-24 bg-gradient-to-b from-white to-gray-50">
+        <section className="py-24 bg-gradient-to-b from-background to-muted">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -632,10 +632,10 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Pourquoi choisir Schoolaris?
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Une plateforme pensee pour les eleves, respectueuse des
                 enseignants, et propulsee par l&apos;intelligence artificielle.
               </p>
@@ -662,10 +662,10 @@ export default function HomePage() {
                         >
                           <feature.icon className="h-6 w-6 text-white" />
                         </div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                        <h3 className="text-lg font-semibold text-foreground mb-2">
                           {feature.title}
                         </h3>
-                        <p className="text-gray-600 text-sm">
+                        <p className="text-muted-foreground text-sm">
                           {feature.description}
                         </p>
                       </CardContent>
@@ -678,7 +678,7 @@ export default function HomePage() {
         </section>
 
         {/* How it works */}
-        <section className="py-24 bg-gray-50">
+        <section className="py-24 bg-muted">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -686,10 +686,10 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="text-center mb-16"
             >
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Comment ca marche?
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
                 Trois etapes simples pour accompagner la reussite scolaire de
                 votre enfant.
               </p>
@@ -710,7 +710,7 @@ export default function HomePage() {
                     <div className="hidden md:block absolute top-16 left-1/2 w-full h-0.5 bg-gradient-to-r from-emerald-200 to-teal-200" />
                   )}
 
-                  <div className="relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="relative bg-card rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
                     {/* Number badge */}
                     <div className="absolute -top-4 left-8 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm font-bold px-4 py-1 rounded-full shadow-lg">
                       {step.number}
@@ -720,10 +720,12 @@ export default function HomePage() {
                       <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center mb-6">
                         <step.icon className="h-8 w-8 text-emerald-600" />
                       </div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                      <h3 className="text-xl font-semibold text-foreground mb-3">
                         {step.title}
                       </h3>
-                      <p className="text-gray-600">{step.description}</p>
+                      <p className="text-muted-foreground">
+                        {step.description}
+                      </p>
                     </div>
                   </div>
                 </motion.div>
@@ -733,7 +735,7 @@ export default function HomePage() {
         </section>
 
         {/* Subjects Section */}
-        <section className="py-24 bg-white">
+        <section className="py-24 bg-background">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -742,10 +744,10 @@ export default function HomePage() {
               className="flex flex-col md:flex-row md:items-end md:justify-between mb-12"
             >
               <div>
-                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                <h2 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
                   Parcourir par matiere
                 </h2>
-                <p className="text-lg text-gray-600">
+                <p className="text-lg text-muted-foreground">
                   Trouvez le cours parfait dans la matiere de votre choix.
                 </p>
               </div>
@@ -781,14 +783,14 @@ export default function HomePage() {
                             <subject.icon className="h-7 w-7 text-white" />
                           </div>
                           <div className="flex-1">
-                            <h3 className="font-semibold text-gray-900 group-hover:text-emerald-600 transition-colors">
+                            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
                               {subject.name}
                             </h3>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-muted-foreground">
                               {subject.count} cours disponibles
                             </p>
                           </div>
-                          <ArrowRight className="h-5 w-5 text-gray-400 group-hover:text-emerald-500 group-hover:translate-x-1 transition-all" />
+                          <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                         </CardContent>
                       </Card>
                     </motion.div>
@@ -870,7 +872,7 @@ export default function HomePage() {
         </section>
 
         {/* CTA for Teachers */}
-        <section className="py-24 bg-gray-50">
+        <section className="py-24 bg-muted">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -1008,7 +1010,7 @@ export default function HomePage() {
         </section>
 
         {/* Final CTA */}
-        <section className="py-24 bg-white">
+        <section className="py-24 bg-background">
           <div className="container mx-auto px-4">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -1016,10 +1018,10 @@ export default function HomePage() {
               viewport={{ once: true }}
               className="max-w-3xl mx-auto text-center"
             >
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
                 Pret a commencer?
               </h2>
-              <p className="text-lg text-gray-600 mb-10">
+              <p className="text-lg text-muted-foreground mb-10">
                 Rejoignez des milliers de familles qui font confiance a
                 Schoolaris pour accompagner la reussite scolaire de leurs
                 enfants.
@@ -1054,7 +1056,7 @@ export default function HomePage() {
                   </motion.div>
                 </Link>
               </div>
-              <p className="text-sm text-gray-500 mt-6">
+              <p className="text-sm text-muted-foreground mt-6">
                 Pas de carte bancaire requise. Annulation a tout moment.
               </p>
             </motion.div>
