@@ -34,7 +34,7 @@ export function CourseCatalogHeader() {
   };
 
   return (
-    <header className="bg-white border-b sticky top-0 z-50">
+    <header className="bg-card border-b sticky top-0 z-50">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between gap-4">
           {/* Logo */}
@@ -53,13 +53,13 @@ export function CourseCatalogHeader() {
             className="hidden md:flex flex-1 max-w-xl mx-4"
           >
             <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
               <Input
                 type="search"
                 placeholder="Rechercher un cours, une matiere..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 w-full pl-10 pr-4 bg-gray-50 border-gray-200 focus:bg-white"
+                className="h-10 w-full pl-10 pr-4 bg-muted focus:bg-background"
               />
             </div>
           </form>
@@ -68,13 +68,13 @@ export function CourseCatalogHeader() {
           <nav className="hidden md:flex items-center gap-6">
             <Link
               href="/courses"
-              className="text-sm font-medium text-gray-700 hover:text-emerald-600"
+              className="text-sm font-medium text-foreground hover:text-primary"
             >
               Catalogue
             </Link>
             <Link
               href="/register?role=teacher"
-              className="text-sm font-medium text-gray-700 hover:text-emerald-600"
+              className="text-sm font-medium text-foreground hover:text-primary"
             >
               Devenir professeur
             </Link>
@@ -93,7 +93,7 @@ export function CourseCatalogHeader() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="md:hidden p-2 text-gray-600 hover:text-gray-900"
+            className="md:hidden p-2 text-muted-foreground hover:text-foreground"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? (
@@ -107,13 +107,13 @@ export function CourseCatalogHeader() {
         {/* Search Bar - Mobile */}
         <form onSubmit={handleSearch} className="md:hidden pb-3">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
               placeholder="Rechercher un cours..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 w-full pl-10 pr-4 bg-gray-50 border-gray-200"
+              className="h-10 w-full pl-10 pr-4 bg-muted"
             />
           </div>
         </form>
@@ -121,18 +121,18 @@ export function CourseCatalogHeader() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t bg-white">
+        <div className="md:hidden border-t bg-card">
           <div className="px-4 py-4 space-y-3">
             <Link
               href="/courses"
-              className="block py-2 text-base font-medium text-gray-700"
+              className="block py-2 text-base font-medium text-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
               Catalogue
             </Link>
             <Link
               href="/register?role=teacher"
-              className="block py-2 text-base font-medium text-gray-700"
+              className="block py-2 text-base font-medium text-foreground"
               onClick={() => setMobileMenuOpen(false)}
             >
               Devenir professeur

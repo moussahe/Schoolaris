@@ -62,10 +62,10 @@ export function DashboardHeader({
       {/* Search */}
       <div className="hidden flex-1 md:block md:max-w-md">
         <div className="relative">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             placeholder="Rechercher..."
-            className="pl-10 rounded-xl border-gray-200 bg-gray-50 focus:bg-white"
+            className="pl-10 rounded-xl bg-muted focus:bg-background"
           />
         </div>
       </div>
@@ -77,7 +77,7 @@ export function DashboardHeader({
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5 text-gray-600" />
+          <Bell className="h-5 w-5 text-muted-foreground" />
           <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-medium text-white">
             3
           </span>
@@ -103,7 +103,7 @@ export function DashboardHeader({
             <DropdownMenuLabel>
               <div className="flex flex-col">
                 <span className="font-medium">{session?.user?.name}</span>
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-muted-foreground">
                   {session?.user?.email}
                 </span>
               </div>

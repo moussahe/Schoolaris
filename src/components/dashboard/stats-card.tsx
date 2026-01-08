@@ -24,16 +24,16 @@ export function StatsCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border bg-white p-6 shadow-sm transition-shadow hover:shadow-md",
+        "rounded-2xl border bg-card p-6 shadow-sm transition-shadow hover:shadow-md",
         className,
       )}
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className="mt-2 text-3xl font-bold text-gray-900">{value}</p>
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="mt-2 text-3xl font-bold text-foreground">{value}</p>
           {description && (
-            <p className="mt-1 text-sm text-gray-500">{description}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{description}</p>
           )}
           {trend && (
             <div className="mt-2 flex items-center gap-1">
@@ -46,12 +46,14 @@ export function StatsCard({
                 {trend.isPositive ? "+" : ""}
                 {trend.value}%
               </span>
-              <span className="text-sm text-gray-500">vs mois dernier</span>
+              <span className="text-sm text-muted-foreground">
+                vs mois dernier
+              </span>
             </div>
           )}
         </div>
-        <div className="rounded-xl bg-emerald-50 p-3">
-          <Icon className="h-6 w-6 text-emerald-600" />
+        <div className="rounded-xl bg-emerald-50 dark:bg-emerald-950 p-3">
+          <Icon className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />
         </div>
       </div>
     </div>

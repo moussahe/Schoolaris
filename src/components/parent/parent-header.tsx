@@ -30,11 +30,11 @@ export function ParentHeader({ user }: ParentHeaderProps) {
     <header className="sticky top-0 z-40 hidden h-16 items-center justify-between border-b bg-card px-8 lg:flex">
       {/* Search */}
       <div className="relative w-96">
-        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+        <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
         <Input
           type="search"
           placeholder="Rechercher un cours..."
-          className="pl-10 rounded-xl border-gray-200 bg-gray-50 focus:bg-white"
+          className="pl-10 rounded-xl bg-muted focus:bg-background"
         />
       </div>
 
@@ -45,7 +45,7 @@ export function ParentHeader({ user }: ParentHeaderProps) {
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative rounded-xl">
-          <Bell className="h-5 w-5 text-gray-500" />
+          <Bell className="h-5 w-5 text-muted-foreground" />
           <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-medium text-white">
             3
           </span>
@@ -63,11 +63,11 @@ export function ParentHeader({ user }: ParentHeaderProps) {
                   src={user.image ?? undefined}
                   alt={user.name ?? "User"}
                 />
-                <AvatarFallback className="bg-emerald-100 text-emerald-600">
+                <AvatarFallback className="bg-emerald-100 text-emerald-600 dark:bg-emerald-950 dark:text-emerald-400">
                   {user.name?.charAt(0).toUpperCase() ?? "U"}
                 </AvatarFallback>
               </Avatar>
-              <span className="text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-foreground">
                 {user.name}
               </span>
             </Button>

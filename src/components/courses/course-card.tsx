@@ -70,7 +70,7 @@ export function CourseCard({ course }: CourseCardProps) {
     <Link href={`/courses/${course.slug}`}>
       <Card className="group overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg">
         {/* Image */}
-        <div className="relative aspect-video overflow-hidden bg-gray-100">
+        <div className="relative aspect-video overflow-hidden bg-muted">
           {course.imageUrl ? (
             <Image
               src={course.imageUrl}
@@ -84,7 +84,7 @@ export function CourseCard({ course }: CourseCardProps) {
             </div>
           )}
           <div className="absolute left-3 top-3">
-            <Badge className="bg-white/90 text-gray-800 backdrop-blur-sm">
+            <Badge className="bg-background/90 text-foreground backdrop-blur-sm">
               {gradeLevelLabels[course.gradeLevel] || course.gradeLevel}
             </Badge>
           </div>
@@ -121,7 +121,7 @@ export function CourseCard({ course }: CourseCardProps) {
                 className="rounded-full"
               />
             ) : (
-              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 text-xs font-medium text-emerald-600">
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-950 text-xs font-medium text-emerald-600 dark:text-emerald-400">
                 {course.author.name?.charAt(0) || "P"}
               </div>
             )}
