@@ -380,16 +380,16 @@ function QuickLinks() {
     {
       title: "Parcourir les cours",
       description: "Decouvrez notre catalogue",
-      href: "/courses",
+      href: "/courses" as const,
       icon: BookOpen,
-      color: "emerald",
+      color: "emerald" as const,
     },
     {
       title: "Ajouter un enfant",
       description: "Creez un profil enfant",
-      href: "/parent/children",
+      href: "/parent/children" as const,
       icon: Users,
-      color: "purple",
+      color: "purple" as const,
     },
   ];
 
