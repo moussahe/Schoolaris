@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { ParentSidebar } from "@/components/parent/parent-sidebar";
 import { ParentHeader } from "@/components/parent/parent-header";
 import { ParentMobileNav } from "@/components/parent/parent-mobile-nav";
+import { ParentBottomNav } from "@/components/parent/parent-bottom-nav";
 
 export default async function ParentLayout({
   children,
@@ -20,7 +21,7 @@ export default async function ParentLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Desktop Sidebar */}
       <ParentSidebar user={session.user} />
 
@@ -33,7 +34,10 @@ export default async function ParentLayout({
         <ParentMobileNav user={session.user} />
 
         {/* Page Content */}
-        <main className="p-4 lg:p-8">{children}</main>
+        <main className="p-4 pb-20 lg:p-8 lg:pb-8">{children}</main>
+
+        {/* Mobile Bottom Navigation */}
+        <ParentBottomNav />
       </div>
     </div>
   );

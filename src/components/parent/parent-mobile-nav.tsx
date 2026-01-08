@@ -53,13 +53,13 @@ export function ParentMobileNav({ user }: ParentMobileNavProps) {
   };
 
   return (
-    <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-white px-4 lg:hidden">
+    <div className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card px-4 lg:hidden">
       {/* Logo */}
       <Link href="/parent" className="flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500">
           <GraduationCap className="h-5 w-5 text-white" />
         </div>
-        <span className="text-lg font-bold text-gray-900">Schoolaris</span>
+        <span className="text-lg font-bold text-foreground">Schoolaris</span>
       </Link>
 
       {/* Menu Button */}

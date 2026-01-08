@@ -47,14 +47,14 @@ export function TeacherSidebar({ className }: TeacherSidebarProps) {
   return (
     <aside
       className={cn(
-        "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r bg-white",
+        "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r bg-card",
         className,
       )}
     >
       {/* Logo */}
       <div className="flex h-16 items-center gap-2 border-b px-6">
         <BookOpen className="h-8 w-8 text-emerald-500" />
-        <span className="text-xl font-bold">Schoolaris</span>
+        <span className="text-xl font-bold text-foreground">Schoolaris</span>
       </div>
 
       {/* Navigation */}
@@ -71,14 +71,14 @@ export function TeacherSidebar({ className }: TeacherSidebarProps) {
               className={cn(
                 "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
                 isActive
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
             >
               <item.icon
                 className={cn(
                   "h-5 w-5",
-                  isActive ? "text-emerald-500" : "text-gray-400",
+                  isActive ? "text-primary" : "text-muted-foreground",
                 )}
               />
               {item.name}
@@ -91,10 +91,10 @@ export function TeacherSidebar({ className }: TeacherSidebarProps) {
       <div className="border-t p-4">
         <Button
           variant="ghost"
-          className="w-full justify-start gap-3 text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+          className="w-full justify-start gap-3 text-muted-foreground hover:bg-muted hover:text-foreground"
           onClick={() => signOut({ callbackUrl: "/" })}
         >
-          <LogOut className="h-5 w-5 text-gray-400" />
+          <LogOut className="h-5 w-5 text-muted-foreground" />
           Deconnexion
         </Button>
       </div>

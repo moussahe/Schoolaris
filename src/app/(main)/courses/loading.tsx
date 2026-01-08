@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function CoursesLoading() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Hero skeleton */}
       <div className="bg-gradient-to-br from-emerald-600 to-teal-700 py-16">
         <div className="container mx-auto px-4 text-center">
@@ -24,7 +24,7 @@ export default function CoursesLoading() {
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="rounded-xl bg-white shadow-sm overflow-hidden"
+              className="rounded-xl bg-card shadow-sm overflow-hidden"
             >
               <Skeleton className="h-40 w-full" />
               <div className="p-4">

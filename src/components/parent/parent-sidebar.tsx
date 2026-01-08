@@ -40,13 +40,13 @@ export function ParentSidebar({ user }: ParentSidebarProps) {
   };
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-50 hidden w-72 flex-col border-r bg-white lg:flex">
+    <aside className="fixed inset-y-0 left-0 z-50 hidden w-72 flex-col border-r bg-card lg:flex">
       {/* Logo */}
       <div className="flex h-16 items-center gap-3 border-b px-6">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500">
           <GraduationCap className="h-6 w-6 text-white" />
         </div>
-        <span className="text-xl font-bold text-gray-900">Schoolaris</span>
+        <span className="text-xl font-bold text-foreground">Schoolaris</span>
       </div>
 
       {/* Navigation */}
@@ -60,14 +60,14 @@ export function ParentSidebar({ user }: ParentSidebarProps) {
               className={cn(
                 "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors",
                 active
-                  ? "bg-emerald-50 text-emerald-600"
-                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
             >
               <item.icon
                 className={cn(
                   "h-5 w-5",
-                  active ? "text-emerald-500" : "text-gray-400",
+                  active ? "text-primary" : "text-muted-foreground",
                 )}
               />
               {item.name}
@@ -89,21 +89,23 @@ export function ParentSidebar({ user }: ParentSidebarProps) {
 
       {/* User Profile */}
       <div className="border-t p-4">
-        <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3">
+        <div className="flex items-center gap-3 rounded-xl bg-muted p-3">
           <Avatar className="h-10 w-10">
             <AvatarImage
               src={user.image ?? undefined}
               alt={user.name ?? "User"}
             />
-            <AvatarFallback className="bg-emerald-100 text-emerald-600">
+            <AvatarFallback className="bg-primary/10 text-primary">
               {user.name?.charAt(0).toUpperCase() ?? "U"}
             </AvatarFallback>
           </Avatar>
           <div className="flex-1 truncate">
-            <p className="text-sm font-medium text-gray-900 truncate">
+            <p className="text-sm font-medium text-foreground truncate">
               {user.name}
             </p>
-            <p className="text-xs text-gray-500 truncate">{user.email}</p>
+            <p className="text-xs text-muted-foreground truncate">
+              {user.email}
+            </p>
           </div>
         </div>
       </div>

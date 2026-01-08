@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 interface ParentHeaderProps {
   user: {
@@ -26,7 +27,7 @@ interface ParentHeaderProps {
 
 export function ParentHeader({ user }: ParentHeaderProps) {
   return (
-    <header className="sticky top-0 z-40 hidden h-16 items-center justify-between border-b bg-white px-8 lg:flex">
+    <header className="sticky top-0 z-40 hidden h-16 items-center justify-between border-b bg-card px-8 lg:flex">
       {/* Search */}
       <div className="relative w-96">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
@@ -39,6 +40,9 @@ export function ParentHeader({ user }: ParentHeaderProps) {
 
       {/* Actions */}
       <div className="flex items-center gap-4">
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative rounded-xl">
           <Bell className="h-5 w-5 text-gray-500" />

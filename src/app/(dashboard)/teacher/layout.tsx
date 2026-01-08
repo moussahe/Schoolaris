@@ -19,7 +19,7 @@ export default async function TeacherLayout({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Desktop Sidebar */}
       <TeacherSidebar className="hidden lg:flex" />
 

@@ -31,6 +31,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const navigation = [
   {
@@ -77,7 +78,7 @@ export function TeacherHeader({ user }: TeacherHeaderProps) {
     : "U";
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-white px-4 lg:px-8">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-card px-4 lg:px-8">
       {/* Mobile menu */}
       <div className="flex items-center gap-4 lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
@@ -144,9 +145,12 @@ export function TeacherHeader({ user }: TeacherHeaderProps) {
 
       {/* Right side */}
       <div className="flex items-center gap-4">
+        {/* Theme Toggle */}
+        <ThemeToggle />
+
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5 text-gray-500" />
+          <Bell className="h-5 w-5 text-muted-foreground" />
           <span className="absolute right-1 top-1 h-2 w-2 rounded-full bg-emerald-500" />
           <span className="sr-only">Notifications</span>
         </Button>

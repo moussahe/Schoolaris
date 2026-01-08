@@ -99,13 +99,13 @@ export function CourseCard({ course }: CourseCardProps) {
           </div>
 
           {/* Title */}
-          <h3 className="line-clamp-2 font-semibold text-gray-900 group-hover:text-emerald-600">
+          <h3 className="line-clamp-2 font-semibold text-foreground group-hover:text-primary transition-colors">
             {course.title}
           </h3>
 
           {/* Subtitle */}
           {course.subtitle && (
-            <p className="mt-1 line-clamp-1 text-sm text-gray-500">
+            <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">
               {course.subtitle}
             </p>
           )}
@@ -125,16 +125,16 @@ export function CourseCard({ course }: CourseCardProps) {
                 {course.author.name?.charAt(0) || "P"}
               </div>
             )}
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-muted-foreground">
               {course.author.name || "Professeur"}
             </span>
           </div>
 
           {/* Stats */}
-          <div className="mt-3 flex items-center gap-4 text-sm text-gray-500">
+          <div className="mt-3 flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1">
               <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-              <span className="font-medium text-gray-900">
+              <span className="font-medium text-foreground">
                 {course.averageRating.toFixed(1)}
               </span>
               <span>({course.reviewCount})</span>
@@ -151,10 +151,10 @@ export function CourseCard({ course }: CourseCardProps) {
 
           {/* Price */}
           <div className="mt-4 flex items-center justify-between border-t pt-4">
-            <span className="text-lg font-bold text-emerald-600">
+            <span className="text-lg font-bold text-primary">
               {formatPrice(course.price)}
             </span>
-            <span className="text-xs text-gray-500">
+            <span className="text-xs text-muted-foreground">
               {course.totalLessons} lecons
             </span>
           </div>

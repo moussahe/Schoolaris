@@ -96,9 +96,9 @@ export function CourseCatalogFilters() {
     searchParams.has("tri");
 
   return (
-    <div className="rounded-xl border bg-white p-6">
+    <div className="rounded-xl border bg-card p-6">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="font-semibold text-gray-900">Filtres</h2>
+        <h2 className="font-semibold text-foreground">Filtres</h2>
         {hasFilters && (
           <Button
             variant="ghost"
@@ -115,7 +115,7 @@ export function CourseCatalogFilters() {
       <div className="space-y-6">
         {/* Grade Level */}
         <div className="space-y-2">
-          <Label className="text-sm text-gray-600">Niveau</Label>
+          <Label className="text-sm text-muted-foreground">Niveau</Label>
           <Select
             value={searchParams.get("niveau") || "all"}
             onValueChange={(value) => handleFilterChange("niveau", value)}
@@ -135,7 +135,7 @@ export function CourseCatalogFilters() {
 
         {/* Subject */}
         <div className="space-y-2">
-          <Label className="text-sm text-gray-600">Matiere</Label>
+          <Label className="text-sm text-muted-foreground">Matiere</Label>
           <Select
             value={searchParams.get("matiere") || "all"}
             onValueChange={(value) => handleFilterChange("matiere", value)}
@@ -155,7 +155,7 @@ export function CourseCatalogFilters() {
 
         {/* Price */}
         <div className="space-y-2">
-          <Label className="text-sm text-gray-600">Prix maximum</Label>
+          <Label className="text-sm text-muted-foreground">Prix maximum</Label>
           <Select
             value={searchParams.get("prix") || "all"}
             onValueChange={(value) => handleFilterChange("prix", value)}
@@ -175,7 +175,7 @@ export function CourseCatalogFilters() {
 
         {/* Sort */}
         <div className="space-y-2">
-          <Label className="text-sm text-gray-600">Trier par</Label>
+          <Label className="text-sm text-muted-foreground">Trier par</Label>
           <Select
             value={searchParams.get("tri") || "recent"}
             onValueChange={(value) => handleFilterChange("tri", value)}
