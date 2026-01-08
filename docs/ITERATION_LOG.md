@@ -7,7 +7,7 @@
 | #   | Date       | Focus      | Améliorations                                                    | Tests | Déployé |
 | --- | ---------- | ---------- | ---------------------------------------------------------------- | ----- | ------- |
 | 1   | 2026-01-08 | Foundation | 24 lint fixes, accessibility, img->Image, prefers-reduced-motion | ✅    | ✅      |
-| 2   | -          | -          | -                                                                | ⏳    | ⏳      |
+| 2   | 2026-01-08 | Foundation | Missing routes, password toggle, test accounts                   | ✅    | ✅      |
 | 3   | -          | -          | -                                                                | ⏳    | ⏳      |
 | 4   | -          | -          | -                                                                | ⏳    | ⏳      |
 | 5   | -          | -          | -                                                                | ⏳    | ⏳      |
