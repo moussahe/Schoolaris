@@ -55,44 +55,43 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-[#080b16]">
-      {/* Gradient line at top */}
-      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#E6007A]/50 to-transparent" />
-
+    <footer className="relative border-t border-slate-200 bg-slate-50">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
         {/* Main footer content */}
         <div className="grid gap-8 lg:grid-cols-6">
           {/* Brand column */}
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-2.5">
               <motion.div
                 whileHover={{ scale: 1.05, rotate: 5 }}
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#E6007A] to-[#00F2EA]"
+                className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-600 to-purple-600 shadow-lg shadow-violet-200"
               >
                 <GraduationCap className="h-5 w-5 text-white" />
               </motion.div>
-              <span className="text-xl font-bold text-white">Schoolaris</span>
+              <span className="text-xl font-bold text-slate-900">
+                Schoolaris
+              </span>
             </Link>
 
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-600">
               La marketplace de cours scolaires. Créés par des profs, propulsés
               par l&apos;IA. Du CP à la Terminale.
             </p>
 
             {/* Newsletter */}
             <div className="mt-6">
-              <p className="mb-2 text-sm font-medium text-white">
+              <p className="mb-2 text-sm font-semibold text-slate-900">
                 Restez informé
               </p>
               <div className="flex gap-2">
                 <input
                   type="email"
                   placeholder="Votre email"
-                  className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-slate-500 transition-colors focus:border-[#00F2EA]/50 focus:outline-none focus:ring-1 focus:ring-[#00F2EA]/50"
+                  className="flex-1 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 transition-colors focus:border-violet-400 focus:outline-none focus:ring-2 focus:ring-violet-100"
                 />
                 <Button
                   size="sm"
-                  className="bg-gradient-to-r from-[#E6007A] to-[#00F2EA] hover:shadow-lg hover:shadow-[#E6007A]/20"
+                  className="rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 px-4 shadow-lg shadow-violet-200"
                 >
                   <Mail className="h-4 w-4" />
                 </Button>
@@ -107,7 +106,7 @@ export function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition-all hover:border-violet-200 hover:bg-violet-50 hover:text-violet-600"
                 >
                   <social.icon className="h-4 w-4" />
                   <span className="sr-only">{social.name}</span>
@@ -118,13 +117,13 @@ export function Footer() {
 
           {/* Links columns */}
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Cours</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="mb-4 text-sm font-bold text-slate-900">Cours</h4>
+            <ul className="space-y-2.5 text-sm">
               {footerLinks.cours.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
+                    className="text-slate-600 transition-colors hover:text-violet-600"
                   >
                     {link.name}
                   </Link>
@@ -134,13 +133,13 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Matières</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="mb-4 text-sm font-bold text-slate-900">Matières</h4>
+            <ul className="space-y-2.5 text-sm">
               {footerLinks.matieres.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
+                    className="text-slate-600 transition-colors hover:text-violet-600"
                   >
                     {link.name}
                   </Link>
@@ -150,15 +149,15 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">
+            <h4 className="mb-4 text-sm font-bold text-slate-900">
               Enseignants
             </h4>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2.5 text-sm">
               {footerLinks.enseignants.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
+                    className="text-slate-600 transition-colors hover:text-violet-600"
                   >
                     {link.name}
                   </Link>
@@ -168,13 +167,13 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Légal</h4>
-            <ul className="space-y-2 text-sm">
+            <h4 className="mb-4 text-sm font-bold text-slate-900">Légal</h4>
+            <ul className="space-y-2.5 text-sm">
               {footerLinks.legal.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
+                    className="text-slate-600 transition-colors hover:text-violet-600"
                   >
                     {link.name}
                   </Link>
@@ -185,12 +184,13 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm sm:flex-row">
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 text-sm sm:flex-row">
           <p className="text-slate-500">
             &copy; {new Date().getFullYear()} Schoolaris. Tous droits réservés.
           </p>
-          <p className="text-slate-600">
-            Fait avec ❤️ en France pour l&apos;éducation
+          <p className="text-slate-400">
+            Fait avec <span className="text-rose-500">❤</span> en France pour
+            l&apos;éducation
           </p>
         </div>
       </div>

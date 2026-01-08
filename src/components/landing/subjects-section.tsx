@@ -18,42 +18,54 @@ const subjects = [
     name: "Mathématiques",
     icon: Calculator,
     count: 156,
-    color: "#00F2EA",
+    color: "bg-violet-500",
+    bgLight: "bg-violet-50",
+    textColor: "text-violet-600",
     href: "/courses?subject=mathematiques",
   },
   {
     name: "Français",
     icon: BookOpen,
     count: 124,
-    color: "#E6007A",
+    color: "bg-rose-500",
+    bgLight: "bg-rose-50",
+    textColor: "text-rose-600",
     href: "/courses?subject=francais",
   },
   {
     name: "Anglais",
     icon: Globe,
     count: 98,
-    color: "#D4FF00",
+    color: "bg-teal-500",
+    bgLight: "bg-teal-50",
+    textColor: "text-teal-600",
     href: "/courses?subject=anglais",
   },
   {
     name: "Sciences",
     icon: Microscope,
     count: 87,
-    color: "#00F2EA",
+    color: "bg-emerald-500",
+    bgLight: "bg-emerald-50",
+    textColor: "text-emerald-600",
     href: "/courses?subject=sciences",
   },
   {
     name: "Histoire-Géo",
     icon: History,
     count: 76,
-    color: "#E6007A",
+    color: "bg-amber-500",
+    bgLight: "bg-amber-50",
+    textColor: "text-amber-600",
     href: "/courses?subject=histoire-geo",
   },
   {
     name: "Physique-Chimie",
     icon: FlaskConical,
     count: 65,
-    color: "#D4FF00",
+    color: "bg-blue-500",
+    bgLight: "bg-blue-50",
+    textColor: "text-blue-600",
     href: "/courses?subject=physique-chimie",
   },
 ];
@@ -77,38 +89,27 @@ function SubjectCard({
     >
       <Link href={subject.href} className="group block">
         <motion.div
-          whileHover={{ y: -5, scale: 1.02 }}
-          className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl transition-all duration-300 hover:border-white/20"
+          whileHover={{ y: -6, scale: 1.02 }}
+          className={`relative overflow-hidden rounded-2xl border border-slate-200 ${subject.bgLight} p-5 shadow-sm transition-all duration-300 hover:border-slate-300 hover:shadow-lg`}
         >
-          {/* Background glow */}
-          <div
-            className="absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-10"
-            style={{
-              background: `linear-gradient(135deg, ${subject.color}, transparent)`,
-            }}
-          />
-
           <div className="relative flex items-center gap-4">
             {/* Icon */}
             <div
-              className="flex h-14 w-14 items-center justify-center rounded-xl"
-              style={{
-                background: `linear-gradient(135deg, ${subject.color}, ${subject.color}80)`,
-              }}
+              className={`flex h-14 w-14 items-center justify-center rounded-xl ${subject.color} shadow-lg`}
             >
               <subject.icon className="h-7 w-7 text-white" />
             </div>
 
             {/* Content */}
             <div className="flex-1">
-              <h3 className="font-semibold text-white transition-colors">
-                {subject.name}
-              </h3>
-              <p className="text-sm text-slate-400">{subject.count} cours</p>
+              <h3 className="font-bold text-slate-900">{subject.name}</h3>
+              <p className={`text-sm font-medium ${subject.textColor}`}>
+                {subject.count} cours
+              </p>
             </div>
 
             {/* Arrow */}
-            <ArrowRight className="h-5 w-5 text-slate-500 transition-all duration-300 group-hover:translate-x-1 group-hover:text-white" />
+            <ArrowRight className="h-5 w-5 text-slate-400 transition-all duration-300 group-hover:translate-x-1 group-hover:text-slate-600" />
           </div>
         </motion.div>
       </Link>
@@ -121,10 +122,7 @@ export function SubjectsSection() {
   const isInView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-[#0a0e1f] py-24">
-      {/* Subtle gradient line */}
-      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-
+    <section ref={ref} className="relative bg-white py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <motion.div
@@ -134,20 +132,20 @@ export function SubjectsSection() {
           className="mb-12 flex flex-col items-center justify-between gap-4 md:flex-row"
         >
           <div>
-            <h2 className="text-3xl font-bold text-white sm:text-4xl">
-              Explorez par{" "}
-              <span className="bg-gradient-to-r from-[#00F2EA] to-[#D4FF00] bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+              Explore par{" "}
+              <span className="bg-gradient-to-r from-violet-600 to-teal-500 bg-clip-text text-transparent">
                 matière
               </span>
             </h2>
-            <p className="mt-2 text-slate-400">
+            <p className="mt-2 text-slate-600">
               Trouvez le cours parfait dans votre discipline.
             </p>
           </div>
 
           <Link
             href="/courses"
-            className="group inline-flex items-center gap-2 text-sm font-medium text-[#00F2EA] transition-colors hover:text-white"
+            className="group inline-flex items-center gap-2 rounded-full bg-slate-100 px-5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-violet-100 hover:text-violet-700"
           >
             Voir tous les cours
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

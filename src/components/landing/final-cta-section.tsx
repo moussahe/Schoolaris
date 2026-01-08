@@ -11,10 +11,14 @@ export function FinalCtaSection() {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-[#0D122B] py-24">
-      {/* Background */}
+    <section
+      ref={ref}
+      className="relative overflow-hidden bg-gradient-to-r from-violet-600 via-purple-600 to-violet-600 py-24"
+    >
+      {/* Decorative elements */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[600px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-[#E6007A]/20 to-[#00F2EA]/20 blur-[150px]" />
+        <div className="absolute -left-20 top-1/2 h-64 w-64 -translate-y-1/2 rounded-full bg-white/10 blur-3xl" />
+        <div className="absolute -right-20 top-1/2 h-48 w-48 -translate-y-1/2 rounded-full bg-teal-400/20 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
@@ -27,21 +31,18 @@ export function FinalCtaSection() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={isInView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-xl"
+            className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm"
           >
-            <Sparkles className="h-4 w-4 text-[#D4FF00]" />
+            <Sparkles className="h-4 w-4 text-amber-300" />
             Commencez gratuitement
           </motion.div>
 
           <h2 className="mb-6 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
             Prêt à transformer l&apos;apprentissage de{" "}
-            <span className="bg-gradient-to-r from-[#E6007A] via-[#00F2EA] to-[#D4FF00] bg-clip-text text-transparent">
-              votre enfant
-            </span>{" "}
-            ?
+            <span className="text-teal-300">votre enfant</span> ?
           </h2>
 
-          <p className="mb-10 text-lg text-slate-400">
+          <p className="mb-10 text-lg text-violet-100">
             Rejoignez des milliers de familles qui font confiance à Schoolaris
             pour accompagner la réussite scolaire de leurs enfants.
           </p>
@@ -54,7 +55,7 @@ export function FinalCtaSection() {
           >
             <Button
               size="lg"
-              className="group w-full bg-gradient-to-r from-[#E6007A] to-[#00F2EA] px-8 text-lg font-semibold text-white hover:shadow-lg hover:shadow-[#E6007A]/25 sm:w-auto"
+              className="group w-full rounded-xl bg-white px-8 text-lg font-bold text-violet-600 shadow-xl hover:bg-violet-50 sm:w-auto"
               asChild
             >
               <Link href="/register">
@@ -65,14 +66,14 @@ export function FinalCtaSection() {
             <Button
               size="lg"
               variant="outline"
-              className="w-full border-white/20 px-8 text-lg text-white hover:bg-white/10 sm:w-auto"
+              className="w-full rounded-xl border-2 border-white/30 bg-transparent px-8 text-lg font-semibold text-white hover:bg-white/10 sm:w-auto"
               asChild
             >
               <Link href="/courses">Explorer les cours</Link>
             </Button>
           </motion.div>
 
-          <p className="mt-6 text-sm text-slate-500">
+          <p className="mt-6 text-sm text-violet-200">
             Pas de carte bancaire requise. Accès instantané.
           </p>
         </motion.div>
