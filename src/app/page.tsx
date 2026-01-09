@@ -1,6 +1,7 @@
 import {
   Header,
   Hero,
+  StatsSection,
   Categories,
   FeaturedCourses,
   HowItWorks,
@@ -15,6 +16,7 @@ export default function HomePage() {
       <Header />
       <main>
         <Hero />
+        <StatsSection />
         <Categories />
         <FeaturedCourses />
         <HowItWorks />
