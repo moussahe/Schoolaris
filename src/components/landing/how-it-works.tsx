@@ -1,99 +1,122 @@
 "use client";
 
 import { useRef } from "react";
+import { BookOpenCheck, GraduationCap, Users } from "lucide-react";
 import { motion, useInView } from "framer-motion";
-import { Search, BookOpen, Trophy } from "lucide-react";
 
 const steps = [
   {
-    number: "01",
-    icon: Search,
-    title: "Trouve ton cours",
+    icon: BookOpenCheck,
+    title: "Choisissez votre cours",
     description:
-      "Parcours notre catalogue de 500+ cours créés par des profs certifiés. Filtre par matière, niveau ou objectif.",
-    color: "#FF385C",
+      "Parcourez notre catalogue et trouvez le cours parfait pour vos besoins.",
   },
   {
-    number: "02",
-    icon: BookOpen,
-    title: "Apprends à ton rythme",
+    icon: Users,
+    title: "Apprenez a votre rythme",
     description:
-      "Accède aux vidéos, exercices et ressources 24h/24. Notre tuteur IA t'accompagne et répond à tes questions.",
-    color: "#A435F0",
+      "Progressez selon votre emploi du temps avec nos tuteurs experts.",
   },
   {
-    number: "03",
-    icon: Trophy,
-    title: "Réussis tes examens",
+    icon: GraduationCap,
+    title: "Reussissez vos examens",
     description:
-      "Suis ta progression, gagne des badges et atteins tes objectifs. 95% de nos étudiants améliorent leurs notes.",
-    color: "#00A699",
+      "Atteignez vos objectifs academiques et excellez dans vos examens.",
   },
 ];
 
+const containerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.3,
+    },
+  },
+} as const;
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 50 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut" as const,
+    },
+  },
+};
+
 export function HowItWorks() {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+  const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <section ref={ref} className="bg-white py-20">
-      <div className="mx-auto max-w-[1760px] px-6 lg:px-10">
+    <section ref={ref} className="bg-[#FDFDFD] py-20 sm:py-28">
+      <div className="container mx-auto max-w-6xl px-4">
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-16 text-center"
-        >
-          <h2 className="mb-3 text-[32px] font-bold text-[#222222]">
-            Comment ça marche ?
-          </h2>
-          <p className="text-lg text-[#717171]">
-            En 3 étapes simples, commence à progresser
-          </p>
-        </motion.div>
+        <div className="mb-16 text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5 }}
+            className="font-serif text-4xl font-bold text-[#0B2A4C] sm:text-5xl"
+          >
+            Comment ca marche?
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-4 text-lg text-[#6B7280]"
+          >
+            Trois etapes simples pour transformer votre avenir academique.
+          </motion.p>
+        </div>
 
         {/* Steps */}
-        <div className="grid gap-8 md:grid-cols-3 lg:gap-12">
-          {steps.map((step, index) => (
-            <motion.div
-              key={step.title}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              className="relative text-center"
-            >
-              {/* Connector line */}
-              {index < steps.length - 1 && (
-                <div className="absolute left-[calc(50%+60px)] top-10 hidden h-0.5 w-[calc(100%-120px)] bg-[#DDDDDD] md:block" />
-              )}
+        <div className="relative">
+          {/* Connecting Line */}
+          <div
+            className="absolute left-1/2 top-1/2 hidden h-1 w-2/3 -translate-x-1/2 -translate-y-1/2 border-t-2 border-dashed border-gray-300 lg:block"
+            aria-hidden="true"
+          />
 
-              {/* Number badge */}
-              <div
-                className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full"
-                style={{ backgroundColor: `${step.color}15` }}
+          <motion.div
+            className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8"
+            variants={containerVariants}
+            initial="hidden"
+            animate={isInView ? "visible" : "hidden"}
+          >
+            {steps.map((step, index) => (
+              <motion.div
+                key={step.title}
+                className="relative z-10 flex flex-col items-center text-center"
+                variants={itemVariants}
               >
-                <step.icon
-                  className="h-10 w-10"
-                  style={{ color: step.color }}
-                />
-              </div>
+                {/* Icon Circle */}
+                <div className="relative mb-6">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-[0px_4px_15px_rgba(0,0,0,0.05)]">
+                    <step.icon
+                      className="h-12 w-12 text-[#0B2A4C]"
+                      strokeWidth={1.5}
+                    />
+                  </div>
+                  {/* Number Badge */}
+                  <span className="absolute -right-2 -top-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#E8A336] font-bold text-white">
+                    0{index + 1}
+                  </span>
+                </div>
 
-              {/* Step number */}
-              <div
-                className="mb-4 inline-block rounded-full px-4 py-1 text-sm font-bold"
-                style={{ backgroundColor: step.color, color: "white" }}
-              >
-                Étape {step.number}
-              </div>
-
-              {/* Content */}
-              <h3 className="mb-3 text-xl font-semibold text-[#222222]">
-                {step.title}
-              </h3>
-              <p className="text-[#717171]">{step.description}</p>
-            </motion.div>
-          ))}
+                {/* Text */}
+                <h3 className="mb-3 text-2xl font-semibold text-[#0B2A4C]">
+                  {step.title}
+                </h3>
+                <p className="max-w-xs text-base text-[#1A1A1A]/80">
+                  {step.description}
+                </p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </div>
     </section>

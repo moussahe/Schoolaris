@@ -1,252 +1,199 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
-import { Star, Users, Clock, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { Star } from "lucide-react";
 
-const courses = [
+type CourseLevel = "Primaire" | "College" | "Lycee";
+
+interface Course {
+  id: number;
+  title: string;
+  teacher: {
+    name: string;
+    avatarInitial: string;
+  };
+  rating: number;
+  reviews: number;
+  price: number | "Gratuit";
+  level: CourseLevel;
+  subject: string;
+  subjectColor: string;
+  thumbnailGradient: string;
+}
+
+const sampleCourses: Course[] = [
   {
     id: 1,
-    title: "Mathématiques Terminale - Préparation Bac",
-    teacher: "Marie Dupont",
-    teacherTitle: "Agrégée de mathématiques",
+    title: "Mathematiques - Terminale S",
+    teacher: { name: "Marie Dupont", avatarInitial: "M" },
     rating: 4.9,
-    reviews: 342,
-    students: 1250,
-    duration: "24h",
+    reviews: 124,
     price: 49,
-    originalPrice: 79,
-    image: "/courses/math.jpg",
-    category: "Mathématiques",
-    categoryColor: "#FF385C",
-    level: "Terminale",
-    bestseller: true,
+    level: "Lycee",
+    subject: "Maths",
+    subjectColor: "bg-blue-100 text-blue-800",
+    thumbnailGradient: "from-blue-400 to-indigo-500",
   },
   {
     id: 2,
-    title: "Français Bac - Dissertation et Commentaire",
-    teacher: "Jean Martin",
-    teacherTitle: "Professeur certifié",
+    title: "Francais - Brevet des Colleges",
+    teacher: { name: "Jean Martin", avatarInitial: "J" },
     rating: 4.8,
-    reviews: 215,
-    students: 890,
-    duration: "18h",
+    reviews: 98,
     price: 39,
-    originalPrice: 59,
-    image: "/courses/french.jpg",
-    category: "Français",
-    categoryColor: "#A435F0",
-    level: "Terminale",
-    bestseller: false,
+    level: "College",
+    subject: "Francais",
+    subjectColor: "bg-red-100 text-red-800",
+    thumbnailGradient: "from-red-400 to-orange-500",
   },
   {
     id: 3,
-    title: "Physique-Chimie Première - Les Fondamentaux",
-    teacher: "Sophie Bernard",
-    teacherTitle: "Docteure en physique",
+    title: "Anglais Conversationnel",
+    teacher: { name: "Sophie Bernard", avatarInitial: "S" },
     rating: 4.7,
-    reviews: 189,
-    students: 720,
-    duration: "20h",
-    price: 0,
-    originalPrice: 0,
-    image: "/courses/physics.jpg",
-    category: "Physique-Chimie",
-    categoryColor: "#1E88E5",
-    level: "Première",
-    bestseller: false,
+    reviews: 215,
+    price: "Gratuit",
+    level: "Lycee",
+    subject: "Anglais",
+    subjectColor: "bg-green-100 text-green-800",
+    thumbnailGradient: "from-green-400 to-teal-500",
   },
   {
     id: 4,
-    title: "Anglais B2 - Préparation aux certifications",
-    teacher: "Emma Wilson",
-    teacherTitle: "Native speaker, CELTA",
+    title: "SVT - Classe de Seconde",
+    teacher: { name: "Pierre Leroy", avatarInitial: "P" },
     rating: 4.9,
-    reviews: 456,
-    students: 2100,
-    duration: "30h",
-    price: 59,
-    originalPrice: 99,
-    image: "/courses/english.jpg",
-    category: "Anglais",
-    categoryColor: "#00A699",
-    level: "Lycée",
-    bestseller: true,
+    reviews: 76,
+    price: 35,
+    level: "Lycee",
+    subject: "SVT",
+    subjectColor: "bg-purple-100 text-purple-800",
+    thumbnailGradient: "from-purple-400 to-pink-500",
   },
 ];
 
-function CourseCard({
-  course,
-  index,
-}: {
-  course: (typeof courses)[0];
-  index: number;
-}) {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
+function LevelBadge({ level }: { level: CourseLevel }) {
+  const levelStyles: Record<CourseLevel, string> = {
+    Primaire: "bg-yellow-100 text-yellow-800",
+    College: "bg-orange-100 text-orange-800",
+    Lycee: "bg-rose-100 text-rose-800",
+  };
+  return (
+    <span
+      className={`absolute left-3 top-3 rounded-full px-2 py-1 text-xs font-semibold ${levelStyles[level]}`}
+    >
+      {level}
+    </span>
+  );
+}
 
+function SubjectBadge({ subject, color }: { subject: string; color: string }) {
+  return (
+    <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${color}`}>
+      {subject}
+    </span>
+  );
+}
+
+function TeacherAvatar({ initial }: { initial: string }) {
+  return (
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0B2A4C] text-sm font-bold text-white">
+      {initial}
+    </div>
+  );
+}
+
+function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
+  return (
+    <div className="flex items-center gap-1.5">
+      <div className="flex items-center">
+        {[...Array(5)].map((_, i) => (
+          <Star
+            key={i}
+            className={`h-4 w-4 ${
+              i < Math.round(rating)
+                ? "fill-[#E8A336] text-[#E8A336]"
+                : "text-gray-300"
+            }`}
+          />
+        ))}
+      </div>
+      <span className="text-sm text-[#6B7280]">
+        {rating.toFixed(1)} ({reviews} avis)
+      </span>
+    </div>
+  );
+}
+
+function CourseCard({ course }: { course: Course }) {
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 20 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
+      whileHover={{ y: -4, boxShadow: "0px 10px 25px rgba(0,0,0,0.1)" }}
+      transition={{ duration: 0.2, ease: "easeInOut" }}
+      className="flex cursor-pointer flex-col overflow-hidden rounded-xl bg-[#FDFDFD] shadow-[0px_4px_15px_rgba(0,0,0,0.05)]"
     >
-      <Link href={`/courses/${course.id}`} className="group block">
-        <div className="overflow-hidden rounded-2xl border border-[#DDDDDD] bg-white transition-all duration-300 hover:shadow-xl">
-          {/* Image */}
-          <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-[#F7F7F7] to-[#EBEBEB]">
-            {/* Placeholder gradient */}
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{
-                background: `linear-gradient(135deg, ${course.categoryColor}, transparent)`,
-              }}
-            />
-            {/* Category badge */}
-            <div
-              className="absolute left-3 top-3 rounded-full px-3 py-1 text-xs font-semibold text-white"
-              style={{ backgroundColor: course.categoryColor }}
-            >
-              {course.category}
-            </div>
-            {/* Bestseller badge */}
-            {course.bestseller && (
-              <div className="absolute left-3 top-12 rounded-full bg-[#ECEB98] px-3 py-1 text-xs font-semibold text-[#3D3C0A]">
-                Bestseller
-              </div>
-            )}
-            {/* Level */}
-            <div className="absolute bottom-3 right-3 rounded-full bg-white/90 px-3 py-1 text-xs font-medium text-[#222222] backdrop-blur">
-              {course.level}
-            </div>
-          </div>
+      <div className="relative h-40">
+        <div
+          className={`h-full w-full bg-gradient-to-br ${course.thumbnailGradient}`}
+        />
+        <LevelBadge level={course.level} />
+      </div>
+      <div className="flex flex-grow flex-col p-4">
+        <div className="mb-2 flex items-start justify-between">
+          <h3 className="pr-2 text-lg font-bold leading-tight text-[#1A1A1A]">
+            {course.title}
+          </h3>
+          <SubjectBadge subject={course.subject} color={course.subjectColor} />
+        </div>
 
-          {/* Content */}
-          <div className="p-4">
-            {/* Title */}
-            <h3 className="mb-2 line-clamp-2 font-semibold text-[#222222] transition-colors group-hover:text-[#FF385C]">
-              {course.title}
-            </h3>
+        <div className="my-2 flex items-center gap-2">
+          <TeacherAvatar initial={course.teacher.avatarInitial} />
+          <span className="text-sm font-medium text-[#6B7280]">
+            {course.teacher.name}
+          </span>
+        </div>
 
-            {/* Teacher */}
-            <p className="mb-3 text-sm text-[#717171]">
-              {course.teacher} • {course.teacherTitle}
-            </p>
-
-            {/* Rating */}
-            <div className="mb-3 flex items-center gap-2">
-              <span className="font-bold text-[#B4690E]">{course.rating}</span>
-              <div className="flex">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <Star
-                    key={i}
-                    className={`h-4 w-4 ${
-                      i <= Math.floor(course.rating)
-                        ? "fill-[#E59819] text-[#E59819]"
-                        : "fill-[#D1D7DC] text-[#D1D7DC]"
-                    }`}
-                  />
-                ))}
-              </div>
-              <span className="text-sm text-[#717171]">
-                ({course.reviews} avis)
-              </span>
-            </div>
-
-            {/* Meta */}
-            <div className="mb-4 flex items-center gap-4 text-sm text-[#717171]">
-              <span className="flex items-center gap-1">
-                <Users className="h-4 w-4" />
-                {course.students.toLocaleString()}
-              </span>
-              <span className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                {course.duration}
-              </span>
-            </div>
-
-            {/* Price */}
-            <div className="flex items-center gap-2">
-              {course.price === 0 ? (
-                <span className="rounded bg-[#008A05]/10 px-2 py-1 text-sm font-bold text-[#008A05]">
-                  Gratuit
-                </span>
-              ) : (
-                <>
-                  <span className="text-lg font-bold text-[#222222]">
-                    {course.price} €
-                  </span>
-                  {course.originalPrice > course.price && (
-                    <span className="text-sm text-[#717171] line-through">
-                      {course.originalPrice} €
-                    </span>
-                  )}
-                </>
-              )}
-            </div>
+        <div className="mt-auto pt-3">
+          <StarRating rating={course.rating} reviews={course.reviews} />
+          <div className="mt-3 text-right">
+            <span className="text-2xl font-extrabold text-[#0B2A4C]">
+              {typeof course.price === "number"
+                ? `${course.price} €`
+                : course.price}
+            </span>
           </div>
         </div>
-      </Link>
+      </div>
     </motion.div>
   );
 }
 
 export function FeaturedCourses() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.1 });
-
   return (
-    <section ref={ref} className="bg-[#F7F7F7] py-20">
-      <div className="mx-auto max-w-[1760px] px-6 lg:px-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-12 flex items-end justify-between"
-        >
-          <div>
-            <h2 className="mb-3 text-[32px] font-bold text-[#222222]">
-              Cours populaires
-            </h2>
-            <p className="text-lg text-[#717171]">
-              Les cours les mieux notés par nos étudiants
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            className="hidden rounded-full border-[#222222] px-6 font-semibold text-[#222222] hover:bg-[#222222] hover:text-white md:flex"
-            asChild
-          >
-            <Link href="/courses">
-              Voir tous les cours
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
-        </motion.div>
-
-        {/* Courses grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {courses.map((course, index) => (
-            <CourseCard key={course.id} course={course} index={index} />
+    <section className="bg-[#F4F5F7] py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-center">
+          <h2 className="text-3xl font-extrabold text-[#0B2A4C] sm:text-4xl">
+            Cours Populaires
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-[#6B7280]">
+            Decouvrez les cours les mieux notes et les plus apprecies par notre
+            communaute d&apos;eleves.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {sampleCourses.map((course) => (
+            <CourseCard key={course.id} course={course} />
           ))}
         </div>
-
-        {/* Mobile CTA */}
-        <div className="mt-10 text-center md:hidden">
-          <Button
-            variant="outline"
-            className="rounded-full border-[#222222] px-6 font-semibold text-[#222222]"
-            asChild
+        <div className="mt-16 text-center">
+          <Link
+            href="/courses"
+            className="inline-block rounded-xl bg-[#0B2A4C] px-8 py-3 font-semibold text-white transition-colors duration-300 hover:bg-[#E8A336]"
           >
-            <Link href="/courses">
-              Voir tous les cours
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Link>
-          </Button>
+            Voir tous les cours
+          </Link>
         </div>
       </div>
     </section>

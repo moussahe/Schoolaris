@@ -1,159 +1,88 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
-import {
-  ArrowRight,
-  CheckCircle,
-  TrendingUp,
-  DollarSign,
-  Users,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import { CheckCircle } from "lucide-react";
 
 const benefits = [
-  "Publication gratuite et illimitée",
-  "Outils de création puissants",
-  "Analytics détaillés en temps réel",
-  "Paiements instantanés via Stripe",
-  "Support dédié aux créateurs",
-];
-
-const stats = [
-  { icon: DollarSign, value: "2 450 €", label: "Revenu moyen/mois" },
-  { icon: Users, value: "234", label: "Élèves par prof" },
-  { icon: TrendingUp, value: "+23%", label: "Croissance mensuelle" },
+  "Publication gratuite",
+  "Outils de creation intuitifs",
+  "Analytics detaillees",
+  "Paiements rapides et securises",
+  "Support dedie",
 ];
 
 export function TeacherCta() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
-
   return (
-    <section ref={ref} className="bg-white py-20">
-      <div className="mx-auto max-w-[1760px] px-6 lg:px-10">
-        <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#222222] to-[#3D3D3D]">
-          <div className="grid items-center gap-12 lg:grid-cols-2">
-            {/* Left content */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6 }}
-              className="p-8 lg:p-12"
-            >
-              {/* Badge */}
-              <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2">
-                <span className="text-sm font-medium text-white">
-                  Pour les enseignants
-                </span>
-              </div>
+    <section className="mx-4 my-16 max-w-6xl rounded-xl bg-[#0B2A4C] p-8 text-white md:mx-auto md:p-12 lg:p-16">
+      <div className="flex flex-col items-center justify-between gap-10 lg:flex-row">
+        {/* Left Section - Text Content */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6 }}
+          className="space-y-6 text-center lg:w-1/2 lg:text-left"
+        >
+          <h2 className="font-serif text-4xl font-extrabold leading-tight md:text-5xl">
+            Gardez <span className="text-[#E8A336]">85%</span> de vos ventes
+          </h2>
+          <p className="text-lg opacity-90 md:text-xl">
+            Maximisez vos revenus en partageant votre expertise. Notre
+            plateforme vous offre une flexibilite totale et une remuneration
+            competitive.
+          </p>
 
-              {/* Headline */}
-              <h2 className="mb-6 text-3xl font-bold text-white lg:text-4xl">
-                Gardez <span className="text-[#FF385C]">85%</span> de vos ventes
-              </h2>
-
-              {/* Description */}
-              <p className="mb-8 text-lg text-white/80">
-                Créez vos cours, fixez vos prix, touchez 85% de chaque vente.
-                Nous nous occupons de la technique, vous vous concentrez sur
-                l&apos;enseignement.
-              </p>
-
-              {/* Benefits */}
-              <ul className="mb-8 space-y-3">
-                {benefits.map((benefit, index) => (
-                  <motion.li
-                    key={benefit}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={isInView ? { opacity: 1, x: 0 } : {}}
-                    transition={{ duration: 0.3, delay: 0.3 + index * 0.1 }}
-                    className="flex items-center gap-3 text-white"
-                  >
-                    <CheckCircle className="h-5 w-5 text-[#FF385C]" />
-                    {benefit}
-                  </motion.li>
-                ))}
-              </ul>
-
-              {/* CTA */}
-              <Button
-                size="lg"
-                className="group rounded-full bg-[#FF385C] px-8 font-semibold text-white hover:bg-[#E31C5F]"
-                asChild
+          {/* Benefits List */}
+          <ul className="mt-6 space-y-3 text-lg md:text-xl">
+            {benefits.map((benefit) => (
+              <li
+                key={benefit}
+                className="flex items-center justify-center gap-3 lg:justify-start"
               >
-                <Link href="/register/teacher">
-                  Devenir créateur
-                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
-                </Link>
-              </Button>
-            </motion.div>
+                <CheckCircle className="h-6 w-6 text-[#E8A336]" />
+                <span>{benefit}</span>
+              </li>
+            ))}
+          </ul>
 
-            {/* Right - Stats card */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={isInView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="hidden p-8 lg:block lg:p-12"
+          {/* CTA Button */}
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="mt-8"
+          >
+            <Link
+              href="/register/teacher"
+              className="inline-block rounded-lg bg-[#E8A336] px-8 py-4 text-lg font-bold text-[#0B2A4C] transition-colors duration-300 hover:bg-yellow-400"
             >
-              <div className="rounded-2xl bg-white p-8 shadow-2xl">
-                {/* Header */}
-                <div className="mb-6 border-b border-[#DDDDDD] pb-6">
-                  <p className="text-sm text-[#717171]">
-                    Vos revenus potentiels
-                  </p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-bold text-[#222222]">
-                      2 450
-                    </span>
-                    <span className="text-xl text-[#717171]">€/mois</span>
-                  </div>
-                  <div className="mt-2 inline-flex items-center gap-1 text-sm font-medium text-[#008A05]">
-                    <TrendingUp className="h-4 w-4" />
-                    +23% ce mois
-                  </div>
-                </div>
+              Devenir enseignant
+            </Link>
+          </motion.div>
+        </motion.div>
 
-                {/* Stats */}
-                <div className="space-y-4">
-                  {stats.map((stat) => (
-                    <div
-                      key={stat.label}
-                      className="flex items-center justify-between rounded-xl bg-[#F7F7F7] p-4"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FF385C]/10">
-                          <stat.icon className="h-5 w-5 text-[#FF385C]" />
-                        </div>
-                        <span className="text-[#717171]">{stat.label}</span>
-                      </div>
-                      <span className="font-bold text-[#222222]">
-                        {stat.value}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Commission breakdown */}
-                <div className="mt-6 rounded-xl bg-[#F7F7F7] p-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#717171]">Vos gains</span>
-                    <span className="text-xl font-bold text-[#008A05]">
-                      85%
-                    </span>
-                  </div>
-                  <div className="mt-2 flex items-center justify-between">
-                    <span className="text-sm text-[#717171]">
-                      Commission plateforme
-                    </span>
-                    <span className="text-sm text-[#717171]">15%</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
+        {/* Right Section - Stats Card */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex items-center justify-center p-6 lg:w-1/2"
+        >
+          <div className="w-full max-w-sm rounded-xl bg-white p-8 text-center text-[#0B2A4C] shadow-2xl">
+            <p className="text-sm font-semibold uppercase text-[#6B7280]">
+              Revenus moyens par mois
+            </p>
+            <p className="mt-2 text-6xl font-extrabold text-[#E8A336]">2450€</p>
+            <p className="mt-4 text-lg font-medium">
+              en partageant vos cours avec{" "}
+              <span className="font-bold">Schoolaris</span>.
+            </p>
+            <p className="mt-2 text-sm text-[#6B7280]">
+              Base sur les donnees de nos enseignants performants.
+            </p>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,145 +1,113 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
-const testimonials = [
+interface Testimonial {
+  quote: string;
+  name: string;
+  role: string;
+  avatarInitial: string;
+}
+
+const testimonials: Testimonial[] = [
   {
-    id: 1,
-    content:
-      "Mon fils a gagné 4 points de moyenne en maths grâce à Schoolaris. Les cours sont clairs, structurés, et le tuteur IA est vraiment impressionnant. Il répond à toutes ses questions !",
-    author: "Sophie Martin",
-    role: "Maman de Lucas, 3ème",
-    avatar: "S",
-    rating: 5,
-    date: "Décembre 2024",
-    highlight: "+4 points de moyenne",
+    quote: "Mon fils a gagne 4 points en maths grace a Schoolaris",
+    name: "Sophie Martin",
+    role: "Maman de Lucas (3eme)",
+    avatarInitial: "SM",
   },
   {
-    id: 2,
-    content:
-      "Enfin une plateforme qui respecte le travail des enseignants ! Je garde 85% de mes ventes, les outils sont intuitifs, et je touche des élèves dans toute la France. Un vrai game-changer.",
-    author: "Marie Dupont",
-    role: "Professeure de français, Paris",
-    avatar: "M",
-    rating: 5,
-    date: "Novembre 2024",
-    highlight: "85% des revenus",
+    quote:
+      "Je garde 85% de mes ventes, c'est bien plus que les autres plateformes",
+    name: "Marie Dupont",
+    role: "Professeure de Maths",
+    avatarInitial: "MD",
   },
   {
-    id: 3,
-    content:
-      "L'IA m'aide à comprendre sans me donner les réponses directement. C'est comme avoir un prof particulier disponible 24h/24. J'ai eu 18 au bac de philo !",
-    author: "Emma Petit",
-    role: "Étudiante, Terminale",
-    avatar: "E",
-    rating: 5,
-    date: "Octobre 2024",
-    highlight: "18/20 au bac",
+    quote: "Les cours sont clairs et le tuteur IA m'aide beaucoup",
+    name: "Emma Petit",
+    role: "Terminale S",
+    avatarInitial: "EP",
   },
 ];
 
-export function Testimonials() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
-
+function TestimonialCard({ quote, name, role, avatarInitial }: Testimonial) {
   return (
-    <section ref={ref} className="bg-[#F7F7F7] py-20">
-      <div className="mx-auto max-w-[1760px] px-6 lg:px-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-12 text-center"
-        >
-          <h2 className="mb-3 text-[32px] font-bold text-[#222222]">
-            Ce qu&apos;ils disent de nous
-          </h2>
-          <p className="text-lg text-[#717171]">
-            Plus de 10 000 familles nous font confiance
-          </p>
-        </motion.div>
+    <motion.div
+      className="relative flex flex-col items-start space-y-4 rounded-xl bg-white p-6 shadow-[0px_4px_15px_rgba(0,0,0,0.05)]"
+      whileHover={{ y: -5 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      {/* Quote Icon */}
+      <div className="absolute right-4 top-4 text-[#E8A336]">
+        <Quote size={24} />
+      </div>
 
-        {/* Testimonials grid - Airbnb style */}
-        <div className="grid gap-6 md:grid-cols-3">
-          {testimonials.map((testimonial, index) => (
-            <motion.div
-              key={testimonial.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              className="group"
-            >
-              <div className="h-full rounded-3xl bg-white p-8 shadow-sm transition-shadow duration-300 hover:shadow-lg">
-                {/* Quote icon */}
-                <Quote className="mb-4 h-8 w-8 text-[#FF385C]/20" />
+      {/* Star Rating */}
+      <div className="flex">
+        {[...Array(5)].map((_, i) => (
+          <Star key={i} size={18} className="fill-[#E8A336] text-[#E8A336]" />
+        ))}
+      </div>
 
-                {/* Highlight badge */}
-                <div className="mb-4 inline-block rounded-full bg-[#FF385C]/10 px-3 py-1 text-sm font-semibold text-[#FF385C]">
-                  {testimonial.highlight}
-                </div>
+      {/* Quote */}
+      <p className="text-lg font-medium text-[#1A1A1A]">
+        &ldquo;{quote}&rdquo;
+      </p>
 
-                {/* Rating */}
-                <div className="mb-4 flex gap-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <Star
-                      key={i}
-                      className="h-5 w-5 fill-[#222222] text-[#222222]"
-                    />
-                  ))}
-                </div>
+      {/* Author */}
+      <div className="flex items-center space-x-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#0B2A4C] text-sm font-bold text-white">
+          {avatarInitial}
+        </div>
+        <div>
+          <p className="font-semibold text-[#1A1A1A]">{name}</p>
+          <p className="text-sm text-[#6B7280]">{role}</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
 
-                {/* Content */}
-                <p className="mb-6 text-[#222222]">
-                  &ldquo;{testimonial.content}&rdquo;
-                </p>
+export function Testimonials() {
+  return (
+    <section className="bg-[#F4F5F7] py-16">
+      <div className="mx-auto max-w-6xl px-4 text-center sm:px-6 lg:px-8">
+        {/* Section Header */}
+        <h2 className="mb-4 font-serif text-4xl font-extrabold text-[#0B2A4C]">
+          Ce que nos utilisateurs disent
+        </h2>
+        <p className="mb-12 text-xl text-[#6B7280]">
+          Des parents, des professeurs et des eleves temoignent de notre impact.
+        </p>
 
-                {/* Author */}
-                <div className="flex items-center gap-4">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#222222] text-lg font-semibold text-white">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-[#222222]">
-                      {testimonial.author}
-                    </p>
-                    <p className="text-sm text-[#717171]">{testimonial.role}</p>
-                  </div>
-                </div>
-
-                {/* Date */}
-                <p className="mt-4 text-sm text-[#717171]">
-                  {testimonial.date}
-                </p>
-              </div>
-            </motion.div>
+        {/* Testimonial Cards */}
+        <div className="mb-16 grid gap-8 md:grid-cols-3">
+          {testimonials.map((testimonial) => (
+            <TestimonialCard key={testimonial.name} {...testimonial} />
           ))}
         </div>
 
-        {/* Trust indicators */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-12 flex flex-wrap items-center justify-center gap-8 text-center"
-        >
-          <div>
-            <p className="text-3xl font-bold text-[#222222]">4.9/5</p>
-            <p className="text-sm text-[#717171]">Note moyenne</p>
+        {/* Trust Indicators */}
+        <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-12 sm:space-y-0">
+          <div className="flex items-center space-x-2">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                size={24}
+                className="fill-[#E8A336] text-[#E8A336]"
+              />
+            ))}
+            <span className="text-xl font-bold text-[#1A1A1A]">4.9/5</span>
           </div>
-          <div className="h-12 w-px bg-[#DDDDDD]" />
-          <div>
-            <p className="text-3xl font-bold text-[#222222]">2 000+</p>
-            <p className="text-sm text-[#717171]">Avis vérifiés</p>
-          </div>
-          <div className="h-12 w-px bg-[#DDDDDD]" />
-          <div>
-            <p className="text-3xl font-bold text-[#222222]">95%</p>
-            <p className="text-sm text-[#717171]">Recommandent</p>
-          </div>
-        </motion.div>
+          <p className="text-xl text-[#1A1A1A]">
+            <span className="font-bold text-[#0B2A4C]">2000+</span> avis
+          </p>
+          <p className="text-xl text-[#1A1A1A]">
+            <span className="font-bold text-[#0B2A4C]">95%</span> recommandent
+          </p>
+        </div>
       </div>
     </section>
   );

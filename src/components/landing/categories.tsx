@@ -1,154 +1,191 @@
 "use client";
 
-import { useRef } from "react";
 import Link from "next/link";
-import { motion, useInView } from "framer-motion";
+import { motion } from "framer-motion";
 import {
+  ArrowRight,
+  BookText,
+  BrainCircuit,
   Calculator,
-  BookOpen,
-  Globe,
-  Microscope,
   FlaskConical,
+  Globe,
   Landmark,
-  Palette,
-  Music,
+  Languages,
+  Leaf,
+  type LucideIcon,
 } from "lucide-react";
 
-const categories = [
+interface Subject {
+  name: string;
+  slug: string;
+  Icon: LucideIcon;
+  courseCount: number;
+  color: string;
+  gridSpan?: number;
+}
+
+const subjects: Subject[] = [
   {
-    name: "Mathématiques",
-    icon: Calculator,
-    count: 156,
-    color: "#FF385C",
-    bg: "#FFF8F6",
-    href: "/courses?subject=mathematiques",
+    name: "Mathematiques",
+    slug: "mathematiques",
+    Icon: Calculator,
+    courseCount: 42,
+    color: "#3B82F6",
+    gridSpan: 2,
   },
   {
-    name: "Français",
-    icon: BookOpen,
-    count: 124,
-    color: "#A435F0",
-    bg: "#F8F5FF",
-    href: "/courses?subject=francais",
+    name: "Francais",
+    slug: "francais",
+    Icon: BookText,
+    courseCount: 35,
+    color: "#EF4444",
   },
   {
     name: "Anglais",
-    icon: Globe,
-    count: 98,
-    color: "#00A699",
-    bg: "#E6FAF8",
-    href: "/courses?subject=anglais",
+    slug: "anglais",
+    Icon: Globe,
+    courseCount: 28,
+    color: "#22C55E",
   },
   {
-    name: "Sciences",
-    icon: Microscope,
-    count: 87,
-    color: "#008A05",
-    bg: "#E8F8E8",
-    href: "/courses?subject=sciences",
+    name: "Histoire-Geo",
+    slug: "histoire-geographie",
+    Icon: Landmark,
+    courseCount: 22,
+    color: "#A16207",
   },
   {
-    name: "Histoire-Géo",
-    icon: Landmark,
-    count: 76,
-    color: "#D93900",
-    bg: "#FFF2ED",
-    href: "/courses?subject=histoire-geo",
+    name: "SVT",
+    slug: "svt",
+    Icon: Leaf,
+    courseCount: 18,
+    color: "#14B8A6",
+    gridSpan: 2,
   },
   {
     name: "Physique-Chimie",
-    icon: FlaskConical,
-    count: 65,
-    color: "#1E88E5",
-    bg: "#E3F2FD",
-    href: "/courses?subject=physique-chimie",
+    slug: "physique-chimie",
+    Icon: FlaskConical,
+    courseCount: 25,
+    color: "#8B5CF6",
   },
   {
-    name: "Arts",
-    icon: Palette,
-    count: 42,
-    color: "#E91E63",
-    bg: "#FCE4EC",
-    href: "/courses?subject=arts",
+    name: "Philosophie",
+    slug: "philosophie",
+    Icon: BrainCircuit,
+    courseCount: 15,
+    color: "#6366F1",
+    gridSpan: 2,
   },
   {
-    name: "Musique",
-    icon: Music,
-    count: 38,
-    color: "#7B1FA2",
-    bg: "#F3E5F5",
-    href: "/courses?subject=musique",
+    name: "Langues",
+    slug: "langues",
+    Icon: Languages,
+    courseCount: 31,
+    color: "#F97316",
+    gridSpan: 2,
   },
 ];
 
-export function Categories() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.2 });
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+} as const;
+
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 12,
+    },
+  },
+};
+
+function SubjectCard({ subject }: { subject: Subject }) {
+  const { name, Icon, courseCount, color, gridSpan = 1, slug } = subject;
 
   return (
-    <section ref={ref} className="bg-white py-20">
-      <div className="mx-auto max-w-[1760px] px-6 lg:px-10">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5 }}
-          className="mb-12"
+    <motion.div
+      variants={itemVariants}
+      whileHover={{
+        y: -8,
+        boxShadow: "0px 10px 25px rgba(0,0,0,0.1)",
+        transition: { type: "spring", stiffness: 300, damping: 20 },
+      }}
+      className="flex flex-col justify-between rounded-xl bg-white p-6 transition-shadow duration-300"
+      style={{
+        boxShadow: "0px 4px 15px rgba(0,0,0,0.05)",
+        gridColumn: `span ${gridSpan} / span ${gridSpan}`,
+      }}
+    >
+      <Link href={`/courses?category=${slug}`} className="group">
+        <div
+          className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg"
+          style={{ backgroundColor: `${color}20` }}
         >
-          <h2 className="mb-3 text-[32px] font-bold text-[#222222]">
-            Explore par matière
-          </h2>
-          <p className="text-lg text-[#717171]">
-            Trouve le cours parfait pour réussir tes examens
-          </p>
-        </motion.div>
+          <Icon className="h-6 w-6" style={{ color }} />
+        </div>
+        <h3 className="mb-1 text-lg font-semibold text-[#1A1A1A] group-hover:text-[#0B2A4C]">
+          {name}
+        </h3>
+        <p className="text-sm text-[#6B7280]">
+          {courseCount} cours disponibles
+        </p>
+      </Link>
+    </motion.div>
+  );
+}
 
-        {/* Categories grid */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
-          {categories.map((category, index) => (
-            <motion.div
-              key={category.name}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.4, delay: index * 0.05 }}
-            >
-              <Link href={category.href} className="group block">
-                <div
-                  className="rounded-2xl p-6 transition-all duration-300 hover:shadow-lg"
-                  style={{ backgroundColor: category.bg }}
-                >
-                  <div
-                    className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
-                    style={{ backgroundColor: category.color }}
-                  >
-                    <category.icon className="h-7 w-7 text-white" />
-                  </div>
-                  <h3 className="mb-1 font-semibold text-[#222222]">
-                    {category.name}
-                  </h3>
-                  <p className="text-sm text-[#717171]">
-                    {category.count} cours
-                  </p>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+export function Categories() {
+  return (
+    <section className="bg-[#F4F5F7] px-4 py-20 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl">
+        {/* Section Header */}
+        <div className="mb-12 text-center">
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-[#E8A336]">
+            Explorez par Matiere
+          </h2>
+          <p className="mt-2 text-3xl font-extrabold tracking-tight text-[#0B2A4C] sm:text-4xl">
+            Trouvez le tuteur parfait pour chaque sujet
+          </p>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-[#6B7280]">
+            Des mathematiques a la philosophie, nous couvrons toutes les
+            matieres pour assurer la reussite de votre enfant.
+          </p>
         </div>
 
-        {/* See all link */}
+        {/* Subjects Grid */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-10 text-center"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
+          {subjects.map((subject) => (
+            <SubjectCard key={subject.slug} subject={subject} />
+          ))}
+        </motion.div>
+
+        {/* "See All" Link */}
+        <div className="mt-12 text-center">
           <Link
             href="/courses"
-            className="inline-flex items-center gap-2 font-semibold text-[#222222] underline underline-offset-4 transition-colors hover:text-[#FF385C]"
+            className="group inline-flex items-center text-base font-semibold text-[#0B2A4C] hover:text-[#E8A336]"
           >
-            Voir toutes les matières
+            Voir toutes les matieres
+            <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
           </Link>
-        </motion.div>
+        </div>
       </div>
     </section>
   );

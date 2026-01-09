@@ -3,254 +3,220 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Menu, X, ChevronDown, Globe } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { GraduationCap, Search, Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const categories = [
-  { name: "Mathématiques", href: "/courses?subject=mathematiques" },
-  { name: "Français", href: "/courses?subject=francais" },
-  { name: "Anglais", href: "/courses?subject=anglais" },
-  { name: "Sciences", href: "/courses?subject=sciences" },
-  { name: "Histoire-Géo", href: "/courses?subject=histoire-geo" },
-  { name: "Physique-Chimie", href: "/courses?subject=physique-chimie" },
-];
-
-const levels = [
-  { name: "Primaire", href: "/courses?level=primaire" },
-  { name: "Collège", href: "/courses?level=college" },
-  { name: "Lycée", href: "/courses?level=lycee" },
+const navLinks = [
+  { href: "/courses", label: "Cours" },
+  { href: "/subjects", label: "Matières" },
+  { href: "/levels", label: "Niveaux" },
+  { href: "/teachers", label: "Enseignants" },
 ];
 
 export function Header() {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [showCategories, setShowCategories] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 0);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isMenuOpen]);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
+
   return (
-    <header
-      className={cn(
-        "fixed top-0 z-50 w-full transition-all duration-200",
-        isScrolled ? "bg-white shadow-sm" : "bg-white",
-      )}
-    >
-      {/* Top bar */}
-      <div className="border-b border-[#DDDDDD]">
-        <div className="mx-auto flex h-[72px] max-w-[1760px] items-center justify-between px-6 lg:px-10">
-          {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#FF385C]">
-              <span className="text-lg font-bold text-white">S</span>
-            </div>
-            <span className="text-xl font-semibold text-[#222222]">
-              Schoolaris
-            </span>
-          </Link>
-
-          {/* Search bar - Airbnb style */}
-          <div className="hidden flex-1 justify-center lg:flex">
-            <button className="flex items-center gap-4 rounded-full border border-[#DDDDDD] bg-white px-4 py-2 shadow-sm transition-shadow hover:shadow-md">
-              <span className="border-r border-[#DDDDDD] pr-4 text-sm font-medium text-[#222222]">
-                Cours
-              </span>
-              <span className="border-r border-[#DDDDDD] pr-4 text-sm text-[#717171]">
-                Niveau
-              </span>
-              <span className="text-sm text-[#717171]">Matière</span>
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#FF385C]">
-                <Search className="h-4 w-4 text-white" />
-              </div>
-            </button>
-          </div>
-
-          {/* Right nav */}
-          <div className="hidden items-center gap-2 lg:flex">
-            <Link
-              href="/register/teacher"
-              className="rounded-full px-4 py-2 text-sm font-medium text-[#222222] transition-colors hover:bg-[#F7F7F7]"
-            >
-              Devenir enseignant
-            </Link>
-            <button className="rounded-full p-2 transition-colors hover:bg-[#F7F7F7]">
-              <Globe className="h-5 w-5 text-[#222222]" />
-            </button>
-            <Button
-              variant="outline"
-              className="rounded-full border-[#222222] text-[#222222] hover:bg-[#F7F7F7]"
-              asChild
-            >
-              <Link href="/login">Connexion</Link>
-            </Button>
-            <Button
-              className="rounded-full bg-[#FF385C] text-white hover:bg-[#E31C5F]"
-              asChild
-            >
-              <Link href="/register">S&apos;inscrire</Link>
-            </Button>
-          </div>
-
-          {/* Mobile menu button */}
-          <button
-            className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-[#F7F7F7] lg:hidden"
-            onClick={() => setMobileOpen(!mobileOpen)}
-          >
-            {mobileOpen ? (
-              <X className="h-5 w-5" />
-            ) : (
-              <Menu className="h-5 w-5" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* Categories bar */}
-      <div className="hidden border-b border-[#DDDDDD] lg:block">
-        <div className="mx-auto max-w-[1760px] px-6 lg:px-10">
-          <nav className="flex items-center gap-8 py-3">
-            <button
-              onClick={() => setShowCategories(!showCategories)}
-              className="flex items-center gap-1 text-sm text-[#222222] transition-colors hover:text-[#FF385C]"
-            >
-              Catégories
-              <ChevronDown
-                className={cn(
-                  "h-4 w-4 transition-transform",
-                  showCategories && "rotate-180",
-                )}
-              />
-            </button>
-            {levels.map((level) => (
-              <Link
-                key={level.name}
-                href={level.href}
-                className="text-sm text-[#717171] transition-colors hover:text-[#222222]"
-              >
-                {level.name}
-              </Link>
-            ))}
-            <Link
-              href="/courses"
-              className="text-sm text-[#717171] transition-colors hover:text-[#222222]"
-            >
-              Tous les cours
-            </Link>
-          </nav>
-        </div>
-      </div>
-
-      {/* Categories dropdown */}
-      <AnimatePresence>
-        {showCategories && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="absolute left-0 right-0 top-full border-b border-[#DDDDDD] bg-white shadow-lg"
-          >
-            <div className="mx-auto max-w-[1760px] px-6 py-8 lg:px-10">
-              <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
-                {categories.map((category) => (
-                  <Link
-                    key={category.name}
-                    href={category.href}
-                    onClick={() => setShowCategories(false)}
-                    className="rounded-xl p-4 text-center transition-colors hover:bg-[#F7F7F7]"
-                  >
-                    <p className="font-medium text-[#222222]">
-                      {category.name}
-                    </p>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </motion.div>
+    <>
+      <header
+        className={cn(
+          "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
+          scrolled
+            ? "bg-[#FDFDFD]/95 shadow-[0px_4px_15px_rgba(0,0,0,0.05)] backdrop-blur-sm"
+            : "bg-transparent",
         )}
-      </AnimatePresence>
+      >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex h-20 items-center justify-between">
+            {/* Logo */}
+            <Link
+              href="/"
+              className="flex items-center gap-2"
+              aria-label="Schoolaris Home"
+            >
+              <GraduationCap className="h-8 w-8 text-[#E8A336]" />
+              <span className="font-serif text-2xl font-bold text-[#0B2A4C]">
+                Schoolaris
+              </span>
+            </Link>
 
-      {/* Mobile menu */}
+            {/* Desktop Navigation */}
+            <nav className="hidden items-center gap-8 lg:flex">
+              {!isSearchOpen &&
+                navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="group relative text-base font-medium text-[#1A1A1A]"
+                  >
+                    {link.label}
+                    <span className="absolute bottom-[-4px] left-0 h-0.5 w-full origin-center scale-x-0 bg-[#E8A336] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                  </Link>
+                ))}
+            </nav>
+
+            {/* Right Section */}
+            <div className="flex items-center gap-4">
+              {/* Search */}
+              <div className="flex items-center">
+                <AnimatePresence>
+                  {isSearchOpen && (
+                    <motion.div
+                      initial={{ width: 0, opacity: 0 }}
+                      animate={{ width: "auto", opacity: 1 }}
+                      exit={{ width: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="hidden sm:block"
+                    >
+                      <input
+                        type="text"
+                        placeholder="Rechercher un cours..."
+                        className="w-48 rounded-full border border-[#6B7280] px-4 py-2 text-sm focus:border-[#E8A336] focus:outline-none focus:ring-2 focus:ring-[#E8A336]/20"
+                        autoFocus
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                <button
+                  onClick={toggleSearch}
+                  aria-label="Toggle Search"
+                  className="p-2 text-[#1A1A1A] transition-colors hover:text-[#E8A336]"
+                >
+                  {isSearchOpen ? (
+                    <X className="h-5 w-5" />
+                  ) : (
+                    <Search className="h-5 w-5" />
+                  )}
+                </button>
+              </div>
+
+              {/* Auth Buttons - Desktop */}
+              <div className="hidden items-center gap-3 lg:flex">
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <Link
+                    href="/login"
+                    className="rounded-lg border-2 border-[#0B2A4C] px-5 py-2 text-sm font-semibold text-[#0B2A4C] transition-colors hover:bg-[#0B2A4C] hover:text-white"
+                  >
+                    Connexion
+                  </Link>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <Link
+                    href="/register"
+                    className="rounded-lg bg-[#E8A336] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#D4922E]"
+                  >
+                    S&apos;inscrire
+                  </Link>
+                </motion.div>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <div className="lg:hidden">
+                <button onClick={toggleMenu} aria-label="Open menu">
+                  <Menu className="h-7 w-7 text-[#1A1A1A]" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Menu */}
       <AnimatePresence>
-        {mobileOpen && (
+        {isMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden border-b border-[#DDDDDD] bg-white lg:hidden"
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-50 bg-[#FDFDFD] lg:hidden"
           >
-            <div className="space-y-4 p-6">
-              {/* Mobile search */}
-              <div className="flex items-center gap-3 rounded-full border border-[#DDDDDD] p-3">
-                <Search className="h-5 w-5 text-[#717171]" />
-                <input
-                  type="text"
-                  placeholder="Rechercher un cours..."
-                  className="flex-1 text-sm outline-none placeholder:text-[#717171]"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#717171]">
-                  Niveaux
-                </p>
-                {levels.map((level) => (
-                  <Link
-                    key={level.name}
-                    href={level.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="block rounded-lg p-3 text-[#222222] hover:bg-[#F7F7F7]"
-                  >
-                    {level.name}
-                  </Link>
-                ))}
-              </div>
-
-              <div className="space-y-2">
-                <p className="text-xs font-semibold uppercase tracking-wider text-[#717171]">
-                  Matières
-                </p>
-                {categories.map((category) => (
-                  <Link
-                    key={category.name}
-                    href={category.href}
-                    onClick={() => setMobileOpen(false)}
-                    className="block rounded-lg p-3 text-[#222222] hover:bg-[#F7F7F7]"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
-
-              <div className="space-y-3 border-t border-[#DDDDDD] pt-4">
+            <div className="flex h-full flex-col">
+              {/* Mobile Header */}
+              <div className="flex items-center justify-between border-b border-[#F4F5F7] p-4">
                 <Link
-                  href="/register/teacher"
-                  onClick={() => setMobileOpen(false)}
-                  className="block text-center font-medium text-[#222222]"
+                  href="/"
+                  className="flex items-center gap-2"
+                  onClick={toggleMenu}
                 >
-                  Devenir enseignant
+                  <GraduationCap className="h-8 w-8 text-[#E8A336]" />
+                  <span className="font-serif text-2xl font-bold text-[#0B2A4C]">
+                    Schoolaris
+                  </span>
                 </Link>
-                <Button
-                  variant="outline"
-                  className="w-full rounded-full border-[#222222]"
-                  asChild
+                <button onClick={toggleMenu} aria-label="Close menu">
+                  <X className="h-7 w-7 text-[#1A1A1A]" />
+                </button>
+              </div>
+
+              {/* Mobile Nav Links */}
+              <nav className="flex flex-grow flex-col items-center justify-center gap-8">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.href}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                  >
+                    <Link
+                      href={link.href}
+                      onClick={toggleMenu}
+                      className="text-2xl font-medium text-[#1A1A1A] transition-colors hover:text-[#E8A336]"
+                    >
+                      {link.label}
+                    </Link>
+                  </motion.div>
+                ))}
+              </nav>
+
+              {/* Mobile Auth Buttons */}
+              <div className="flex flex-col gap-4 border-t border-[#F4F5F7] p-6">
+                <Link
+                  href="/login"
+                  onClick={toggleMenu}
+                  className="w-full rounded-lg border-2 border-[#0B2A4C] px-6 py-3 text-center text-lg font-semibold text-[#0B2A4C] transition-colors hover:bg-[#0B2A4C] hover:text-white"
                 >
-                  <Link href="/login">Connexion</Link>
-                </Button>
-                <Button
-                  className="w-full rounded-full bg-[#FF385C] hover:bg-[#E31C5F]"
-                  asChild
+                  Connexion
+                </Link>
+                <Link
+                  href="/register"
+                  onClick={toggleMenu}
+                  className="w-full rounded-lg bg-[#E8A336] px-6 py-3 text-center text-lg font-semibold text-white transition-colors hover:bg-[#D4922E]"
                 >
-                  <Link href="/register">S&apos;inscrire</Link>
-                </Button>
+                  S&apos;inscrire
+                </Link>
               </div>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }
