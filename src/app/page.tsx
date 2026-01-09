@@ -1,25 +1,25 @@
 import {
-  MainNav,
-  HeroSection,
-  FeaturesSection,
-  SubjectsSection,
-  TestimonialsSection,
-  TeacherCtaSection,
-  FinalCtaSection,
+  Header,
+  Hero,
+  Categories,
+  FeaturedCourses,
+  HowItWorks,
+  Testimonials,
+  TeacherCta,
   Footer,
 } from "@/components/landing";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
-      <MainNav />
+    <div className="min-h-screen bg-white">
+      <Header />
       <main>
-        <HeroSection />
-        <FeaturesSection />
-        <SubjectsSection />
-        <TestimonialsSection />
-        <TeacherCtaSection />
-        <FinalCtaSection />
+        <Hero />
+        <Categories />
+        <FeaturedCourses />
+        <HowItWorks />
+        <Testimonials />
+        <TeacherCta />
       </main>
       <Footer />
     </div>

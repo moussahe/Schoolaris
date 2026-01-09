@@ -1,8 +1,8 @@
-export { HeroSection } from "./hero-section";
-export { MainNav } from "./main-nav";
-export { FeaturesSection } from "./features-section";
-export { SubjectsSection } from "./subjects-section";
-export { TestimonialsSection } from "./testimonials-section";
-export { TeacherCtaSection } from "./teacher-cta-section";
-export { FinalCtaSection } from "./final-cta-section";
+export { Header } from "./header";
+export { Hero } from "./hero";
+export { Categories } from "./categories";
+export { FeaturedCourses } from "./featured-courses";
+export { HowItWorks } from "./how-it-works";
+export { Testimonials } from "./testimonials";
+export { TeacherCta } from "./teacher-cta";
 export { Footer } from "./footer";

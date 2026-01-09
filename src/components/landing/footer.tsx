@@ -1,197 +1,134 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {
-  GraduationCap,
-  Twitter,
-  Linkedin,
-  Instagram,
-  Youtube,
-  Mail,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { GraduationCap } from "lucide-react";
 
 const footerLinks = {
-  cours: [
-    { name: "Tous les cours", href: "/courses" },
-    { name: "Primaire", href: "/courses?level=primaire" },
-    { name: "Collège", href: "/courses?level=college" },
-    { name: "Lycée", href: "/courses?level=lycee" },
-  ],
-  matieres: [
-    { name: "Mathématiques", href: "/courses?subject=mathematiques" },
-    { name: "Français", href: "/courses?subject=francais" },
-    { name: "Anglais", href: "/courses?subject=anglais" },
-    { name: "Sciences", href: "/courses?subject=sciences" },
-  ],
-  enseignants: [
-    { name: "Devenir créateur", href: "/register/teacher" },
-    { name: "Guide professeur", href: "/teacher/guide" },
-    { name: "Tarification", href: "/pricing" },
-    { name: "FAQ", href: "/faq" },
-  ],
-  legal: [
-    { name: "CGU", href: "/conditions" },
-    { name: "Confidentialité", href: "/confidentialite" },
-    { name: "Cookies", href: "/cookies" },
-  ],
+  students: {
+    title: "Étudiants",
+    links: [
+      { label: "Tous les cours", href: "/courses" },
+      { label: "Par matière", href: "/courses" },
+      { label: "Par niveau", href: "/courses" },
+      { label: "Cours gratuits", href: "/courses?price=free" },
+      { label: "Aide aux devoirs", href: "/ai-tutor" },
+    ],
+  },
+  teachers: {
+    title: "Enseignants",
+    links: [
+      { label: "Devenir créateur", href: "/register/teacher" },
+      { label: "Comment ça marche", href: "/teachers" },
+      { label: "Centre de ressources", href: "/resources" },
+      { label: "Communauté", href: "/community" },
+      { label: "Success stories", href: "/stories" },
+    ],
+  },
+  company: {
+    title: "Entreprise",
+    links: [
+      { label: "À propos", href: "/about" },
+      { label: "Carrières", href: "/careers" },
+      { label: "Presse", href: "/press" },
+      { label: "Blog", href: "/blog" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+  support: {
+    title: "Support",
+    links: [
+      { label: "Centre d'aide", href: "/help" },
+      { label: "FAQ", href: "/faq" },
+      { label: "Conditions d'utilisation", href: "/terms" },
+      { label: "Politique de confidentialité", href: "/privacy" },
+      { label: "Accessibilité", href: "/accessibility" },
+    ],
+  },
 };
-
-const socialLinks = [
-  { name: "Twitter", icon: Twitter, href: "https://twitter.com/schoolaris" },
-  {
-    name: "LinkedIn",
-    icon: Linkedin,
-    href: "https://linkedin.com/company/schoolaris",
-  },
-  {
-    name: "Instagram",
-    icon: Instagram,
-    href: "https://instagram.com/schoolaris",
-  },
-  { name: "YouTube", icon: Youtube, href: "https://youtube.com/@schoolaris" },
-];
 
 export function Footer() {
   return (
-    <footer className="relative border-t border-white/10 bg-[#080b16]">
-      {/* Gradient line at top */}
-      <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-[#E6007A]/50 to-transparent" />
-
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+    <footer className="border-t border-[#DDDDDD] bg-[#F7F7F7]">
+      <div className="mx-auto max-w-[1760px] px-6 py-12 lg:px-10 lg:py-16">
         {/* Main footer content */}
-        <div className="grid gap-8 lg:grid-cols-6">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-5">
           {/* Brand column */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3">
-              <motion.div
-                whileHover={{ scale: 1.05, rotate: 5 }}
-                className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[#E6007A] to-[#00F2EA]"
-              >
-                <GraduationCap className="h-5 w-5 text-white" />
-              </motion.div>
-              <span className="text-xl font-bold text-white">Schoolaris</span>
-            </Link>
-
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-slate-400">
-              La marketplace de cours scolaires. Créés par des profs, propulsés
-              par l&apos;IA. Du CP à la Terminale.
-            </p>
-
-            {/* Newsletter */}
-            <div className="mt-6">
-              <p className="mb-2 text-sm font-medium text-white">
-                Restez informé
-              </p>
-              <div className="flex gap-2">
-                <input
-                  type="email"
-                  placeholder="Votre email"
-                  className="flex-1 rounded-lg border border-white/10 bg-white/5 px-4 py-2 text-sm text-white placeholder-slate-500 transition-colors focus:border-[#00F2EA]/50 focus:outline-none focus:ring-1 focus:ring-[#00F2EA]/50"
-                />
-                <Button
-                  size="sm"
-                  className="bg-gradient-to-r from-[#E6007A] to-[#00F2EA] hover:shadow-lg hover:shadow-[#E6007A]/20"
-                >
-                  <Mail className="h-4 w-4" />
-                </Button>
+          <div className="lg:col-span-1">
+            <Link href="/" className="mb-6 flex items-center gap-2">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FF385C]">
+                <GraduationCap className="h-6 w-6 text-white" />
               </div>
-            </div>
-
-            {/* Social links */}
-            <div className="mt-6 flex gap-3">
-              {socialLinks.map((social) => (
-                <a
-                  key={social.name}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-9 w-9 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-400 transition-all hover:border-white/20 hover:bg-white/10 hover:text-white"
-                >
-                  <social.icon className="h-4 w-4" />
-                  <span className="sr-only">{social.name}</span>
-                </a>
-              ))}
+              <span className="text-xl font-bold text-[#222222]">
+                Schoolaris
+              </span>
+            </Link>
+            <p className="mb-6 text-sm text-[#717171]">
+              La plateforme qui connecte les meilleurs enseignants avec les
+              élèves qui veulent réussir.
+            </p>
+            {/* App store badges placeholder */}
+            <div className="flex gap-3">
+              <div className="flex h-10 items-center justify-center rounded-lg bg-[#222222] px-4">
+                <span className="text-xs font-medium text-white">
+                  App Store
+                </span>
+              </div>
+              <div className="flex h-10 items-center justify-center rounded-lg bg-[#222222] px-4">
+                <span className="text-xs font-medium text-white">
+                  Google Play
+                </span>
+              </div>
             </div>
           </div>
 
           {/* Links columns */}
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Cours</h4>
-            <ul className="space-y-2 text-sm">
-              {footerLinks.cours.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Matières</h4>
-            <ul className="space-y-2 text-sm">
-              {footerLinks.matieres.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">
-              Enseignants
-            </h4>
-            <ul className="space-y-2 text-sm">
-              {footerLinks.enseignants.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="mb-4 text-sm font-semibold text-white">Légal</h4>
-            <ul className="space-y-2 text-sm">
-              {footerLinks.legal.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    href={link.href}
-                    className="text-slate-400 transition-colors hover:text-white"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {Object.values(footerLinks).map((section) => (
+            <div key={section.title}>
+              <h3 className="mb-4 font-semibold text-[#222222]">
+                {section.title}
+              </h3>
+              <ul className="space-y-3">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      href={link.href}
+                      className="text-sm text-[#717171] transition-colors hover:text-[#222222]"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         {/* Bottom bar */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-sm sm:flex-row">
-          <p className="text-slate-500">
-            &copy; {new Date().getFullYear()} Schoolaris. Tous droits réservés.
-          </p>
-          <p className="text-slate-600">
-            Fait avec ❤️ en France pour l&apos;éducation
-          </p>
+        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-[#DDDDDD] pt-8 md:flex-row">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-[#717171]">
+            <span>© 2024 Schoolaris</span>
+            <span>·</span>
+            <Link href="/terms" className="hover:text-[#222222]">
+              CGU
+            </Link>
+            <span>·</span>
+            <Link href="/privacy" className="hover:text-[#222222]">
+              Confidentialité
+            </Link>
+            <span>·</span>
+            <Link href="/cookies" className="hover:text-[#222222]">
+              Cookies
+            </Link>
+          </div>
+
+          {/* Language & Currency */}
+          <div className="flex items-center gap-4 text-sm">
+            <button className="flex items-center gap-2 text-[#222222] hover:underline">
+              <span>🇫🇷</span>
+              <span>Français</span>
+            </button>
+            <button className="text-[#222222] hover:underline">EUR (€)</button>
+          </div>
         </div>
       </div>
     </footer>
