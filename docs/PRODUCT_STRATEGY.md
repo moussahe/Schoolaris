@@ -154,21 +154,21 @@ Attentes:
 
 ### Phase 2: Engagement (M4-M6) 🟡 IMPORTANT
 
-| Feature                   | Impact           | Status     |
-| ------------------------- | ---------------- | ---------- |
-| Gamification (XP, badges) | Retention        | ✅ Done    |
-| Parcours IA personnalisé  | Efficacité       | ✅ Done    |
-| Rapports hebdo parents    | Satisfaction     | ✅ Done    |
-| Exercices génératifs IA   | Pratique infinie | ⏳ À faire |
+| Feature                   | Impact           | Status  |
+| ------------------------- | ---------------- | ------- |
+| Gamification (XP, badges) | Retention        | ✅ Done |
+| Parcours IA personnalisé  | Efficacité       | ✅ Done |
+| Rapports hebdo parents    | Satisfaction     | ✅ Done |
+| Exercices génératifs IA   | Pratique infinie | ✅ Done |
 
 ### Phase 3: Scale (M7-M12) 🟢 NICE TO HAVE
 
-| Feature           | Impact        | Status |
-| ----------------- | ------------- | ------ |
-| Mode Examen       | Valeur perçue | ⏳     |
-| Live Sessions     | Premium       | ⏳     |
-| Forums communauté | Retention     | ⏳     |
-| Certificats       | Valorisation  | ⏳     |
+| Feature           | Impact        | Status     |
+| ----------------- | ------------- | ---------- |
+| Mode Examen       | Valeur perçue | ✅ Done    |
+| Live Sessions     | Premium       | ⏳ À faire |
+| Forums communauté | Retention     | ⏳ À faire |
+| Certificats       | Valorisation  | ⏳ À faire |
 
 ---
 
@@ -273,7 +273,8 @@ Pour atteindre 500K€:
 - [x] Quiz adaptatifs
 - [x] Gamification basique (XP, streaks)
 - [x] Rapports hebdomadaires parents
-- [ ] Exercices generatifs IA
+- [x] Exercices generatifs IA
+- [x] Mode Revision Examen (Brevet/Bac)
 - [ ] Beta privée 50 familles
 - [ ] Onboarder 10 profs
 

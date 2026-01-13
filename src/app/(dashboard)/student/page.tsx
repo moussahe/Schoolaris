@@ -14,6 +14,7 @@ import {
   Target,
   TrendingUp,
   MessageSquare,
+  Award,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -444,6 +445,29 @@ async function StudentDashboard({ childId }: { childId: string }) {
               ))}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Exam Mode CTA */}
+      <div className="rounded-2xl bg-gradient-to-r from-amber-500 to-orange-600 p-6 text-white shadow-lg">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+              <Award className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="font-semibold">Mode Revision Examen</h3>
+              <p className="text-sm text-amber-100">
+                Entraine-toi dans les conditions reelles du Brevet ou du Bac
+              </p>
+            </div>
+          </div>
+          <Button asChild className="bg-white text-amber-600 hover:bg-amber-50">
+            <Link href="/student/exam-mode">
+              <Award className="mr-2 h-4 w-4" />
+              Commencer
+            </Link>
+          </Button>
         </div>
       </div>
 
