@@ -275,6 +275,7 @@ Pour atteindre 500K€:
 - [x] Rapports hebdomadaires parents
 - [x] Exercices generatifs IA
 - [x] Mode Revision Examen (Brevet/Bac)
+- [x] Tracking des points faibles (weak areas) avec IA
 - [ ] Beta privée 50 familles
 - [ ] Onboarder 10 profs
 

@@ -94,7 +94,20 @@ export async function POST(req: NextRequest) {
         ? scores.reduce((a, b) => a + b, 0) / scores.length
         : 50;
 
-    // 6. Build context for AI
+    // 6. Fetch weak areas for this child and subject
+    const weakAreas = await prisma.weakArea.findMany({
+      where: {
+        childId: validated.childId,
+        subject: lesson.chapter.course.subject,
+        isResolved: false,
+      },
+      orderBy: [{ errorCount: "desc" }, { lastErrorAt: "desc" }],
+      take: 5, // Get top 5 weak areas
+    });
+
+    const weakAreaTopics = weakAreas.map((wa) => wa.topic);
+
+    // 7. Build context for AI
     const context: QuizGenerationContext = {
       subject: lesson.chapter.course.subject,
       gradeLevel: lesson.chapter.course.gradeLevel,
@@ -102,18 +115,18 @@ export async function POST(req: NextRequest) {
       lessonContent: lesson.content || lesson.description || "",
       currentDifficulty: validated.currentDifficulty as Difficulty,
       previousPerformance:
-        scores.length > 0
+        scores.length > 0 || weakAreaTopics.length > 0
           ? {
               correctRate: averageScore / 100,
-              weakAreas: [], // TODO: Track specific weak areas
+              weakAreas: weakAreaTopics,
             }
           : undefined,
     };
 
-    // 7. Generate questions with AI
+    // 8. Generate questions with AI
     const questions = await generateAdaptiveQuestions(context);
 
-    // 8. Return questions
+    // 9. Return questions
     return NextResponse.json({
       success: true,
       questions: questions.slice(0, validated.questionCount),

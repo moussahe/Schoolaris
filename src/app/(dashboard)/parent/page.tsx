@@ -18,6 +18,7 @@ import { ProgressBar } from "@/components/parent/progress-bar";
 import { AlertsPanel, type Alert } from "@/components/parent/alerts-panel";
 import { AIInsightsPanel } from "@/components/parent/ai-insights-panel";
 import { WeeklyReportCard } from "@/components/parent/weekly-report-card";
+import { WeakAreasPanel } from "@/components/parent/weak-areas-panel";
 
 async function getParentStats(userId: string) {
   const [children, purchases, recentProgress] = await Promise.all([
@@ -648,6 +649,35 @@ async function WeeklyReportsSection({ userId }: { userId: string }) {
   );
 }
 
+async function WeakAreasSection({ userId }: { userId: string }) {
+  // Get children for this parent
+  const children = await prisma.child.findMany({
+    where: { parentId: userId },
+    select: { id: true, firstName: true },
+  });
+
+  if (children.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-lg font-semibold text-gray-900">
+        Points a Ameliorer
+      </h2>
+      <div className="grid gap-4 lg:grid-cols-2">
+        {children.map((child) => (
+          <WeakAreasPanel
+            key={child.id}
+            childId={child.id}
+            childName={child.firstName}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function formatRelativeTime(date: Date): string {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
@@ -726,6 +756,11 @@ export default async function ParentDashboardPage() {
       {/* Weekly Reports */}
       <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
         <WeeklyReportsSection userId={userId} />
+      </Suspense>
+
+      {/* Weak Areas */}
+      <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
+        <WeakAreasSection userId={userId} />
       </Suspense>
 
       {/* Main Content */}

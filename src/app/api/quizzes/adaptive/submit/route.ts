@@ -5,7 +5,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
-import { generateQuizFeedback, type QuizFeedbackContext } from "@/lib/ai-quiz";
+import {
+  generateQuizFeedback,
+  extractWeakAreas,
+  type QuizFeedbackContext,
+} from "@/lib/ai-quiz";
 import { awardXP, XP_REWARDS, checkAndAwardBadges } from "@/lib/gamification";
 
 const submitSchema = z.object({
@@ -144,7 +148,68 @@ export async function POST(req: NextRequest) {
       // Continue without AI feedback
     }
 
-    // 10. Create alert for parent if score is low
+    // 10. Extract and save weak areas from wrong answers
+    if (wrongAnswers.length > 0) {
+      try {
+        const extractedWeakAreas = await extractWeakAreas(
+          wrongAnswers,
+          lesson.chapter.course.subject,
+          lesson.title,
+        );
+
+        // Upsert weak areas - increment error count if exists, create if not
+        for (const weakArea of extractedWeakAreas) {
+          await prisma.weakArea.upsert({
+            where: {
+              childId_subject_topic: {
+                childId: validated.childId,
+                subject: lesson.chapter.course.subject,
+                topic: weakArea.topic,
+              },
+            },
+            create: {
+              childId: validated.childId,
+              subject: lesson.chapter.course.subject,
+              topic: weakArea.topic,
+              gradeLevel: lesson.chapter.course.gradeLevel,
+              category: weakArea.category,
+              errorCount: 1,
+              attemptCount: 1,
+            },
+            update: {
+              errorCount: { increment: 1 },
+              attemptCount: { increment: 1 },
+              lastErrorAt: new Date(),
+              category: weakArea.category,
+            },
+          });
+        }
+      } catch (weakAreaError) {
+        // Log but don't fail the request
+        console.error("Failed to save weak areas:", weakAreaError);
+      }
+    }
+
+    // 11. Mark weak areas as resolved if correct (mastery detection)
+    if (validated.score >= 90) {
+      // High performance suggests mastery - resolve related weak areas
+      await prisma.weakArea.updateMany({
+        where: {
+          childId: validated.childId,
+          subject: lesson.chapter.course.subject,
+          isResolved: false,
+          // Only resolve if they've attempted this topic multiple times successfully
+          attemptCount: { gte: 3 },
+          errorCount: { lte: 2 }, // Low error rate
+        },
+        data: {
+          isResolved: true,
+          resolvedAt: new Date(),
+        },
+      });
+    }
+
+    // 12. Create alert for parent if score is low
     if (validated.score < 50) {
       await prisma.alert.create({
         data: {
@@ -165,7 +230,7 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // 11. Return result
+    // 13. Return result
     return NextResponse.json({
       success: true,
       score: validated.score,

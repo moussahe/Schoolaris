@@ -166,6 +166,7 @@ model Child {
   liveSessions     LiveSession[]
   forumTopics      ForumTopic[]      @relation("ChildTopics")
   forumReplies     ForumReply[]      @relation("ChildReplies")
+  weakAreas        WeakArea[]
 
   @@index([parentId])
   @@index([gradeLevel])
@@ -744,6 +745,42 @@ model LiveSession {
   @@index([scheduledAt])
   @@index([status])
   @@index([subject])
+}
+
+// ============ WEAK AREAS TRACKING ============
+
+// Tracks specific areas where a child struggles (e.g., "fractions", "conjugaison")
+model WeakArea {
+  id            String     @id @default(cuid())
+  childId       String
+  subject       Subject
+  topic         String     // e.g., "fractions", "conjugaison imparfait", "theoreme Pythagore"
+  gradeLevel    GradeLevel
+
+  // Tracking metrics
+  errorCount    Int        @default(1)    // Number of times this area was missed
+  attemptCount  Int        @default(1)    // Total attempts on this topic
+  lastErrorAt   DateTime   @default(now())
+  firstSeenAt   DateTime   @default(now())
+
+  // AI categorization
+  category      String?    // e.g., "calcul", "comprehension", "methode"
+  difficulty    String?    // Perceived difficulty: easy, medium, hard
+
+  // Progress tracking
+  isResolved    Boolean    @default(false) // Marked as mastered
+  resolvedAt    DateTime?
+
+  // Relations
+  child         Child      @relation(fields: [childId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, subject, topic])
+  @@index([childId])
+  @@index([subject])
+  @@index([gradeLevel])
+  @@index([isResolved])
+  @@index([errorCount])
+  @@index([lastErrorAt])
 }
 
 // ============ WEEKLY REPORTS ============

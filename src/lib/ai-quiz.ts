@@ -300,6 +300,110 @@ export async function generateQuizFeedback(
   }
 }
 
+// Weak Area Extraction from Quiz Errors
+export interface WrongAnswer {
+  question: string;
+  selectedAnswer: string;
+  correctAnswer: string;
+}
+
+export interface ExtractedWeakArea {
+  topic: string; // e.g., "fractions", "conjugaison imparfait"
+  category: string; // e.g., "calcul", "comprehension", "methode"
+}
+
+export function getWeakAreaExtractionPrompt(
+  wrongAnswers: WrongAnswer[],
+  subject: string,
+  lessonTitle: string,
+): string {
+  const errorsList = wrongAnswers
+    .map(
+      (w, i) =>
+        `${i + 1}. Question: "${w.question}"
+   - Reponse de l'eleve: "${w.selectedAnswer}"
+   - Bonne reponse: "${w.correctAnswer}"`,
+    )
+    .join("\n");
+
+  return `Tu es un expert en pedagogie pour Schoolaris. Analyse les erreurs suivantes et identifie les points faibles specifiques.
+
+CONTEXTE:
+- Matiere: ${subject}
+- Lecon: ${lessonTitle}
+
+ERREURS DE L'ELEVE:
+${errorsList}
+
+TACHE:
+Pour chaque erreur, identifie le TOPIC precis (concept/notion) que l'eleve n'a pas maitrise.
+
+REGLES:
+1. Le topic doit etre un concept SPECIFIQUE (pas "mathematiques" mais "fractions", "theoreme de Pythagore", etc.)
+2. La categorie doit etre: "calcul", "comprehension", "methode", "memorisation", "application", ou "analyse"
+3. Si plusieurs erreurs concernent le meme topic, ne le liste qu'une fois
+
+FORMAT DE REPONSE (JSON strict):
+{
+  "weakAreas": [
+    {
+      "topic": "nom specifique du concept non maitrise",
+      "category": "type d'erreur"
+    }
+  ]
+}
+
+Reponds UNIQUEMENT avec le JSON.`;
+}
+
+export async function extractWeakAreas(
+  wrongAnswers: WrongAnswer[],
+  subject: string,
+  lessonTitle: string,
+): Promise<ExtractedWeakArea[]> {
+  if (wrongAnswers.length === 0) {
+    return [];
+  }
+
+  const client = getAnthropicClient();
+  const prompt = getWeakAreaExtractionPrompt(
+    wrongAnswers,
+    subject,
+    lessonTitle,
+  );
+
+  try {
+    const response = await client.messages.create({
+      model: QUIZ_AI_MODEL, // Using haiku for speed
+      max_tokens: 512,
+      messages: [{ role: "user", content: prompt }],
+    });
+
+    const textContent = response.content.find((c) => c.type === "text");
+    if (!textContent || textContent.type !== "text") {
+      throw new Error("No text response from AI");
+    }
+
+    const jsonMatch = textContent.text.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) {
+      throw new Error("No JSON found in response");
+    }
+
+    const parsed = JSON.parse(jsonMatch[0]) as {
+      weakAreas: ExtractedWeakArea[];
+    };
+
+    return parsed.weakAreas || [];
+  } catch (error) {
+    console.error("Error extracting weak areas:", error);
+    // Fallback: derive topics from question text
+    return wrongAnswers.map(() => ({
+      topic: lessonTitle, // Use lesson title as fallback topic
+      category: "comprehension",
+    }));
+  }
+}
+
 // Calculate next difficulty based on performance
 export function calculateNextDifficulty(
   currentDifficulty: Difficulty,
