@@ -36,6 +36,10 @@ yarn-error.log*
 # local scripts
 /scripts
 
+# autodev state files
+.autodev-marathon.state
+.autodev*.state
+
 # env files (can opt-in for committing if needed)
 .env*
 
