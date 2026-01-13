@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   GraduationCap,
   Twitter,
@@ -12,6 +13,7 @@ import {
   Mail,
   MapPin,
   Phone,
+  CheckCircle,
 } from "lucide-react";
 
 const footerLinks = {
@@ -64,6 +66,21 @@ const socialLinks = [
 ];
 
 export function Footer() {
+  const [email, setEmail] = useState("");
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || isLoading) return;
+
+    setIsLoading(true);
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    setIsSubscribed(true);
+    setIsLoading(false);
+  };
+
   return (
     <footer className="w-full bg-[#0B2A4C]">
       {/* Newsletter Section */}
@@ -78,21 +95,47 @@ export function Footer() {
                 Recevez nos meilleurs cours et conseils chaque semaine.
               </p>
             </div>
-            <form className="flex w-full max-w-md gap-3">
-              <input
-                type="email"
-                placeholder="Votre adresse email"
-                className="flex-1 rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:border-[#E8A336] focus:outline-none focus:ring-1 focus:ring-[#E8A336]"
-              />
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                type="submit"
-                className="rounded-lg bg-[#E8A336] px-6 py-3 text-sm font-semibold text-[#0B2A4C] transition-colors hover:bg-[#D4922E]"
-              >
-                S&apos;inscrire
-              </motion.button>
-            </form>
+            <AnimatePresence mode="wait">
+              {isSubscribed ? (
+                <motion.div
+                  key="success"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center gap-3 rounded-lg bg-green-500/10 px-6 py-3"
+                >
+                  <CheckCircle className="h-5 w-5 text-green-400" />
+                  <span className="text-sm font-medium text-green-400">
+                    Merci ! Vous etes inscrit a notre newsletter.
+                  </span>
+                </motion.div>
+              ) : (
+                <motion.form
+                  key="form"
+                  initial={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onSubmit={handleNewsletterSubmit}
+                  className="flex w-full max-w-md gap-3"
+                >
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Votre adresse email"
+                    required
+                    className="flex-1 rounded-lg border border-white/20 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/50 focus:border-[#E8A336] focus:outline-none focus:ring-1 focus:ring-[#E8A336]"
+                  />
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={isLoading}
+                    className="rounded-lg bg-[#E8A336] px-6 py-3 text-sm font-semibold text-[#0B2A4C] transition-colors hover:bg-[#D4922E] disabled:opacity-70"
+                  >
+                    {isLoading ? "..." : "S'inscrire"}
+                  </motion.button>
+                </motion.form>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
@@ -201,14 +244,52 @@ export function Footer() {
           <div className="flex flex-col items-center gap-4 sm:flex-row">
             <span className="text-sm text-white/70">Paiements securises</span>
             <div className="flex gap-2">
-              {["Visa", "Mastercard", "Stripe", "PayPal"].map((method) => (
-                <div
-                  key={method}
-                  className="flex h-8 items-center justify-center rounded bg-white/10 px-3 text-xs font-medium text-white/80"
-                >
-                  {method}
-                </div>
-              ))}
+              {/* Visa */}
+              <div className="flex h-8 w-12 items-center justify-center rounded bg-white px-2">
+                <svg viewBox="0 0 48 32" className="h-5 w-auto">
+                  <path
+                    fill="#1A1F71"
+                    d="M20.8 22.4l1.9-11.5h3l-1.9 11.5h-3zm12.1-11.2c-.6-.2-1.5-.5-2.7-.5-3 0-5.1 1.5-5.1 3.7 0 1.6 1.5 2.5 2.6 3 1.2.6 1.6.9 1.6 1.4 0 .8-.9 1.1-1.8 1.1-1.2 0-1.9-.2-2.9-.6l-.4-.2-.4 2.5c.7.3 2.1.6 3.5.6 3.2 0 5.3-1.5 5.3-3.8 0-1.3-.8-2.3-2.5-3.1-1-.5-1.7-.9-1.7-1.4 0-.5.5-1 1.7-1 1 0 1.7.2 2.3.4l.3.1.4-2.2zm7.8-.3h-2.3c-.7 0-1.3.2-1.6 1l-4.5 10.5h3.2s.5-1.4.6-1.7h3.9c.1.4.4 1.7.4 1.7h2.8l-2.5-11.5zm-3.7 7.4c.3-.7 1.2-3.3 1.2-3.3s.3-.7.4-1.1l.2 1s.6 2.8.7 3.4h-2.5zM18.6 10.9l-2.8 7.8-.3-1.5c-.5-1.7-2.1-3.6-3.9-4.5l2.7 10.6h3.2l4.8-12.4h-3.7z"
+                  />
+                  <path
+                    fill="#F9A533"
+                    d="M12.6 10.9H7.5l-.1.3c3.8.9 6.3 3.2 7.4 5.9l-1.1-5.2c-.2-.8-.8-1-1.1-1z"
+                  />
+                </svg>
+              </div>
+              {/* Mastercard */}
+              <div className="flex h-8 w-12 items-center justify-center rounded bg-white px-2">
+                <svg viewBox="0 0 48 32" className="h-5 w-auto">
+                  <circle cx="18" cy="16" r="10" fill="#EB001B" />
+                  <circle cx="30" cy="16" r="10" fill="#F79E1B" />
+                  <path
+                    d="M24 8.5c2.5 2 4 5 4 8.5s-1.5 6.5-4 8.5c-2.5-2-4-5-4-8.5s1.5-6.5 4-8.5z"
+                    fill="#FF5F00"
+                  />
+                </svg>
+              </div>
+              {/* Stripe */}
+              <div className="flex h-8 w-12 items-center justify-center rounded bg-[#635BFF] px-2">
+                <svg viewBox="0 0 60 25" className="h-4 w-auto">
+                  <path
+                    fill="#fff"
+                    d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32c-1.14.58-2.77 1.05-4.55 1.05-4.66 0-7.2-2.93-7.2-7.32 0-4.08 2.48-7.35 6.64-7.35 4.08 0 5.97 3.14 5.97 7.35 0 .49-.03.99-.05 1.35zm-5.92-5.62c-1.33 0-2.31.98-2.51 2.72h4.87c-.03-1.6-.79-2.72-2.36-2.72zm-12.93 11.44h-4.51V6.15h4.51v14zm-9.37 0h-4.51V6.15h4.51v14zm-9.38 0H17.5V.7h4.54v19.4zM12.08 13.6c0 4.08-2.6 6.65-6.38 6.65-1.74 0-3.28-.53-4.4-1.4l.11-3.47c1.08.79 2.28 1.26 3.68 1.26 1.47 0 2.44-.72 2.44-2.15 0-1.47-.97-2.15-2.44-2.15-.95 0-1.87.26-2.68.63l-.11-8.26h8.67v3.45h-4.65l.05 1.86c.32-.05.69-.1 1.08-.1 3.45 0 4.63 2.23 4.63 3.68z"
+                  />
+                </svg>
+              </div>
+              {/* PayPal */}
+              <div className="flex h-8 w-12 items-center justify-center rounded bg-white px-2">
+                <svg viewBox="0 0 48 32" className="h-5 w-auto">
+                  <path
+                    fill="#253B80"
+                    d="M19.5 8h6.2c3.2 0 4.5 1.6 4.3 4-.4 4.4-3.2 6.8-6.8 6.8h-1.7c-.5 0-1 .4-1.1.9l-.9 5.5c-.1.4-.4.7-.8.7H15l3.5-17c.1-.6.5-.9 1-.9z"
+                  />
+                  <path
+                    fill="#179BD7"
+                    d="M35 8.2c-.4 4.4-3.2 6.6-6.8 6.6h-1.7c-.5 0-1 .4-1.1.9l-1.3 8.1c-.1.3.2.6.5.6h3.5c.5 0 .9-.3 1-.8l.7-4.5c.1-.5.5-.8 1-.8h.7c3.3 0 5.9-2.2 6.3-5.5.2-1.6-.3-2.9-1.3-3.8-.4-.4-.9-.6-1.5-.8z"
+                  />
+                </svg>
+              </div>
             </div>
           </div>
         </div>

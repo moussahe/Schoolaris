@@ -172,6 +172,17 @@
   --color-emerald-700: #047857;
   --color-emerald-800: #065f46;
   --color-emerald-900: #064e3b;
+
+  /* ==========================================================================
+     SCHOOLARIS BRAND COLORS (Gemini Design System)
+  ========================================================================== */
+  --color-brand-dark: #0b2a4c;
+  --color-brand-gold: #e8a336;
+  --color-brand-gold-hover: #d4922e;
+  --color-brand-chalk: #fdfdfd;
+  --color-brand-pearl: #f4f5f7;
+  --color-brand-text: #1a1a1a;
+  --color-brand-muted: #6b7280;
 }
 
 /* =============================================================================

@@ -103,15 +103,15 @@ export function StatsSection() {
           className="mt-12 flex flex-wrap items-center justify-center gap-6 border-t border-white/10 pt-8"
         >
           <div className="flex items-center gap-2 text-sm text-white/70">
-            <div className="h-2 w-2 rounded-full bg-green-400" />
+            <div className="h-2 w-2 rounded-full bg-[#E8A336]" />
             Paiements securises
           </div>
           <div className="flex items-center gap-2 text-sm text-white/70">
-            <div className="h-2 w-2 rounded-full bg-green-400" />
+            <div className="h-2 w-2 rounded-full bg-[#E8A336]" />
             Donnees protegees RGPD
           </div>
           <div className="flex items-center gap-2 text-sm text-white/70">
-            <div className="h-2 w-2 rounded-full bg-green-400" />
+            <div className="h-2 w-2 rounded-full bg-[#E8A336]" />
             Support 7j/7
           </div>
         </motion.div>
