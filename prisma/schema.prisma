@@ -142,9 +142,10 @@ model Child {
   updatedAt  DateTime   @updatedAt
 
   // Relations
-  parent    User       @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
-  purchases Purchase[]
-  progress  Progress[]
+  parent        User             @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
+  purchases     Purchase[]
+  progress      Progress[]
+  conversations AIConversation[]
 
   @@index([parentId])
   @@index([gradeLevel])
@@ -404,4 +405,51 @@ model Review {
   @@unique([userId, courseId])
   @@index([courseId])
   @@index([rating])
+}
+
+// ============ AI TUTOR ============
+
+enum AIMessageRole {
+  USER
+  ASSISTANT
+}
+
+model AIConversation {
+  id        String   @id @default(cuid())
+  childId   String
+  courseId  String?  // Optional: conversation can be course-specific
+  lessonId  String?  // Optional: conversation can be lesson-specific
+  title     String?  // Auto-generated from first message
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  child    Child        @relation(fields: [childId], references: [id], onDelete: Cascade)
+  messages AIMessage[]
+
+  @@index([childId])
+  @@index([courseId])
+  @@index([lessonId])
+  @@index([createdAt])
+}
+
+model AIMessage {
+  id             String        @id @default(cuid())
+  conversationId String
+  role           AIMessageRole
+  content        String        @db.Text
+
+  // Context at time of message (for AI to understand)
+  contextCourseId  String?
+  contextLessonId  String?
+  contextQuizScore Int?
+
+  // Metadata
+  tokensUsed     Int?          // Track API usage for cost management
+  createdAt      DateTime      @default(now())
+
+  conversation AIConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([createdAt])
 }

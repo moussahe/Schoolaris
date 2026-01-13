@@ -18,6 +18,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { LessonContent } from "@/components/parent/lesson-content";
 import { MarkCompleteButton } from "@/components/parent/mark-complete-button";
+import { AIChatButton } from "@/components/ai";
 
 interface PageProps {
   params: Promise<{
@@ -65,6 +66,8 @@ async function getLessonWithNavigation(
             select: {
               id: true,
               title: true,
+              gradeLevel: true,
+              subject: true,
             },
           },
         },
@@ -351,6 +354,16 @@ async function LessonViewer({
           </Button>
         )}
       </div>
+
+      {/* AI Assistant Button */}
+      <AIChatButton
+        context={{
+          level: lesson.chapter.course.gradeLevel,
+          subject: lesson.chapter.course.subject,
+          courseTitle: lesson.chapter.course.title,
+          lessonTitle: lesson.title,
+        }}
+      />
     </div>
   );
 }
