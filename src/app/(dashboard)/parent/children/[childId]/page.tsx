@@ -26,6 +26,7 @@ import {
   StreakCounter,
   BadgeDisplay,
 } from "@/components/gamification";
+import { LearningPathCard } from "@/components/ai";
 
 interface PageProps {
   params: Promise<{
@@ -322,6 +323,9 @@ async function ChildDetail({
         />
         <BadgeDisplay badges={child.gamification.badges} maxVisible={4} />
       </div>
+
+      {/* AI Learning Path */}
+      <LearningPathCard childId={child.id} />
 
       {/* Courses Grid */}
       <div>
