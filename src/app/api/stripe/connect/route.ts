@@ -12,7 +12,7 @@ import {
  * POST /api/stripe/connect
  * Start Stripe Connect onboarding for a teacher
  */
-export async function POST(_req: NextRequest) {
+export async function POST() {
   try {
     const session = await auth();
     if (!session?.user) {

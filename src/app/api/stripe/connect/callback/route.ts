@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getConnectAccount } from "@/lib/stripe";
@@ -7,7 +7,7 @@ import { getConnectAccount } from "@/lib/stripe";
  * GET /api/stripe/connect/callback
  * Handle return from Stripe Connect onboarding
  */
-export async function GET(_req: NextRequest) {
+export async function GET() {
   try {
     const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
 
