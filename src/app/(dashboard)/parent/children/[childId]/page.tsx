@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { xpToNextLevel } from "@/lib/gamification";
 import {
   ArrowLeft,
   BookOpen,
@@ -20,6 +21,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ProgressBar } from "@/components/parent/progress-bar";
 import { ChildFormDialog } from "@/components/parent/child-form-dialog";
+import {
+  XPProgress,
+  StreakCounter,
+  BadgeDisplay,
+} from "@/components/gamification";
 
 interface PageProps {
   params: Promise<{
@@ -85,6 +91,10 @@ async function getChildWithDetails(childId: string, userId: string) {
         },
         orderBy: { lastAccessedAt: "desc" },
       },
+      badges: {
+        include: { badge: true },
+        orderBy: { earnedAt: "desc" },
+      },
     },
   });
 
@@ -126,6 +136,19 @@ async function getChildWithDetails(childId: string, userId: string) {
   const overallProgress =
     totalLessonsAll > 0 ? (completedLessonsAll / totalLessonsAll) * 100 : 0;
 
+  // Calculate XP progress
+  const levelProgress = xpToNextLevel(child.xp);
+
+  // Format badges for display
+  const formattedBadges = child.badges.map((b) => ({
+    code: b.badge.code,
+    name: b.badge.name,
+    description: b.badge.description,
+    imageUrl: b.badge.imageUrl,
+    category: b.badge.category,
+    earnedAt: b.earnedAt,
+  }));
+
   return {
     ...child,
     coursesWithProgress,
@@ -135,6 +158,14 @@ async function getChildWithDetails(childId: string, userId: string) {
       totalLessons: totalLessonsAll,
       completedLessons: completedLessonsAll,
       overallProgress,
+    },
+    gamification: {
+      xp: child.xp,
+      level: child.level,
+      levelProgress,
+      currentStreak: child.currentStreak,
+      longestStreak: child.longestStreak,
+      badges: formattedBadges,
     },
   };
 }
@@ -274,6 +305,22 @@ async function ChildDetail({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Gamification Section */}
+      <div className="grid gap-4 md:grid-cols-3">
+        <XPProgress
+          xp={child.gamification.xp}
+          level={child.gamification.level}
+          progress={child.gamification.levelProgress.progress}
+          current={child.gamification.levelProgress.current}
+          needed={child.gamification.levelProgress.needed}
+        />
+        <StreakCounter
+          currentStreak={child.gamification.currentStreak}
+          longestStreak={child.gamification.longestStreak}
+        />
+        <BadgeDisplay badges={child.gamification.badges} maxVisible={4} />
       </div>
 
       {/* Courses Grid */}

@@ -1,6 +1,3 @@
-export {
-  XPBadge,
-  StreakBadge,
-  AchievementBadge,
-  LevelProgress,
-} from "./xp-badge";
+export { XPProgress } from "./xp-progress";
+export { StreakCounter } from "./streak-counter";
+export { BadgeDisplay } from "./badge-display";

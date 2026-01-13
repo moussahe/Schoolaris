@@ -141,11 +141,19 @@ model Child {
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
+  // Gamification
+  xp             Int      @default(0)
+  level          Int      @default(1)
+  currentStreak  Int      @default(0)
+  longestStreak  Int      @default(0)
+  lastActivityAt DateTime?
+
   // Relations
   parent        User             @relation("ParentChildren", fields: [parentId], references: [id], onDelete: Cascade)
   purchases     Purchase[]
   progress      Progress[]
   conversations AIConversation[]
+  badges        ChildBadge[]
 
   @@index([parentId])
   @@index([gradeLevel])
@@ -491,4 +499,47 @@ model AIMessage {
 
   @@index([conversationId])
   @@index([createdAt])
+}
+
+// ============ GAMIFICATION ============
+
+enum BadgeCategory {
+  PROGRESS     // Completing lessons/courses
+  STREAK       // Daily study streaks
+  QUIZ         // Quiz performance
+  ACHIEVEMENT  // Special milestones
+  SOCIAL       // Sharing, helping others
+}
+
+model Badge {
+  id          String        @id @default(cuid())
+  code        String        @unique // e.g., "first_lesson", "streak_7", "quiz_master"
+  name        String
+  description String
+  imageUrl    String?
+  category    BadgeCategory
+  xpReward    Int           @default(0)
+  requirement Json?         // e.g., { "lessonsCompleted": 10 }
+  isSecret    Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+
+  children ChildBadge[]
+
+  @@index([category])
+  @@index([code])
+}
+
+model ChildBadge {
+  id        String   @id @default(cuid())
+  childId   String
+  badgeId   String
+  earnedAt  DateTime @default(now())
+
+  child Child @relation(fields: [childId], references: [id], onDelete: Cascade)
+  badge Badge @relation(fields: [badgeId], references: [id], onDelete: Cascade)
+
+  @@unique([childId, badgeId])
+  @@index([childId])
+  @@index([badgeId])
+  @@index([earnedAt])
 }
