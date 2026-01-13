@@ -10,7 +10,6 @@ import {
   BookOpen,
   CheckCircle2,
   Play,
-  Lock,
   Clock,
   FileText,
   Video,

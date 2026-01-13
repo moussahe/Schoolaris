@@ -4,17 +4,8 @@ import Image from "next/image";
 import { cookies } from "next/headers";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import {
-  BookOpen,
-  CheckCircle2,
-  Play,
-  Clock,
-  Trophy,
-  ArrowRight,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { BookOpen, CheckCircle2, Play, Trophy, ArrowRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
 
 async function getStudentCourses(childId: string) {
   const purchases = await prisma.purchase.findMany({

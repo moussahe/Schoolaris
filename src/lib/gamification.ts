@@ -4,6 +4,8 @@ import { BadgeCategory } from "@prisma/client";
 // XP rewards for different actions
 export const XP_REWARDS = {
   LESSON_COMPLETED: 50,
+  QUIZ_COMPLETE: 25,
+  QUIZ_PASS: 100,
   QUIZ_PASSED: 100,
   QUIZ_PERFECT: 200,
   COURSE_COMPLETED: 500,
@@ -438,3 +440,6 @@ export async function getGamificationStats(childId: string) {
     recentActivityCount: recentActivity,
   };
 }
+
+// Alias for addXP (for API consistency)
+export const awardXP = addXP;

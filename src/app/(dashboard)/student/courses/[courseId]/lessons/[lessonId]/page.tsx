@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LessonContent } from "@/components/student/lesson-content";
-import { LessonQuiz } from "@/components/student/lesson-quiz";
+import { QuizSection } from "@/components/quiz/quiz-section";
 import { AITutorPanel } from "@/components/student/ai-tutor-panel";
 
 interface PageProps {
@@ -234,7 +234,7 @@ async function LessonViewer({
 
       {/* Quiz Section */}
       {quiz && (
-        <LessonQuiz
+        <QuizSection
           quiz={{
             id: quiz.id,
             title: quiz.title,
@@ -261,6 +261,8 @@ async function LessonViewer({
             ),
           }}
           lessonId={lesson.id}
+          lessonTitle={lesson.title}
+          subject={course.subject}
           childId={childId}
           previousScore={quizScore}
         />
