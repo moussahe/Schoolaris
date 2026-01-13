@@ -28,11 +28,24 @@ export default function ForgotPasswordPage() {
   });
 
   const onSubmit = async (data: ForgotPasswordFormData) => {
-    // TODO: Implement password reset email
-    console.log("Reset password for:", data.email);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSubmitted(true);
+    try {
+      const response = await fetch("/api/auth/forgot-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email }),
+      });
+
+      // Always show success to prevent email enumeration
+      if (response.ok) {
+        setIsSubmitted(true);
+      } else {
+        // Still show success message for security
+        setIsSubmitted(true);
+      }
+    } catch {
+      // Show success anyway to prevent enumeration
+      setIsSubmitted(true);
+    }
   };
 
   return (

@@ -6,6 +6,11 @@ import {
   calculateTeacherRevenue,
   stripe,
 } from "@/lib/stripe";
+import { sendEmail } from "@/lib/email";
+import {
+  purchaseConfirmationEmail,
+  purchaseConfirmationText,
+} from "@/lib/email/templates/purchase-confirmation";
 import type Stripe from "stripe";
 
 /**
@@ -179,8 +184,82 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     });
   }
 
-  // TODO: Send confirmation email
+  // Send confirmation email
+  await sendPurchaseConfirmationEmail({
+    buyerId,
+    courseId,
+    childId,
+    courseName: course.title,
+    teacherName: course.author.name || "Professeur",
+    price: amount,
+  });
+
   console.log(`Purchase completed: Course ${courseId} by user ${buyerId}`);
+}
+
+/**
+ * Send purchase confirmation email
+ */
+async function sendPurchaseConfirmationEmail(data: {
+  buyerId: string;
+  courseId: string;
+  childId?: string;
+  courseName: string;
+  teacherName: string;
+  price: number;
+}) {
+  try {
+    // Get buyer info
+    const buyer = await prisma.user.findUnique({
+      where: { id: data.buyerId },
+      select: { name: true, email: true },
+    });
+
+    if (!buyer?.email) {
+      console.error("[Email] No email found for buyer:", data.buyerId);
+      return;
+    }
+
+    // Get child name if applicable
+    let childName: string | undefined;
+    if (data.childId) {
+      const child = await prisma.child.findUnique({
+        where: { id: data.childId },
+        select: { firstName: true },
+      });
+      childName = child?.firstName;
+    }
+
+    const baseUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+    const courseUrl = childName
+      ? `${baseUrl}/parent/courses/${data.courseId}`
+      : `${baseUrl}/dashboard/courses`;
+
+    await sendEmail({
+      to: buyer.email,
+      subject: `Confirmation d'achat - ${data.courseName}`,
+      html: purchaseConfirmationEmail({
+        parentName: buyer.name || "Cher client",
+        courseName: data.courseName,
+        teacherName: data.teacherName,
+        price: data.price,
+        childName,
+        courseUrl,
+      }),
+      text: purchaseConfirmationText({
+        parentName: buyer.name || "Cher client",
+        courseName: data.courseName,
+        teacherName: data.teacherName,
+        price: data.price,
+        childName,
+        courseUrl,
+      }),
+    });
+
+    console.log(`[Email] Purchase confirmation sent to ${buyer.email}`);
+  } catch (error) {
+    console.error("[Email] Failed to send purchase confirmation:", error);
+  }
 }
 
 /**

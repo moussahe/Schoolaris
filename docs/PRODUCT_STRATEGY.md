@@ -276,6 +276,10 @@ Pour atteindre 500K€:
 - [x] Exercices generatifs IA
 - [x] Mode Revision Examen (Brevet/Bac)
 - [x] Tracking des points faibles (weak areas) avec IA
+- [x] Systeme email transactionnel (Resend)
+- [x] Reset mot de passe avec email
+- [x] Emails de confirmation d'achat
+- [x] Envoi automatique rapports hebdomadaires
 - [ ] Beta privée 50 familles
 - [ ] Onboarder 10 profs
 
