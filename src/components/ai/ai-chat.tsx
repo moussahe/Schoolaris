@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Send, Bot, User, Loader2, Sparkles, X } from "lucide-react";
+import { Send, Bot, User, Loader2, Sparkles, X, History } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -14,6 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface Message {
+  id?: string;
   role: "user" | "assistant";
   content: string;
 }
@@ -27,17 +28,38 @@ interface ChatContext {
 
 interface AIChatProps {
   context: ChatContext;
+  childId?: string;
+  courseId?: string;
+  lessonId?: string;
+  conversationId?: string;
   className?: string;
   onClose?: () => void;
+  onConversationCreated?: (conversationId: string) => void;
 }
 
-export function AIChat({ context, className, onClose }: AIChatProps) {
+export function AIChat({
+  context,
+  childId,
+  courseId,
+  lessonId,
+  conversationId: initialConversationId,
+  className,
+  onClose,
+  onConversationCreated,
+}: AIChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(
+    initialConversationId || null,
+  );
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Mode persistence active si childId est fourni
+  const persistenceEnabled = !!childId;
 
   // Auto-scroll vers le bas
   const scrollToBottom = useCallback(() => {
@@ -48,11 +70,111 @@ export function AIChat({ context, className, onClose }: AIChatProps) {
     scrollToBottom();
   }, [messages, scrollToBottom]);
 
+  // Charger une conversation existante
+  useEffect(() => {
+    if (initialConversationId && persistenceEnabled) {
+      setIsInitializing(true);
+      fetch(`/api/ai/conversations/${initialConversationId}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.messages) {
+            setMessages(
+              data.messages.map(
+                (m: { id: string; role: string; content: string }) => ({
+                  id: m.id,
+                  role: m.role.toLowerCase() as "user" | "assistant",
+                  content: m.content,
+                }),
+              ),
+            );
+          }
+        })
+        .catch((err) => {
+          console.error("Erreur chargement conversation:", err);
+        })
+        .finally(() => {
+          setIsInitializing(false);
+        });
+    }
+  }, [initialConversationId, persistenceEnabled]);
+
+  // Creer une nouvelle conversation
+  const createConversation = async (): Promise<string | null> => {
+    if (!childId) return null;
+
+    try {
+      const res = await fetch("/api/ai/conversations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ childId, courseId, lessonId }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Erreur de creation");
+      }
+
+      setConversationId(data.id);
+      onConversationCreated?.(data.id);
+      return data.id;
+    } catch (err) {
+      console.error("Erreur creation conversation:", err);
+      return null;
+    }
+  };
+
+  // Envoyer un message avec persistence
+  const sendMessageWithPersistence = async (
+    convId: string,
+    userContent: string,
+  ) => {
+    const res = await fetch(`/api/ai/conversations/${convId}/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: userContent, context }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Erreur d'envoi");
+    }
+
+    return data;
+  };
+
+  // Envoyer un message sans persistence (mode original)
+  const sendMessageWithoutPersistence = async (
+    allMessages: Message[],
+  ): Promise<string> => {
+    const res = await fetch("/api/ai/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        messages: allMessages.map((m) => ({
+          role: m.role,
+          content: m.content,
+        })),
+        context,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(data.error || "Une erreur est survenue");
+    }
+
+    return data.message;
+  };
+
   // Envoyer un message
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
-    const userMessage: Message = { role: "user", content: input.trim() };
+    const userContent = input.trim();
+    const userMessage: Message = { role: "user", content: userContent };
     const newMessages = [...messages, userMessage];
 
     setMessages(newMessages);
@@ -61,34 +183,56 @@ export function AIChat({ context, className, onClose }: AIChatProps) {
     setError(null);
 
     try {
-      const res = await fetch("/api/ai/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          messages: newMessages,
-          context,
-        }),
-      });
+      if (persistenceEnabled) {
+        // Mode persistence
+        let currentConvId = conversationId;
 
-      const data = await res.json();
+        // Creer une conversation si necessaire
+        if (!currentConvId) {
+          currentConvId = await createConversation();
+          if (!currentConvId) {
+            throw new Error("Impossible de creer la conversation");
+          }
+        }
 
-      if (!res.ok) {
-        throw new Error(data.error || "Une erreur est survenue");
+        const data = await sendMessageWithPersistence(
+          currentConvId,
+          userContent,
+        );
+
+        setMessages([
+          ...messages,
+          {
+            id: data.userMessage.id,
+            role: "user",
+            content: data.userMessage.content,
+          },
+          {
+            id: data.assistantMessage.id,
+            role: "assistant",
+            content: data.assistantMessage.content,
+          },
+        ]);
+      } else {
+        // Mode sans persistence (original)
+        const assistantContent =
+          await sendMessageWithoutPersistence(newMessages);
+        setMessages([
+          ...newMessages,
+          { role: "assistant", content: assistantContent },
+        ]);
       }
-
-      setMessages([
-        ...newMessages,
-        { role: "assistant", content: data.message },
-      ]);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur de connexion");
+      // Rollback en cas d'erreur
+      setMessages(messages);
     } finally {
       setIsLoading(false);
       textareaRef.current?.focus();
     }
   };
 
-  // Gérer Enter pour envoyer
+  // Gerer Enter pour envoyer
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -99,7 +243,23 @@ export function AIChat({ context, className, onClose }: AIChatProps) {
   // Message d'accueil
   const welcomeMessage = `Salut ! 👋 Je suis ton assistant pour t'aider avec ${context.subject}${context.lessonTitle ? ` - "${context.lessonTitle}"` : ""}.
 
-Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas directement les réponses, mais je t'aiderai à comprendre ! 💡`;
+Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas directement les reponses, mais je t'aiderai a comprendre ! 💡`;
+
+  if (isInitializing) {
+    return (
+      <Card
+        className={cn(
+          "flex h-[500px] flex-col items-center justify-center",
+          className,
+        )}
+      >
+        <Loader2 className="h-8 w-8 animate-spin text-violet-500" />
+        <p className="mt-2 text-sm text-muted-foreground">
+          Chargement de la conversation...
+        </p>
+      </Card>
+    );
+  }
 
   return (
     <Card className={cn("flex h-[500px] flex-col", className)}>
@@ -110,6 +270,9 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
               <Sparkles className="h-4 w-4 text-white" />
             </div>
             Assistant IA
+            {persistenceEnabled && conversationId && (
+              <History className="h-3 w-3 text-muted-foreground" />
+            )}
           </CardTitle>
           {onClose && (
             <Button variant="ghost" size="icon" onClick={onClose}>
@@ -119,6 +282,9 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
         </div>
         <p className="text-xs text-muted-foreground">
           {context.level} • {context.subject}
+          {persistenceEnabled && (
+            <span className="ml-2 text-violet-500">• Sauvegarde auto</span>
+          )}
         </p>
       </CardHeader>
 
@@ -139,7 +305,7 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
           {/* Messages */}
           {messages.map((message, index) => (
             <div
-              key={index}
+              key={message.id || index}
               className={cn(
                 "flex gap-3",
                 message.role === "user" && "flex-row-reverse",
@@ -182,7 +348,7 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
                 <div className="flex items-center gap-2">
                   <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="text-sm text-muted-foreground">
-                    Je réfléchis...
+                    Je reflechis...
                   </span>
                 </div>
               </div>

@@ -32,3 +32,13 @@ export {
   useHasPurchased,
   useCreateCheckout,
 } from "./use-purchases";
+
+// AI Chat hooks
+export {
+  useAIChat,
+  useConversations,
+  useConversationMessages,
+  useSendMessage,
+  useDeleteConversation,
+} from "./use-ai-chat";
+export type { AIMessage, AIConversation } from "./use-ai-chat";
