@@ -266,7 +266,7 @@ Pour atteindre 500K€:
 
 - [x] Développer AI Tutor (chat contextuel)
 - [x] Améliorer dashboard parent (alertes)
-- [ ] Créer 3 cours de démo complets
+- [x] Créer 3 cours de démo complets
 
 ### Ce Mois
 
@@ -280,6 +280,7 @@ Pour atteindre 500K€:
 - [x] Reset mot de passe avec email
 - [x] Emails de confirmation d'achat
 - [x] Envoi automatique rapports hebdomadaires
+- [x] Rate limiting Redis (Upstash) pour production
 - [ ] Beta privée 50 familles
 - [ ] Onboarder 10 profs
 
