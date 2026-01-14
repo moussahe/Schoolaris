@@ -46,15 +46,20 @@ interface SpeechRecognition extends EventTarget {
   abort: () => void;
 }
 
+// Extend Window interface for Speech Recognition API
+declare global {
+  interface Window {
+    SpeechRecognition?: new () => SpeechRecognition;
+    webkitSpeechRecognition?: new () => SpeechRecognition;
+  }
+}
+
 // Check for browser support
 function getSpeechRecognition(): (new () => SpeechRecognition) | null {
   if (typeof window === "undefined") return null;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const SpeechRecognitionAPI =
-    (window as any).SpeechRecognition ||
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (window as any).webkitSpeechRecognition;
+    window.SpeechRecognition || window.webkitSpeechRecognition;
 
   return SpeechRecognitionAPI || null;
 }

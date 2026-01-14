@@ -11,6 +11,9 @@ import {
   History,
   Mic,
   MicOff,
+  Volume2,
+  VolumeX,
+  Square,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -30,6 +33,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useStreamingMessage } from "@/hooks/use-ai-chat";
 import { useVoiceInput } from "@/hooks/use-voice-input";
+import { useVoiceOutput } from "@/hooks/use-voice-output";
 
 interface Message {
   id?: string;
@@ -100,6 +104,68 @@ export function AIChat({
       }
     },
   });
+
+  // Hook for voice output (TTS)
+  const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
+  const [currentlySpeakingId, setCurrentlySpeakingId] = useState<string | null>(
+    null,
+  );
+  const {
+    isSpeaking,
+    isSupported: isTTSSupported,
+    speak,
+    stop: stopSpeaking,
+  } = useVoiceOutput({
+    language: "fr-FR",
+    rate: 0.95, // Slightly slower for young learners
+    onStart: () => {},
+    onEnd: () => setCurrentlySpeakingId(null),
+    onError: () => setCurrentlySpeakingId(null),
+  });
+
+  // Handle speaking a message
+  const handleSpeak = useCallback(
+    (messageId: string | undefined, content: string) => {
+      if (!messageId) return;
+
+      if (isSpeaking && currentlySpeakingId === messageId) {
+        // Stop if clicking on currently speaking message
+        stopSpeaking();
+        setCurrentlySpeakingId(null);
+      } else {
+        // Start speaking this message
+        stopSpeaking(); // Stop any current speech
+        setCurrentlySpeakingId(messageId);
+        speak(content);
+      }
+    },
+    [isSpeaking, currentlySpeakingId, speak, stopSpeaking],
+  );
+
+  // Auto-speak new AI responses if voice output is enabled
+  useEffect(() => {
+    if (!voiceOutputEnabled || !isTTSSupported) return;
+
+    // Find the last assistant message
+    const lastMessage = messages[messages.length - 1];
+    if (
+      lastMessage?.role === "assistant" &&
+      lastMessage.id &&
+      !isStreaming &&
+      !isSpeaking
+    ) {
+      // Auto-speak the new response
+      setCurrentlySpeakingId(lastMessage.id);
+      speak(lastMessage.content);
+    }
+  }, [
+    messages,
+    voiceOutputEnabled,
+    isTTSSupported,
+    isStreaming,
+    isSpeaking,
+    speak,
+  ]);
 
   // Mode persistence active si childId est fourni
   const persistenceEnabled = !!childId;
@@ -361,11 +427,48 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
               <History className="h-3 w-3 text-muted-foreground" />
             )}
           </CardTitle>
-          {onClose && (
-            <Button variant="ghost" size="icon" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
-          )}
+          <div className="flex items-center gap-1">
+            {/* Voice output toggle for accessibility */}
+            {isTTSSupported && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={voiceOutputEnabled ? "default" : "ghost"}
+                      size="icon"
+                      onClick={() => {
+                        if (isSpeaking) stopSpeaking();
+                        setVoiceOutputEnabled(!voiceOutputEnabled);
+                      }}
+                      className={cn(
+                        "h-8 w-8",
+                        voiceOutputEnabled &&
+                          "bg-violet-600 hover:bg-violet-700 text-white",
+                      )}
+                    >
+                      {voiceOutputEnabled ? (
+                        <Volume2 className="h-4 w-4" />
+                      ) : (
+                        <VolumeX className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>
+                      {voiceOutputEnabled
+                        ? "Desactiver la lecture vocale"
+                        : "Activer la lecture vocale automatique"}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
+            {onClose && (
+              <Button variant="ghost" size="icon" onClick={onClose}>
+                <X className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
         </div>
         <p className="text-xs text-muted-foreground">
           {context.level} • {context.subject}
@@ -412,15 +515,43 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
                   <User className="h-4 w-4 text-white" />
                 )}
               </div>
-              <div
-                className={cn(
-                  "max-w-[80%] rounded-2xl px-4 py-3",
-                  message.role === "assistant"
-                    ? "rounded-tl-none bg-muted"
-                    : "rounded-tr-none bg-emerald-600 text-white",
+              <div className="flex flex-col gap-1">
+                <div
+                  className={cn(
+                    "max-w-[80%] rounded-2xl px-4 py-3",
+                    message.role === "assistant"
+                      ? "rounded-tl-none bg-muted"
+                      : "rounded-tr-none bg-emerald-600 text-white",
+                  )}
+                >
+                  <p className="whitespace-pre-wrap text-sm">
+                    {message.content}
+                  </p>
+                </div>
+                {/* Speaker button for AI messages */}
+                {message.role === "assistant" && isTTSSupported && (
+                  <button
+                    onClick={() => handleSpeak(message.id, message.content)}
+                    className={cn(
+                      "flex items-center gap-1.5 self-start rounded-full px-2 py-1 text-xs transition-all",
+                      currentlySpeakingId === message.id && isSpeaking
+                        ? "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300"
+                        : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                    )}
+                  >
+                    {currentlySpeakingId === message.id && isSpeaking ? (
+                      <>
+                        <Square className="h-3 w-3 fill-current" />
+                        <span>Arreter</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="h-3 w-3" />
+                        <span>Ecouter</span>
+                      </>
+                    )}
+                  </button>
                 )}
-              >
-                <p className="whitespace-pre-wrap text-sm">{message.content}</p>
               </div>
             </div>
           ))}
