@@ -131,6 +131,7 @@ model User {
   forumTopics    ForumTopic[]     @relation("TopicAuthor")
   forumReplies   ForumReply[]     @relation("ReplyAuthor")
   forumVotes     ForumVote[]      @relation("UserVotes")
+  alerts         Alert[]
 
   @@index([email])
   @@index([role])
@@ -167,6 +168,7 @@ model Child {
   forumTopics      ForumTopic[]      @relation("ChildTopics")
   forumReplies     ForumReply[]      @relation("ChildReplies")
   weakAreas        WeakArea[]
+  alerts           Alert[]
 
   @@index([parentId])
   @@index([gradeLevel])
@@ -458,15 +460,20 @@ model Alert {
   metadata    Json?         // Additional context (courseId, quizScore, etc.)
   isRead      Boolean       @default(false)
   isDismissed Boolean       @default(false)
+  emailSent   Boolean       @default(false) // Track if email notification was sent
   actionUrl   String?       // Deep link to relevant page
   expiresAt   DateTime?     // Auto-dismiss after this date
   createdAt   DateTime      @default(now())
+
+  parent      User          @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  child       Child?        @relation(fields: [childId], references: [id], onDelete: SetNull)
 
   @@index([parentId])
   @@index([childId])
   @@index([isRead])
   @@index([type])
   @@index([createdAt])
+  @@index([emailSent])
 }
 
 // ============ AI TUTOR ============

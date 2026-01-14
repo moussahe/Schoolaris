@@ -4,6 +4,14 @@
     {
       "path": "/api/reports/weekly/send-emails",
       "schedule": "0 19 * * 0"
+    },
+    {
+      "path": "/api/alerts/generate",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/alerts/send-emails",
+      "schedule": "10 */6 * * *"
     }
   ]
 }
