@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CourseEditForm } from "@/components/teacher/course-edit-form";
 import { ChapterList } from "@/components/teacher/chapter-list";
+import { CoursePublishDialog } from "@/components/teacher/course-publish-dialog";
 
 interface PageProps {
   params: Promise<{ courseId: string }>;
@@ -95,9 +96,23 @@ export default async function EditCoursePage({ params }: PageProps) {
               Voir le cours
             </Link>
           </Button>
-          <CoursePublishButton
+          <CoursePublishDialog
             courseId={course.id}
             isPublished={course.isPublished}
+            courseTitle={course.title}
+            courseDescription={course.description}
+            courseImageUrl={course.imageUrl}
+            learningOutcomes={learningOutcomes}
+            chapters={course.chapters.map((c) => ({
+              id: c.id,
+              title: c.title,
+              isPublished: c.isPublished,
+              lessons: c.lessons.map((l) => ({
+                id: l.id,
+                title: l.title,
+                isPublished: l.isPublished,
+              })),
+            }))}
           />
         </div>
       </div>
@@ -135,66 +150,5 @@ export default async function EditCoursePage({ params }: PageProps) {
         </TabsContent>
       </Tabs>
     </div>
-  );
-}
-
-// Publish button component
-function CoursePublishButton({
-  courseId,
-  isPublished,
-}: {
-  courseId: string;
-  isPublished: boolean;
-}) {
-  return (
-    <form
-      action={async () => {
-        "use server";
-        const { auth } = await import("@/lib/auth");
-        const { prisma } = await import("@/lib/prisma");
-        const { revalidatePath } = await import("next/cache");
-
-        const session = await auth();
-        if (!session?.user) return;
-
-        const course = await prisma.course.findUnique({
-          where: { id: courseId },
-          select: { authorId: true },
-        });
-
-        if (course?.authorId !== session.user.id) return;
-
-        await prisma.course.update({
-          where: { id: courseId },
-          data: {
-            isPublished: !isPublished,
-            publishedAt: !isPublished ? new Date() : null,
-          },
-        });
-
-        revalidatePath(`/teacher/courses/${courseId}`);
-      }}
-    >
-      <Button
-        type="submit"
-        className={`rounded-xl ${
-          isPublished
-            ? "bg-amber-500 hover:bg-amber-600"
-            : "bg-emerald-500 hover:bg-emerald-600"
-        }`}
-      >
-        {isPublished ? (
-          <>
-            <GlobeLock className="mr-2 h-4 w-4" />
-            Depublier
-          </>
-        ) : (
-          <>
-            <Globe className="mr-2 h-4 w-4" />
-            Publier
-          </>
-        )}
-      </Button>
-    </form>
   );
 }
