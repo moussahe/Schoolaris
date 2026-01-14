@@ -12,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useStreamingMessage } from "@/hooks/use-ai-chat";
 
 interface Message {
   id?: string;
@@ -56,8 +57,13 @@ export function AIChat({
   const [conversationId, setConversationId] = useState<string | null>(
     initialConversationId || null,
   );
+  const [streamingContent, setStreamingContent] = useState<string>("");
+  const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Hook for streaming messages
+  const { streamMessage } = useStreamingMessage();
 
   // Mode persistence active si childId est fourni
   const persistenceEnabled = !!childId;
@@ -125,26 +131,6 @@ export function AIChat({
     }
   };
 
-  // Envoyer un message avec persistence
-  const sendMessageWithPersistence = async (
-    convId: string,
-    userContent: string,
-  ) => {
-    const res = await fetch(`/api/ai/conversations/${convId}/messages`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: userContent, context }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      throw new Error(data.error || "Erreur d'envoi");
-    }
-
-    return data;
-  };
-
   // Envoyer un message sans persistence (mode original)
   const sendMessageWithoutPersistence = async (
     allMessages: Message[],
@@ -170,65 +156,116 @@ export function AIChat({
     return data.message;
   };
 
+  // Envoyer un message avec streaming (nouveau mode)
+  const sendMessageWithStreaming = async (
+    convId: string,
+    userContent: string,
+  ) => {
+    setIsStreaming(true);
+    setStreamingContent("");
+
+    // Add user message immediately
+    const tempUserMessage: Message = { role: "user", content: userContent };
+    setMessages((prev) => [...prev, tempUserMessage]);
+
+    // Track the full content during streaming
+    let finalContent = "";
+
+    const result = await streamMessage(convId, userContent, context, {
+      onStart: (userMessageId) => {
+        // Update user message with real ID
+        setMessages((prev) => {
+          const updated = [...prev];
+          const lastUserIndex = updated.findLastIndex(
+            (m) => m.role === "user" && m.content === userContent,
+          );
+          if (lastUserIndex !== -1) {
+            updated[lastUserIndex] = {
+              ...updated[lastUserIndex],
+              id: userMessageId,
+            };
+          }
+          return updated;
+        });
+      },
+      onText: (_, fullText) => {
+        finalContent = fullText;
+        setStreamingContent(fullText);
+      },
+      onComplete: (assistantMessageId) => {
+        // Replace streaming content with final message using captured content
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: assistantMessageId,
+            role: "assistant",
+            content: finalContent,
+          },
+        ]);
+        setStreamingContent("");
+        setIsStreaming(false);
+      },
+      onError: (errorMsg) => {
+        setError(errorMsg);
+        setIsStreaming(false);
+        setStreamingContent("");
+      },
+    });
+
+    // If streaming completed but callbacks didn't clean up properly
+    if (result.success) {
+      setIsStreaming(false);
+      setStreamingContent("");
+    }
+  };
+
   // Envoyer un message
   const sendMessage = async () => {
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || isStreaming) return;
 
     const userContent = input.trim();
     const userMessage: Message = { role: "user", content: userContent };
     const newMessages = [...messages, userMessage];
 
-    setMessages(newMessages);
     setInput("");
-    setIsLoading(true);
     setError(null);
 
     try {
       if (persistenceEnabled) {
-        // Mode persistence
+        // Mode persistence with streaming
         let currentConvId = conversationId;
 
         // Creer une conversation si necessaire
         if (!currentConvId) {
+          setIsLoading(true);
           currentConvId = await createConversation();
+          setIsLoading(false);
           if (!currentConvId) {
             throw new Error("Impossible de creer la conversation");
           }
         }
 
-        const data = await sendMessageWithPersistence(
-          currentConvId,
-          userContent,
-        );
-
-        setMessages([
-          ...messages,
-          {
-            id: data.userMessage.id,
-            role: "user",
-            content: data.userMessage.content,
-          },
-          {
-            id: data.assistantMessage.id,
-            role: "assistant",
-            content: data.assistantMessage.content,
-          },
-        ]);
+        // Use streaming mode
+        await sendMessageWithStreaming(currentConvId, userContent);
       } else {
-        // Mode sans persistence (original)
+        // Mode sans persistence (original, non-streaming)
+        setMessages(newMessages);
+        setIsLoading(true);
         const assistantContent =
           await sendMessageWithoutPersistence(newMessages);
         setMessages([
           ...newMessages,
           { role: "assistant", content: assistantContent },
         ]);
+        setIsLoading(false);
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erreur de connexion");
       // Rollback en cas d'erreur
       setMessages(messages);
-    } finally {
       setIsLoading(false);
+      setIsStreaming(false);
+    } finally {
       textareaRef.current?.focus();
     }
   };
@@ -339,8 +376,23 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
             </div>
           ))}
 
-          {/* Loading indicator */}
-          {isLoading && (
+          {/* Streaming response - shows as AI types */}
+          {isStreaming && streamingContent && (
+            <div className="flex gap-3">
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600">
+                <Bot className="h-4 w-4 text-white" />
+              </div>
+              <div className="max-w-[80%] rounded-2xl rounded-tl-none bg-muted px-4 py-3">
+                <p className="whitespace-pre-wrap text-sm">
+                  {streamingContent}
+                </p>
+                <span className="inline-block h-4 w-1 animate-pulse bg-violet-500 ml-1" />
+              </div>
+            </div>
+          )}
+
+          {/* Loading indicator - shows before streaming starts */}
+          {(isLoading || (isStreaming && !streamingContent)) && (
             <div className="flex gap-3">
               <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-purple-600">
                 <Bot className="h-4 w-4 text-white" />
@@ -377,15 +429,15 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
             placeholder="Pose ta question..."
             className="min-h-[44px] max-h-[120px] resize-none"
             rows={1}
-            disabled={isLoading}
+            disabled={isLoading || isStreaming}
           />
           <Button
             onClick={sendMessage}
-            disabled={!input.trim() || isLoading}
+            disabled={!input.trim() || isLoading || isStreaming}
             size="icon"
             className="h-11 w-11 flex-shrink-0 bg-emerald-600 hover:bg-emerald-700"
           >
-            {isLoading ? (
+            {isLoading || isStreaming ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <Send className="h-4 w-4" />

@@ -196,3 +196,137 @@ export function useDeleteConversation() {
     },
   });
 }
+
+// Types pour le streaming
+interface StreamEvent {
+  type: "init" | "text" | "done" | "error";
+  userMessageId?: string;
+  userMessageCreatedAt?: string;
+  text?: string;
+  assistantMessageId?: string;
+  assistantMessageCreatedAt?: string;
+  usage?: {
+    inputTokens: number;
+    outputTokens: number;
+  };
+  error?: string;
+}
+
+interface StreamCallbacks {
+  onStart?: (userMessageId: string) => void;
+  onText?: (text: string, fullText: string) => void;
+  onComplete?: (
+    assistantMessageId: string,
+    usage: { inputTokens: number; outputTokens: number },
+  ) => void;
+  onError?: (error: string) => void;
+}
+
+interface ChatContext {
+  level: string;
+  subject: string;
+  courseTitle?: string;
+  lessonTitle?: string;
+  lessonContent?: string;
+}
+
+// Hook pour le streaming SSE
+export function useStreamingMessage() {
+  const queryClient = useQueryClient();
+
+  const streamMessage = async (
+    conversationId: string,
+    content: string,
+    context: ChatContext,
+    callbacks?: StreamCallbacks,
+  ): Promise<{ success: boolean; error?: string }> => {
+    try {
+      const res = await fetch(
+        `/api/ai/conversations/${conversationId}/messages/stream`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ content, context }),
+        },
+      );
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        const errorMessage = errorData.error || "Erreur d'envoi";
+        callbacks?.onError?.(errorMessage);
+        return { success: false, error: errorMessage };
+      }
+
+      const reader = res.body?.getReader();
+      if (!reader) {
+        callbacks?.onError?.("Stream non disponible");
+        return { success: false, error: "Stream non disponible" };
+      }
+
+      const decoder = new TextDecoder();
+      let fullText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            try {
+              const event: StreamEvent = JSON.parse(line.slice(6));
+
+              switch (event.type) {
+                case "init":
+                  if (event.userMessageId) {
+                    callbacks?.onStart?.(event.userMessageId);
+                  }
+                  break;
+
+                case "text":
+                  if (event.text) {
+                    fullText += event.text;
+                    callbacks?.onText?.(event.text, fullText);
+                  }
+                  break;
+
+                case "done":
+                  if (event.assistantMessageId && event.usage) {
+                    callbacks?.onComplete?.(
+                      event.assistantMessageId,
+                      event.usage,
+                    );
+                  }
+                  // Invalider les queries pour refresh
+                  queryClient.invalidateQueries({
+                    queryKey: ["conversation-messages", conversationId],
+                  });
+                  queryClient.invalidateQueries({
+                    queryKey: ["conversations"],
+                  });
+                  break;
+
+                case "error":
+                  callbacks?.onError?.(event.error || "Erreur inconnue");
+                  return { success: false, error: event.error };
+              }
+            } catch {
+              // Ignorer les erreurs de parsing JSON pour les lignes incompletes
+            }
+          }
+        }
+      }
+
+      return { success: true };
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Erreur de connexion";
+      callbacks?.onError?.(errorMessage);
+      return { success: false, error: errorMessage };
+    }
+  };
+
+  return { streamMessage };
+}
