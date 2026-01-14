@@ -169,6 +169,7 @@ model Child {
   forumReplies     ForumReply[]      @relation("ChildReplies")
   weakAreas        WeakArea[]
   alerts           Alert[]
+  spacedRepetitionCards SpacedRepetitionCard[]
   quizAttempts     QuizAttempt[]
   studyGoals       StudyGoal[]
   adaptiveLearningStates AdaptiveLearningState[]
@@ -487,6 +488,7 @@ enum AlertType {
   STREAK           // Child maintained streak
   WEEKLY_REPORT    // Weekly progress summary
   AI_INSIGHT       // AI-generated insight about performance
+  REVISION_DUE     // Child has spaced repetition cards due for review
 }
 
 enum AlertPriority {
@@ -826,6 +828,7 @@ model WeakArea {
 
   // Relations
   child         Child      @relation(fields: [childId], references: [id], onDelete: Cascade)
+  spacedRepetitionCard SpacedRepetitionCard?
 
   @@unique([childId, subject, topic])
   @@index([childId])
@@ -987,6 +990,91 @@ model WeeklyReport {
   @@index([childId])
   @@index([weekStart])
   @@index([createdAt])
+}
+
+// ============ SPACED REPETITION ============
+
+// SM-2 Algorithm based spaced repetition cards for weak areas
+model SpacedRepetitionCard {
+  id              String     @id @default(cuid())
+  childId         String
+  weakAreaId      String     @unique
+
+  // SM-2 algorithm parameters
+  easeFactor      Float      @default(2.5)    // Difficulty factor (1.3 - 2.5)
+  interval        Int        @default(1)       // Days until next review
+  repetitions     Int        @default(0)       // Number of successful reviews
+
+  // Scheduling
+  nextReviewAt    DateTime                     // When this card should be reviewed
+  lastReviewedAt  DateTime?                    // Last time reviewed
+
+  // Performance tracking
+  totalReviews    Int        @default(0)
+  successfulReviews Int      @default(0)
+  failedReviews   Int        @default(0)
+  averageScore    Float      @default(0)       // Average quality rating (0-5)
+
+  // Card state
+  isActive        Boolean    @default(true)
+  isMastered      Boolean    @default(false)   // Mastered after X successful reviews
+  masteredAt      DateTime?
+
+  // Generated content cache
+  cachedQuestion  Json?      // AI-generated review question
+  cachedAt        DateTime?  // When the question was generated
+
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  // Relations
+  child           Child      @relation(fields: [childId], references: [id], onDelete: Cascade)
+  weakArea        WeakArea   @relation(fields: [weakAreaId], references: [id], onDelete: Cascade)
+  reviews         SpacedRepetitionReview[]
+
+  @@unique([childId, weakAreaId])
+  @@index([childId])
+  @@index([weakAreaId])
+  @@index([nextReviewAt])
+  @@index([isActive])
+  @@index([isMastered])
+}
+
+// Individual review sessions for spaced repetition
+model SpacedRepetitionReview {
+  id              String     @id @default(cuid())
+  cardId          String
+  childId         String
+
+  // Review result (SM-2 quality rating)
+  quality         Int        // 0-5: 0=complete failure, 5=perfect response
+  wasCorrect      Boolean    // Simplified: did they get it right?
+
+  // Question and answer
+  question        String     @db.Text
+  expectedAnswer  String     @db.Text
+  childAnswer     String?    @db.Text
+
+  // AI feedback
+  aiFeedback      String?    @db.Text
+
+  // Timing
+  timeSpent       Int        @default(0) // seconds
+  reviewedAt      DateTime   @default(now())
+
+  // SM-2 state after this review
+  newEaseFactor   Float
+  newInterval     Int
+
+  createdAt       DateTime   @default(now())
+
+  // Relations
+  card            SpacedRepetitionCard @relation(fields: [cardId], references: [id], onDelete: Cascade)
+
+  @@index([cardId])
+  @@index([childId])
+  @@index([reviewedAt])
+  @@index([wasCorrect])
 }
 
 // ============ COMMUNITY FORUMS ============

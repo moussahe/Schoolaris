@@ -13,3 +13,4 @@ export { WeeklyReport } from "./weekly-report";
 export { WeeklyReportCard } from "./weekly-report-card";
 export { AIInsights } from "./ai-insights";
 export { AIInsightsPanel } from "./ai-insights-panel";
+export { RevisionStatusPanel } from "./revision-status-panel";

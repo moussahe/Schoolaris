@@ -13,6 +13,7 @@ import {
   Star,
   Award,
   ClipboardList,
+  Brain,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -32,6 +33,7 @@ interface StudentSidebarProps {
 const navigation = [
   { name: "Tableau de bord", href: "/student", icon: LayoutDashboard },
   { name: "Mes Cours", href: "/student/courses", icon: BookOpen },
+  { name: "Revision", href: "/student/revision", icon: Brain },
   {
     name: "Historique Quiz",
     href: "/student/quiz-history",

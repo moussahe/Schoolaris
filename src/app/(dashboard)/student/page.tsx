@@ -15,6 +15,7 @@ import {
   TrendingUp,
   MessageSquare,
   Award,
+  Brain,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -460,6 +461,32 @@ async function StudentDashboard({ childId }: { childId: string }) {
               ))}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Spaced Repetition CTA */}
+      <div className="rounded-2xl bg-gradient-to-r from-violet-600 to-indigo-600 p-6 text-white shadow-lg">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-center gap-4">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+              <Brain className="h-6 w-6" />
+            </div>
+            <div>
+              <h3 className="font-semibold">Revision Intelligente</h3>
+              <p className="text-sm text-violet-100">
+                Revise tes points faibles avec la methode scientifique SM-2
+              </p>
+            </div>
+          </div>
+          <Button
+            asChild
+            className="bg-white text-violet-600 hover:bg-violet-50"
+          >
+            <Link href="/student/revision">
+              <Brain className="mr-2 h-4 w-4" />
+              Reviser
+            </Link>
+          </Button>
         </div>
       </div>
 
