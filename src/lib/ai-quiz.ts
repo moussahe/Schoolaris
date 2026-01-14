@@ -1,10 +1,54 @@
 // AI Quiz Generation and Feedback
 // Schoolaris - Quiz adaptatif avec Claude AI
 
+import { z } from "zod";
 import { getAnthropicClient } from "./ai";
 
-// Model for quiz generation - using haiku for speed
-export const QUIZ_AI_MODEL = "claude-3-haiku-20240307";
+// Model for quiz generation - using latest haiku for better quality
+export const QUIZ_AI_MODEL = "claude-3-5-haiku-latest";
+
+// Zod schemas for AI response validation
+const optionSchema = z.object({
+  id: z.string(),
+  text: z.string().min(1),
+  isCorrect: z.boolean(),
+});
+
+const generatedQuestionSchema = z.object({
+  question: z.string().min(5),
+  options: z.array(optionSchema).length(4),
+  explanation: z.string().min(10),
+  difficulty: z.enum(["easy", "medium", "hard"]),
+  points: z.number().min(1).max(3),
+});
+
+const questionsResponseSchema = z.object({
+  questions: z.array(generatedQuestionSchema).min(1),
+});
+
+const quizFeedbackSchema = z.object({
+  summary: z.string().min(10),
+  encouragement: z.string().min(10),
+  areasToReview: z.array(z.string()),
+  nextSteps: z.string().min(10),
+  difficultyRecommendation: z.enum(["easy", "medium", "hard"]),
+});
+
+const weakAreasResponseSchema = z.object({
+  weakAreas: z.array(
+    z.object({
+      topic: z.string().min(2),
+      category: z.enum([
+        "calcul",
+        "comprehension",
+        "methode",
+        "memorisation",
+        "application",
+        "analyse",
+      ]),
+    }),
+  ),
+});
 
 export type Difficulty = "easy" | "medium" | "hard";
 
@@ -137,16 +181,31 @@ export async function generateAdaptiveQuestions(
       throw new Error("No JSON found in response");
     }
 
-    const parsed = JSON.parse(jsonMatch[0]) as {
-      questions: GeneratedQuestion[];
-    };
+    // Parse and validate with Zod schema
+    const rawParsed = JSON.parse(jsonMatch[0]);
+    const validationResult = questionsResponseSchema.safeParse(rawParsed);
 
-    // Validate structure
-    if (!Array.isArray(parsed.questions)) {
-      throw new Error("Invalid response structure");
+    if (!validationResult.success) {
+      // Log validation errors for debugging but don't expose to user
+      console.error(
+        "AI response validation failed:",
+        validationResult.error.issues,
+      );
+      return getFallbackQuestions(context.currentDifficulty);
     }
 
-    return parsed.questions;
+    // Additional validation: ensure exactly one correct answer per question
+    for (const question of validationResult.data.questions) {
+      const correctCount = question.options.filter((o) => o.isCorrect).length;
+      if (correctCount !== 1) {
+        console.error(
+          `Invalid question: ${correctCount} correct answers found`,
+        );
+        return getFallbackQuestions(context.currentDifficulty);
+      }
+    }
+
+    return validationResult.data.questions;
   } catch (error) {
     console.error("Error generating adaptive questions:", error);
     // Return fallback questions in case of error
@@ -247,6 +306,30 @@ REGLES pour difficultyRecommendation:
 Reponds UNIQUEMENT avec le JSON.`;
 }
 
+function getFallbackFeedback(context: QuizFeedbackContext): QuizFeedback {
+  const percentage = Math.round((context.score / context.totalPoints) * 100);
+  return {
+    summary:
+      percentage >= 70
+        ? `Bravo ${context.childName}! Tu as bien compris cette lecon.`
+        : `Continue tes efforts ${context.childName}! Tu progresses.`,
+    encouragement:
+      percentage >= 70
+        ? "Tu es sur la bonne voie! Continue comme ca!"
+        : "Chaque erreur est une occasion d'apprendre. Tu vas y arriver!",
+    areasToReview:
+      context.wrongAnswers.length > 0
+        ? ["Relis les parties de la lecon correspondant aux questions manquees"]
+        : [],
+    nextSteps:
+      percentage >= 70
+        ? "Tu peux passer a la lecon suivante ou refaire le quiz pour viser 100%!"
+        : "Relis la lecon et refais le quiz pour ameliorer ton score.",
+    difficultyRecommendation:
+      percentage < 50 ? "easy" : percentage > 80 ? "hard" : "medium",
+  };
+}
+
 export async function generateQuizFeedback(
   context: QuizFeedbackContext,
 ): Promise<QuizFeedback> {
@@ -270,33 +353,22 @@ export async function generateQuizFeedback(
       throw new Error("No JSON found in response");
     }
 
-    return JSON.parse(jsonMatch[0]) as QuizFeedback;
+    // Parse and validate with Zod schema
+    const rawParsed = JSON.parse(jsonMatch[0]);
+    const validationResult = quizFeedbackSchema.safeParse(rawParsed);
+
+    if (!validationResult.success) {
+      console.error(
+        "Quiz feedback validation failed:",
+        validationResult.error.issues,
+      );
+      return getFallbackFeedback(context);
+    }
+
+    return validationResult.data;
   } catch (error) {
     console.error("Error generating quiz feedback:", error);
-    // Return fallback feedback
-    const percentage = Math.round((context.score / context.totalPoints) * 100);
-    return {
-      summary:
-        percentage >= 70
-          ? `Bravo ${context.childName}! Tu as bien compris cette lecon.`
-          : `Continue tes efforts ${context.childName}! Tu progresses.`,
-      encouragement:
-        percentage >= 70
-          ? "Tu es sur la bonne voie! Continue comme ca!"
-          : "Chaque erreur est une occasion d'apprendre. Tu vas y arriver!",
-      areasToReview:
-        context.wrongAnswers.length > 0
-          ? [
-              "Relis les parties de la lecon correspondant aux questions manquees",
-            ]
-          : [],
-      nextSteps:
-        percentage >= 70
-          ? "Tu peux passer a la lecon suivante ou refaire le quiz pour viser 100%!"
-          : "Relis la lecon et refais le quiz pour ameliorer ton score.",
-      difficultyRecommendation:
-        percentage < 50 ? "easy" : percentage > 80 ? "hard" : "medium",
-    };
+    return getFallbackFeedback(context);
   }
 }
 
@@ -356,6 +428,19 @@ FORMAT DE REPONSE (JSON strict):
 Reponds UNIQUEMENT avec le JSON.`;
 }
 
+function getFallbackWeakAreas(
+  wrongAnswers: WrongAnswer[],
+  lessonTitle: string,
+): ExtractedWeakArea[] {
+  // Deduplicate to avoid repetitive fallback entries
+  return [
+    {
+      topic: lessonTitle,
+      category: "comprehension" as const,
+    },
+  ].slice(0, Math.min(wrongAnswers.length, 3));
+}
+
 export async function extractWeakAreas(
   wrongAnswers: WrongAnswer[],
   subject: string,
@@ -374,7 +459,7 @@ export async function extractWeakAreas(
 
   try {
     const response = await client.messages.create({
-      model: QUIZ_AI_MODEL, // Using haiku for speed
+      model: QUIZ_AI_MODEL,
       max_tokens: 512,
       messages: [{ role: "user", content: prompt }],
     });
@@ -389,18 +474,22 @@ export async function extractWeakAreas(
       throw new Error("No JSON found in response");
     }
 
-    const parsed = JSON.parse(jsonMatch[0]) as {
-      weakAreas: ExtractedWeakArea[];
-    };
+    // Parse and validate with Zod schema
+    const rawParsed = JSON.parse(jsonMatch[0]);
+    const validationResult = weakAreasResponseSchema.safeParse(rawParsed);
 
-    return parsed.weakAreas || [];
+    if (!validationResult.success) {
+      console.error(
+        "Weak areas validation failed:",
+        validationResult.error.issues,
+      );
+      return getFallbackWeakAreas(wrongAnswers, lessonTitle);
+    }
+
+    return validationResult.data.weakAreas;
   } catch (error) {
     console.error("Error extracting weak areas:", error);
-    // Fallback: derive topics from question text
-    return wrongAnswers.map(() => ({
-      topic: lessonTitle, // Use lesson title as fallback topic
-      category: "comprehension",
-    }));
+    return getFallbackWeakAreas(wrongAnswers, lessonTitle);
   }
 }
 
