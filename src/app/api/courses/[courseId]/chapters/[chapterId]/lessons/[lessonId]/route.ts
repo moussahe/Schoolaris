@@ -182,20 +182,87 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
     const newDuration = validated.duration ?? oldDuration;
     const durationDiff = newDuration - oldDuration;
 
-    const updatedLesson = await prisma.lesson.update({
-      where: { id: lessonId },
-      data: validated,
-    });
+    // Extract quiz fields from validated data to handle separately
+    const { quizQuestions, quizPassingScore, ...lessonData } = validated;
 
-    // Update course duration if changed
-    if (durationDiff !== 0) {
-      await prisma.course.update({
-        where: { id: courseId },
-        data: {
-          totalDuration: { increment: durationDiff },
-        },
+    // Use transaction for lesson + quiz updates
+    const updatedLesson = await prisma.$transaction(async (tx) => {
+      const lesson = await tx.lesson.update({
+        where: { id: lessonId },
+        data: lessonData,
       });
-    }
+
+      // Handle quiz updates if content type is QUIZ
+      if (
+        lessonData.contentType === "QUIZ" &&
+        quizQuestions &&
+        quizQuestions.length > 0
+      ) {
+        // Find existing quiz
+        const existingQuiz = await tx.quiz.findFirst({
+          where: { lessonId },
+        });
+
+        if (existingQuiz) {
+          // Update existing quiz
+          await tx.quiz.update({
+            where: { id: existingQuiz.id },
+            data: {
+              title: lessonData.title || check.lesson!.title,
+              description: lessonData.description,
+              passingScore: quizPassingScore ?? 70,
+            },
+          });
+
+          // Delete old questions and create new ones
+          await tx.question.deleteMany({
+            where: { quizId: existingQuiz.id },
+          });
+
+          await tx.question.createMany({
+            data: quizQuestions.map((q, index) => ({
+              quizId: existingQuiz.id,
+              question: q.question,
+              options: q.options,
+              explanation: q.explanation,
+              position: index,
+            })),
+          });
+        } else {
+          // Create new quiz
+          const quiz = await tx.quiz.create({
+            data: {
+              title: lessonData.title || check.lesson!.title,
+              description: lessonData.description,
+              lessonId,
+              passingScore: quizPassingScore ?? 70,
+            },
+          });
+
+          await tx.question.createMany({
+            data: quizQuestions.map((q, index) => ({
+              quizId: quiz.id,
+              question: q.question,
+              options: q.options,
+              explanation: q.explanation,
+              position: index,
+            })),
+          });
+        }
+      }
+
+      // Update course duration if changed
+      if (durationDiff !== 0) {
+        await tx.course.update({
+          where: { id: courseId },
+          data: {
+            totalDuration: { increment: durationDiff },
+          },
+        });
+      }
+
+      return lesson;
+    });
 
     return NextResponse.json(updatedLesson);
   } catch (error) {

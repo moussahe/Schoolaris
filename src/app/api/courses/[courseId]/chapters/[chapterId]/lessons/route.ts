@@ -136,32 +136,64 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
       position = (lastLesson?.position ?? -1) + 1;
     }
 
-    const lesson = await prisma.lesson.create({
-      data: {
-        title: validated.title,
-        description: validated.description,
-        content: validated.content,
-        contentType: validated.contentType,
-        videoUrl: validated.videoUrl,
-        duration: validated.duration,
-        position,
-        isFreePreview: validated.isFreePreview ?? false,
-        chapterId,
-      },
+    // Use transaction to create lesson and quiz together
+    const result = await prisma.$transaction(async (tx) => {
+      const lesson = await tx.lesson.create({
+        data: {
+          title: validated.title,
+          description: validated.description,
+          content: validated.content,
+          contentType: validated.contentType,
+          videoUrl: validated.videoUrl,
+          duration: validated.duration,
+          position,
+          isFreePreview: validated.isFreePreview ?? false,
+          chapterId,
+        },
+      });
+
+      // If content type is QUIZ and we have questions, create the quiz
+      if (
+        validated.contentType === "QUIZ" &&
+        validated.quizQuestions &&
+        validated.quizQuestions.length > 0
+      ) {
+        const quiz = await tx.quiz.create({
+          data: {
+            title: validated.title,
+            description: validated.description,
+            lessonId: lesson.id,
+            passingScore: validated.quizPassingScore ?? 70,
+          },
+        });
+
+        // Create questions
+        await tx.question.createMany({
+          data: validated.quizQuestions.map((q, index) => ({
+            quizId: quiz.id,
+            question: q.question,
+            options: q.options,
+            explanation: q.explanation,
+            position: index,
+          })),
+        });
+      }
+
+      // Update course total lessons count
+      await tx.course.update({
+        where: { id: courseId },
+        data: {
+          totalLessons: { increment: 1 },
+          totalDuration: validated.duration
+            ? { increment: validated.duration }
+            : undefined,
+        },
+      });
+
+      return lesson;
     });
 
-    // Update course total lessons count
-    await prisma.course.update({
-      where: { id: courseId },
-      data: {
-        totalLessons: { increment: 1 },
-        totalDuration: validated.duration
-          ? { increment: validated.duration }
-          : undefined,
-      },
-    });
-
-    return NextResponse.json(lesson, { status: 201 });
+    return NextResponse.json(result, { status: 201 });
   } catch (error) {
     return handleApiError(error);
   }

@@ -9,6 +9,10 @@ import {
   Search,
   ShieldCheck,
   GraduationCap,
+  Sparkles,
+  Trophy,
+  Users,
+  Star,
 } from "lucide-react";
 
 const containerVariants = {
@@ -73,15 +77,57 @@ export function Hero() {
       ref={ref}
       className="relative w-full overflow-hidden bg-[#FDFDFD] py-20 pt-32 md:py-32 md:pt-40"
     >
-      {/* Background Shapes */}
+      {/* Background Shapes - Modern Gradient Blobs */}
       <motion.div
-        className="absolute left-0 top-0 h-full w-full opacity-50"
+        className="absolute left-0 top-0 h-full w-full"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.5 }}
+        animate={{ opacity: 1 }}
         transition={{ duration: 1.5, ease: "easeIn" }}
       >
-        <div className="absolute left-[-15%] top-[-20%] h-[500px] w-[500px] rounded-full bg-[#E8A336]/10 blur-3xl filter" />
-        <div className="absolute bottom-[-25%] right-[-15%] h-[600px] w-[600px] rounded-full bg-[#0B2A4C]/10 blur-3xl filter" />
+        {/* Primary Gold Blob */}
+        <motion.div
+          className="absolute left-[-10%] top-[-15%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-[#E8A336]/20 to-[#E8A336]/5 blur-3xl"
+          animate={{
+            scale: [1, 1.1, 1],
+            x: [0, 20, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut",
+          }}
+        />
+        {/* Secondary Blue Blob */}
+        <motion.div
+          className="absolute bottom-[-20%] right-[-10%] h-[700px] w-[700px] rounded-full bg-gradient-to-tl from-[#0B2A4C]/15 to-[#0B2A4C]/5 blur-3xl"
+          animate={{
+            scale: [1, 1.15, 1],
+            y: [0, -30, 0],
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut",
+          }}
+        />
+        {/* Accent Purple Blob */}
+        <motion.div
+          className="absolute left-1/3 top-1/4 h-[400px] w-[400px] rounded-full bg-gradient-to-r from-violet-500/10 to-purple-500/5 blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            rotate: [0, 10, 0],
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut",
+          }}
+        />
+        {/* Grid Pattern Overlay */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
       </motion.div>
 
       {/* Floating Benefit Cards */}
@@ -125,10 +171,11 @@ export function Hero() {
         />
       </motion.div>
 
+      {/* Parcours Flexibles - Plus a gauche */}
       <motion.div
-        className="absolute bottom-24 left-1/4 hidden lg:block"
+        className="absolute bottom-32 left-8 hidden lg:block"
         animate={{
-          y: [0, -15, 0],
+          y: [0, -12, 0],
         }}
         transition={{
           duration: 5,
@@ -143,6 +190,109 @@ export function Hero() {
           title="Parcours Flexibles"
           description="Rythme personnalise"
         />
+      </motion.div>
+
+      {/* NEW: Stats Badge - Bottom Right */}
+      <motion.div
+        className="absolute bottom-40 right-16 hidden lg:block"
+        animate={{
+          y: [0, -10, 0],
+          rotate: [0, 2, 0],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          repeatType: "mirror",
+          ease: "easeInOut",
+          delay: 0.8,
+        }}
+      >
+        <div className="flex items-center gap-3 rounded-full border border-emerald-200 bg-white/90 px-4 py-2 shadow-lg backdrop-blur-sm">
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
+            <Trophy className="h-5 w-5 text-emerald-600" />
+          </div>
+          <div>
+            <p className="text-lg font-bold text-emerald-600">98%</p>
+            <p className="text-xs text-gray-500">Satisfaction</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* NEW: AI Badge - Top Right */}
+      <motion.div
+        className="absolute right-32 top-40 hidden xl:block"
+        animate={{
+          y: [0, -8, 0],
+          scale: [1, 1.02, 1],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          repeatType: "mirror",
+          ease: "easeInOut",
+          delay: 2,
+        }}
+      >
+        <div className="flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-500 to-purple-600 px-4 py-2 text-white shadow-lg">
+          <Sparkles className="h-4 w-4" />
+          <span className="text-sm font-semibold">IA Integree</span>
+        </div>
+      </motion.div>
+
+      {/* NEW: Students Count - Left Middle */}
+      <motion.div
+        className="absolute left-12 top-1/2 hidden xl:block"
+        animate={{
+          x: [0, 5, 0],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          repeatType: "mirror",
+          ease: "easeInOut",
+          delay: 1.2,
+        }}
+      >
+        <div className="flex items-center gap-3 rounded-xl border border-blue-200 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-sm">
+          <div className="flex -space-x-2">
+            {[...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-white bg-gradient-to-br from-blue-400 to-blue-600 text-xs font-bold text-white"
+              >
+                {["L", "E", "M"][i]}
+              </div>
+            ))}
+          </div>
+          <div>
+            <p className="text-sm font-bold text-gray-800">+50k</p>
+            <p className="text-xs text-gray-500">Eleves actifs</p>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* NEW: Rating Badge - Bottom Left */}
+      <motion.div
+        className="absolute bottom-16 left-1/3 hidden lg:block"
+        animate={{
+          y: [0, -6, 0],
+        }}
+        transition={{
+          duration: 5.5,
+          repeat: Infinity,
+          repeatType: "mirror",
+          ease: "easeInOut",
+          delay: 0.3,
+        }}
+      >
+        <div className="flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 shadow-md backdrop-blur-sm">
+          <div className="flex">
+            {[...Array(5)].map((_, i) => (
+              <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+            ))}
+          </div>
+          <span className="text-sm font-semibold text-gray-700">4.9/5</span>
+        </div>
       </motion.div>
 
       {/* Main Content */}

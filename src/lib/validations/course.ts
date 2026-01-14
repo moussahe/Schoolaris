@@ -104,6 +104,22 @@ export const reorderChaptersSchema = z.object({
   ),
 });
 
+// Quiz option schema
+export const quizOptionSchema = z.object({
+  id: z.string(),
+  text: z.string(),
+  isCorrect: z.boolean(),
+});
+
+// Quiz question schema
+export const quizQuestionSchema = z.object({
+  id: z.string(),
+  question: z.string().min(1, "La question est requise"),
+  options: z.array(quizOptionSchema).min(2, "Au moins 2 options requises"),
+  explanation: z.string().optional(),
+  position: z.number(),
+});
+
 // Lesson schemas
 export const createLessonSchema = z.object({
   title: z
@@ -120,6 +136,9 @@ export const createLessonSchema = z.object({
   duration: z.number().int().min(0).optional(), // In seconds
   position: z.number().int().min(0).optional(),
   isFreePreview: z.boolean().optional(),
+  // Quiz specific fields
+  quizQuestions: z.array(quizQuestionSchema).optional(),
+  quizPassingScore: z.number().min(0).max(100).optional(),
 });
 
 export const updateLessonSchema = createLessonSchema.partial().extend({

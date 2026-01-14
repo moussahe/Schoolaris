@@ -35,6 +35,10 @@ import {
 } from "@/components/ui/form";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import {
+  QuizEditor,
+  type QuizQuestion,
+} from "@/components/teacher/quiz-editor";
 
 const lessonSchema = z.object({
   title: z.string().min(3, "Le titre doit contenir au moins 3 caracteres"),
@@ -45,6 +49,27 @@ const lessonSchema = z.object({
   duration: z.coerce.number().min(0).optional(),
   isPublished: z.boolean().default(false),
   isFreePreview: z.boolean().default(false),
+  // Quiz specific fields
+  quizQuestions: z
+    .array(
+      z.object({
+        id: z.string(),
+        question: z.string().min(1, "La question est requise"),
+        options: z
+          .array(
+            z.object({
+              id: z.string(),
+              text: z.string(),
+              isCorrect: z.boolean(),
+            }),
+          )
+          .min(2, "Au moins 2 options requises"),
+        explanation: z.string().optional(),
+        position: z.number(),
+      }),
+    )
+    .optional(),
+  quizPassingScore: z.number().min(0).max(100).optional(),
 });
 
 interface Lesson {
@@ -58,6 +83,8 @@ interface Lesson {
   position: number;
   isPublished: boolean;
   isFreePreview: boolean;
+  quizQuestions?: QuizQuestion[];
+  quizPassingScore?: number;
 }
 
 interface LessonFormProps {
@@ -113,6 +140,14 @@ export function LessonForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isEditing = !!lesson;
 
+  // Quiz state (separate from form for better UX)
+  const [quizQuestions, setQuizQuestions] = useState<QuizQuestion[]>(
+    lesson?.quizQuestions ?? [],
+  );
+  const [quizPassingScore, setQuizPassingScore] = useState(
+    lesson?.quizPassingScore ?? 70,
+  );
+
   const form = useForm({
     resolver: zodResolver(lessonSchema),
     defaultValues: {
@@ -129,6 +164,8 @@ export function LessonForm({
       duration: lesson?.duration ?? undefined,
       isPublished: lesson?.isPublished ?? false,
       isFreePreview: lesson?.isFreePreview ?? false,
+      quizQuestions: lesson?.quizQuestions ?? [],
+      quizPassingScore: lesson?.quizPassingScore ?? 70,
     },
   });
 
@@ -138,14 +175,58 @@ export function LessonForm({
     setIsSubmitting(true);
 
     try {
+      // Validate quiz questions if content type is QUIZ
+      if (values.contentType === "QUIZ") {
+        if (quizQuestions.length === 0) {
+          toast.error("Ajoutez au moins une question au quiz");
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Validate each question
+        for (let i = 0; i < quizQuestions.length; i++) {
+          const q = quizQuestions[i];
+          if (!q.question.trim()) {
+            toast.error(
+              `Question ${i + 1}: Le texte de la question est requis`,
+            );
+            setIsSubmitting(false);
+            return;
+          }
+          const filledOptions = q.options.filter((opt) => opt.text.trim());
+          if (filledOptions.length < 2) {
+            toast.error(`Question ${i + 1}: Au moins 2 options sont requises`);
+            setIsSubmitting(false);
+            return;
+          }
+          const hasCorrect = q.options.some(
+            (opt) => opt.isCorrect && opt.text.trim(),
+          );
+          if (!hasCorrect) {
+            toast.error(`Question ${i + 1}: Une reponse correcte est requise`);
+            setIsSubmitting(false);
+            return;
+          }
+        }
+      }
+
       const url = isEditing
         ? `/api/courses/${courseId}/chapters/${chapterId}/lessons/${lesson.id}`
         : `/api/courses/${courseId}/chapters/${chapterId}/lessons`;
 
+      // Include quiz data if content type is QUIZ
+      const payload = {
+        ...values,
+        ...(values.contentType === "QUIZ" && {
+          quizQuestions,
+          quizPassingScore,
+        }),
+      };
+
       const response = await fetch(url, {
         method: isEditing ? "PATCH" : "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
+        body: JSON.stringify(payload),
       });
 
       if (!response.ok) {
@@ -309,6 +390,20 @@ export function LessonForm({
                   </FormItem>
                 )}
               />
+            )}
+
+            {/* Quiz Editor (shown for QUIZ type) */}
+            {contentType === "QUIZ" && (
+              <div className="space-y-2">
+                <FormLabel>Configuration du Quiz</FormLabel>
+                <QuizEditor
+                  questions={quizQuestions}
+                  onChange={setQuizQuestions}
+                  passingScore={quizPassingScore}
+                  onPassingScoreChange={setQuizPassingScore}
+                  disabled={isSubmitting}
+                />
+              </div>
             )}
 
             {/* Duration */}

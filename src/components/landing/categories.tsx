@@ -12,6 +12,7 @@ import {
   Landmark,
   Languages,
   Leaf,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,7 +22,8 @@ interface Subject {
   Icon: LucideIcon;
   courseCount: number;
   color: string;
-  gridSpan?: number;
+  bgGradient: string;
+  size: "small" | "medium" | "large";
 }
 
 const subjects: Subject[] = [
@@ -31,7 +33,8 @@ const subjects: Subject[] = [
     Icon: Calculator,
     courseCount: 42,
     color: "#3B82F6",
-    gridSpan: 2,
+    bgGradient: "from-blue-500/20 to-blue-600/10",
+    size: "large",
   },
   {
     name: "Francais",
@@ -39,6 +42,8 @@ const subjects: Subject[] = [
     Icon: BookText,
     courseCount: 35,
     color: "#EF4444",
+    bgGradient: "from-red-500/20 to-red-600/10",
+    size: "medium",
   },
   {
     name: "Anglais",
@@ -46,6 +51,8 @@ const subjects: Subject[] = [
     Icon: Globe,
     courseCount: 28,
     color: "#22C55E",
+    bgGradient: "from-emerald-500/20 to-emerald-600/10",
+    size: "small",
   },
   {
     name: "Histoire-Geo",
@@ -53,6 +60,8 @@ const subjects: Subject[] = [
     Icon: Landmark,
     courseCount: 22,
     color: "#A16207",
+    bgGradient: "from-amber-500/20 to-amber-600/10",
+    size: "small",
   },
   {
     name: "SVT",
@@ -60,7 +69,8 @@ const subjects: Subject[] = [
     Icon: Leaf,
     courseCount: 18,
     color: "#14B8A6",
-    gridSpan: 2,
+    bgGradient: "from-teal-500/20 to-teal-600/10",
+    size: "medium",
   },
   {
     name: "Physique-Chimie",
@@ -68,6 +78,8 @@ const subjects: Subject[] = [
     Icon: FlaskConical,
     courseCount: 25,
     color: "#8B5CF6",
+    bgGradient: "from-violet-500/20 to-violet-600/10",
+    size: "small",
   },
   {
     name: "Philosophie",
@@ -75,7 +87,8 @@ const subjects: Subject[] = [
     Icon: BrainCircuit,
     courseCount: 15,
     color: "#6366F1",
-    gridSpan: 2,
+    bgGradient: "from-indigo-500/20 to-indigo-600/10",
+    size: "small",
   },
   {
     name: "Langues",
@@ -83,7 +96,8 @@ const subjects: Subject[] = [
     Icon: Languages,
     courseCount: 31,
     color: "#F97316",
-    gridSpan: 2,
+    bgGradient: "from-orange-500/20 to-orange-600/10",
+    size: "medium",
   },
 ];
 
@@ -92,54 +106,125 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
     },
   },
 } as const;
 
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: { y: 30, opacity: 0, scale: 0.95 },
   visible: {
     y: 0,
     opacity: 1,
+    scale: 1,
     transition: {
       type: "spring" as const,
       stiffness: 100,
-      damping: 12,
+      damping: 15,
     },
   },
 };
 
-function SubjectCard({ subject }: { subject: Subject }) {
-  const { name, Icon, courseCount, color, gridSpan = 1, slug } = subject;
+function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
+  const { name, Icon, courseCount, color, bgGradient, slug, size } = subject;
+
+  // Bento grid sizing
+  const sizeClasses = {
+    small: "col-span-1 row-span-1",
+    medium: "col-span-1 row-span-1 lg:col-span-1 lg:row-span-2",
+    large: "col-span-1 row-span-1 lg:col-span-2 lg:row-span-2",
+  };
+
+  const isLarge = size === "large";
+  const isMedium = size === "medium";
 
   return (
     <motion.div
       variants={itemVariants}
       whileHover={{
-        y: -8,
-        boxShadow: "0px 10px 25px rgba(0,0,0,0.1)",
-        transition: { type: "spring", stiffness: 300, damping: 20 },
+        y: -6,
+        scale: 1.02,
+        transition: { type: "spring", stiffness: 400, damping: 25 },
       }}
-      className="flex flex-col justify-between rounded-xl bg-white p-6 transition-shadow duration-300"
-      style={{
-        boxShadow: "0px 4px 15px rgba(0,0,0,0.05)",
-        gridColumn: `span ${gridSpan} / span ${gridSpan}`,
-      }}
+      className={`group relative overflow-hidden rounded-2xl border border-white/50 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-white hover:shadow-xl ${sizeClasses[size]}`}
     >
-      <Link href={`/courses?category=${slug}`} className="group">
-        <div
-          className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg"
-          style={{ backgroundColor: `${color}20` }}
-        >
-          <Icon className="h-6 w-6" style={{ color }} />
+      {/* Gradient Background */}
+      <div
+        className={`absolute inset-0 bg-gradient-to-br ${bgGradient} opacity-50 transition-opacity duration-300 group-hover:opacity-80`}
+      />
+
+      {/* Animated Glow Effect */}
+      <motion.div
+        className="absolute -right-20 -top-20 h-40 w-40 rounded-full blur-3xl"
+        style={{ backgroundColor: `${color}30` }}
+        animate={{
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          repeatType: "mirror",
+          delay: index * 0.2,
+        }}
+      />
+
+      <Link
+        href={`/courses?category=${slug}`}
+        className={`relative flex h-full flex-col justify-between ${isLarge ? "p-8" : isMedium ? "p-6" : "p-5"}`}
+      >
+        {/* Icon Container */}
+        <div className="mb-auto">
+          <motion.div
+            className={`inline-flex items-center justify-center rounded-xl ${isLarge ? "h-16 w-16" : "h-12 w-12"}`}
+            style={{ backgroundColor: `${color}20` }}
+            whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Icon
+              className={isLarge ? "h-8 w-8" : "h-6 w-6"}
+              style={{ color }}
+            />
+          </motion.div>
         </div>
-        <h3 className="mb-1 text-lg font-semibold text-[#1A1A1A] group-hover:text-[#0B2A4C]">
-          {name}
-        </h3>
-        <p className="text-sm text-[#6B7280]">
-          {courseCount} cours disponibles
-        </p>
+
+        {/* Content */}
+        <div className={isLarge ? "mt-8" : "mt-4"}>
+          <h3
+            className={`font-bold text-[#0B2A4C] transition-colors group-hover:text-[#0B2A4C] ${isLarge ? "text-2xl" : "text-lg"}`}
+          >
+            {name}
+          </h3>
+          <div className="mt-2 flex items-center gap-2">
+            <span
+              className={`font-semibold ${isLarge ? "text-lg" : "text-sm"}`}
+              style={{ color }}
+            >
+              {courseCount} cours
+            </span>
+            {isLarge && (
+              <span className="rounded-full bg-[#E8A336]/20 px-2 py-0.5 text-xs font-medium text-[#E8A336]">
+                Populaire
+              </span>
+            )}
+          </div>
+
+          {/* Arrow indicator */}
+          <div className="mt-3 flex items-center gap-1 text-sm font-medium text-[#6B7280] transition-colors group-hover:text-[#0B2A4C]">
+            <span>Explorer</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </div>
+        </div>
+
+        {/* Decorative Elements for Large Cards */}
+        {isLarge && (
+          <>
+            <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-white/80 px-3 py-1.5 text-xs font-medium text-[#0B2A4C] shadow-sm">
+              <Sparkles className="h-3 w-3 text-[#E8A336]" />
+              IA disponible
+            </div>
+          </>
+        )}
       </Link>
     </motion.div>
   );
@@ -147,45 +232,64 @@ function SubjectCard({ subject }: { subject: Subject }) {
 
 export function Categories() {
   return (
-    <section className="bg-[#F4F5F7] px-4 py-20 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        {/* Section Header */}
-        <div className="mb-12 text-center">
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-[#E8A336]">
-            Explorez par Matiere
-          </h2>
-          <p className="mt-2 text-3xl font-extrabold tracking-tight text-[#0B2A4C] sm:text-4xl">
-            Trouvez le tuteur parfait pour chaque sujet
-          </p>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-[#6B7280]">
-            Des mathematiques a la philosophie, nous couvrons toutes les
-            matieres pour assurer la reussite de votre enfant.
-          </p>
-        </div>
+    <section className="relative overflow-hidden bg-gradient-to-b from-[#F8F9FB] to-[#F4F5F7] px-4 py-24 sm:px-6 lg:px-8">
+      {/* Background Decorations */}
+      <div className="absolute left-0 top-0 h-full w-full">
+        <div className="absolute left-1/4 top-10 h-72 w-72 rounded-full bg-[#E8A336]/5 blur-3xl" />
+        <div className="absolute bottom-10 right-1/4 h-96 w-96 rounded-full bg-[#0B2A4C]/5 blur-3xl" />
+      </div>
 
-        {/* Subjects Grid */}
+      <div className="relative mx-auto max-w-7xl">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-16 text-center"
+        >
+          <span className="inline-flex items-center gap-2 rounded-full bg-[#E8A336]/10 px-4 py-1.5 text-sm font-semibold text-[#E8A336]">
+            <Sparkles className="h-4 w-4" />
+            Explorez par Matiere
+          </span>
+          <h2 className="mt-4 font-serif text-4xl font-bold tracking-tight text-[#0B2A4C] sm:text-5xl">
+            Toutes les matieres, un seul objectif
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-[#6B7280]">
+            Des mathematiques a la philosophie, nos professeurs experts
+            accompagnent votre enfant vers la reussite.
+          </p>
+        </motion.div>
+
+        {/* Bento Grid */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          viewport={{ once: true, amount: 0.1 }}
+          className="grid auto-rows-[140px] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[160px] lg:grid-cols-4"
         >
-          {subjects.map((subject) => (
-            <SubjectCard key={subject.slug} subject={subject} />
+          {subjects.map((subject, index) => (
+            <SubjectCard key={subject.slug} subject={subject} index={index} />
           ))}
         </motion.div>
 
-        {/* "See All" Link */}
-        <div className="mt-12 text-center">
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="mt-16 text-center"
+        >
           <Link
             href="/courses"
-            className="group inline-flex items-center text-base font-semibold text-[#0B2A4C] hover:text-[#E8A336]"
+            className="group inline-flex items-center gap-2 rounded-full bg-[#0B2A4C] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#0B2A4C]/90 hover:shadow-lg"
           >
-            Voir toutes les matieres
-            <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+            Voir tous les cours
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
