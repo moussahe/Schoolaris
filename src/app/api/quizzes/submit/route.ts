@@ -10,6 +10,7 @@ const submitQuizSchema = z.object({
   childId: z.string().cuid(),
   answers: z.record(z.string(), z.string()), // questionId -> optionId
   timeSpent: z.number().min(0),
+  startedAt: z.string().datetime().optional(), // ISO timestamp when quiz started
 });
 
 interface QuestionOption {
@@ -98,35 +99,8 @@ export async function POST(req: NextRequest) {
       totalPoints > 0 ? Math.round((earnedPoints / totalPoints) * 100) : 0;
     const passed = percentage >= quiz.passingScore;
 
-    // 6. Save or update progress
-    await prisma.progress.upsert({
-      where: {
-        childId_lessonId: {
-          childId: validated.childId,
-          lessonId: validated.lessonId,
-        },
-      },
-      create: {
-        childId: validated.childId,
-        lessonId: validated.lessonId,
-        quizScore: percentage,
-        isCompleted: passed,
-        timeSpent: validated.timeSpent,
-      },
-      update: {
-        quizScore: percentage,
-        isCompleted: passed,
-        timeSpent: {
-          increment: validated.timeSpent,
-        },
-        lastAccessedAt: new Date(),
-      },
-    });
-
-    // 7. Generate AI feedback (optional, for premium or if AI is available)
-    let aiExplanation: string | undefined;
-
-    // Simple feedback generation based on score
+    // 6. Generate AI feedback
+    let aiExplanation: string;
     if (percentage >= 90) {
       aiExplanation = `Excellent travail ! Tu maitrises bien ce sujet avec ${correctCount}/${quiz.questions.length} bonnes reponses. Continue comme ca !`;
     } else if (percentage >= 70) {
@@ -136,6 +110,56 @@ export async function POST(req: NextRequest) {
     } else {
       aiExplanation = `Ne te decourage pas ! Tu as obtenu ${correctCount}/${quiz.questions.length} bonnes reponses. Prends le temps de bien relire la lecon avant de reessayer.`;
     }
+
+    // 7. Save progress and quiz attempt in a transaction
+    const startedAt = validated.startedAt
+      ? new Date(validated.startedAt)
+      : new Date(Date.now() - validated.timeSpent * 1000);
+
+    await prisma.$transaction([
+      // Update progress
+      prisma.progress.upsert({
+        where: {
+          childId_lessonId: {
+            childId: validated.childId,
+            lessonId: validated.lessonId,
+          },
+        },
+        create: {
+          childId: validated.childId,
+          lessonId: validated.lessonId,
+          quizScore: percentage,
+          isCompleted: passed,
+          timeSpent: validated.timeSpent,
+        },
+        update: {
+          quizScore: percentage,
+          isCompleted: passed,
+          timeSpent: {
+            increment: validated.timeSpent,
+          },
+          lastAccessedAt: new Date(),
+        },
+      }),
+      // Create quiz attempt record for history
+      prisma.quizAttempt.create({
+        data: {
+          childId: validated.childId,
+          quizId: validated.quizId,
+          lessonId: validated.lessonId,
+          score: earnedPoints,
+          totalPoints,
+          percentage,
+          passed,
+          correctCount,
+          totalQuestions: quiz.questions.length,
+          answers: answersDetail,
+          timeSpent: validated.timeSpent,
+          startedAt,
+          aiFeedback: aiExplanation,
+        },
+      }),
+    ]);
 
     // 8. Return result
     return NextResponse.json({

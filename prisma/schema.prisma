@@ -169,6 +169,7 @@ model Child {
   forumReplies     ForumReply[]      @relation("ChildReplies")
   weakAreas        WeakArea[]
   alerts           Alert[]
+  quizAttempts     QuizAttempt[]
 
   @@index([parentId])
   @@index([gradeLevel])
@@ -295,11 +296,12 @@ model Lesson {
   updatedAt   DateTime    @updatedAt
 
   // Relations
-  chapter   Chapter    @relation(fields: [chapterId], references: [id], onDelete: Cascade)
-  quizzes   Quiz[]
-  progress  Progress[]
-  resources Resource[]
-  exercises Exercise[]
+  chapter      Chapter       @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  quizzes      Quiz[]
+  progress     Progress[]
+  resources    Resource[]
+  exercises    Exercise[]
+  quizAttempts QuizAttempt[]
 
   @@index([chapterId])
   @@index([position])
@@ -329,8 +331,9 @@ model Quiz {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  lesson    Lesson     @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  lesson    Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
   questions Question[]
+  attempts  QuizAttempt[]
 
   @@index([lessonId])
 }
@@ -350,6 +353,47 @@ model Question {
 
   @@index([quizId])
   @@index([position])
+}
+
+// ============ QUIZ ATTEMPTS (History) ============
+
+model QuizAttempt {
+  id          String   @id @default(cuid())
+  childId     String
+  quizId      String
+  lessonId    String
+
+  // Results
+  score       Int      // Points earned
+  totalPoints Int      // Maximum possible points
+  percentage  Int      // Percentage score (0-100)
+  passed      Boolean  // Did they pass?
+  correctCount Int     // Number of correct answers
+  totalQuestions Int   // Total questions in quiz
+
+  // Detailed answers (JSON)
+  answers     Json     // Array of {questionId, selectedOptionId, isCorrect, timeSpent}
+
+  // Timing
+  timeSpent   Int      // Total time in seconds
+  startedAt   DateTime // When the attempt started
+  completedAt DateTime @default(now()) // When the attempt was submitted
+
+  // AI Feedback
+  aiFeedback  String?  @db.Text // AI-generated feedback for this attempt
+
+  createdAt   DateTime @default(now())
+
+  // Relations
+  child       Child    @relation(fields: [childId], references: [id], onDelete: Cascade)
+  quiz        Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@index([childId])
+  @@index([quizId])
+  @@index([lessonId])
+  @@index([completedAt])
+  @@index([passed])
 }
 
 // ============ PURCHASES (Marketplace) ============

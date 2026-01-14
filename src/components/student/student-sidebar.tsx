@@ -12,6 +12,7 @@ import {
   Flame,
   Star,
   Award,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -31,6 +32,11 @@ interface StudentSidebarProps {
 const navigation = [
   { name: "Tableau de bord", href: "/student", icon: LayoutDashboard },
   { name: "Mes Cours", href: "/student/courses", icon: BookOpen },
+  {
+    name: "Historique Quiz",
+    href: "/student/quiz-history",
+    icon: ClipboardList,
+  },
   { name: "Mes Certificats", href: "/student/certificates", icon: Award },
   { name: "Mes Badges", href: "/student/badges", icon: Trophy },
   { name: "Assistant IA", href: "/student/ai-tutor", icon: MessageSquare },
