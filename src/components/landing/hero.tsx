@@ -196,19 +196,27 @@ export function Hero() {
             className="mt-8 flex flex-wrap items-center justify-center gap-4"
           >
             <Link
-              href="/courses"
-              className="inline-flex transform items-center justify-center rounded-full bg-[#E8A336] px-8 py-3 text-base font-bold text-[#0B2A4C] shadow-lg transition-all hover:scale-105 hover:bg-[#D4922E]"
+              href="/demo"
+              className="inline-flex transform items-center justify-center rounded-full bg-[#E8A336] px-8 py-3.5 text-base font-bold text-[#0B2A4C] shadow-lg transition-all hover:scale-105 hover:bg-[#D4922E]"
             >
-              Explorer les cours
+              Essayer Gratuitement
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
-              href="/register/teacher"
-              className="inline-flex transform items-center justify-center rounded-full border-2 border-[#0B2A4C]/20 bg-transparent px-8 py-3 text-base font-semibold text-[#0B2A4C] transition-all hover:scale-105 hover:bg-[#0B2A4C]/5"
+              href="/courses"
+              className="inline-flex transform items-center justify-center rounded-full border-2 border-[#0B2A4C] bg-white px-8 py-3 text-base font-semibold text-[#0B2A4C] transition-all hover:scale-105 hover:bg-[#0B2A4C]/5"
             >
-              Devenir enseignant
+              Explorer les cours
             </Link>
           </motion.div>
+
+          {/* Free Trial Badge */}
+          <motion.p
+            variants={itemVariants}
+            className="mt-4 text-sm text-[#1A1A1A]/60"
+          >
+            Testez l&apos;assistant IA gratuitement, sans inscription
+          </motion.p>
 
           {/* Trust Indicators */}
           <motion.div variants={itemVariants} className="mt-16">

@@ -118,6 +118,17 @@ export function Header() {
                   whileTap={{ scale: 0.97 }}
                 >
                   <Link
+                    href="/demo"
+                    className="rounded-lg border-2 border-[#E8A336] bg-[#E8A336]/10 px-5 py-2 text-sm font-semibold text-[#E8A336] transition-colors hover:bg-[#E8A336] hover:text-white"
+                  >
+                    Essai Gratuit
+                  </Link>
+                </motion.div>
+                <motion.div
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  <Link
                     href="/login"
                     className="rounded-lg border-2 border-[#0B2A4C] px-5 py-2 text-sm font-semibold text-[#0B2A4C] transition-colors hover:bg-[#0B2A4C] hover:text-white"
                   >
@@ -198,6 +209,13 @@ export function Header() {
 
               {/* Mobile Auth Buttons */}
               <div className="flex flex-col gap-4 border-t border-[#F4F5F7] p-6">
+                <Link
+                  href="/demo"
+                  onClick={toggleMenu}
+                  className="w-full rounded-lg border-2 border-[#E8A336] bg-[#E8A336]/10 px-6 py-3 text-center text-lg font-semibold text-[#E8A336] transition-colors hover:bg-[#E8A336] hover:text-white"
+                >
+                  Essai Gratuit
+                </Link>
                 <Link
                   href="/login"
                   onClick={toggleMenu}

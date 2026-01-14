@@ -4,6 +4,8 @@ export { StatsSection } from "./stats-section";
 export { Categories } from "./categories";
 export { FeaturedCourses } from "./featured-courses";
 export { HowItWorks } from "./how-it-works";
+export { PricingPreview } from "./pricing-preview";
 export { Testimonials } from "./testimonials";
 export { TeacherCta } from "./teacher-cta";
+export { UrgencyBanner } from "./urgency-banner";
 export { Footer } from "./footer";
