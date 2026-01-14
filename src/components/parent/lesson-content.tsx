@@ -1,6 +1,7 @@
 "use client";
 
 import { QuizPlayer } from "@/components/quiz";
+import { sanitizeHtml } from "@/lib/utils";
 import type {
   Quiz as QuizType,
   QuizQuestion as QuizQuestionType,
@@ -95,7 +96,7 @@ export function LessonContent({
       {lesson.content && (
         <div
           className="prose prose-gray max-w-none prose-headings:text-gray-900 prose-p:text-gray-600 prose-strong:text-gray-900 prose-ul:text-gray-600 prose-ol:text-gray-600"
-          dangerouslySetInnerHTML={{ __html: lesson.content }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(lesson.content) }}
         />
       )}
 

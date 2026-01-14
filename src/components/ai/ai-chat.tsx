@@ -96,8 +96,10 @@ export function AIChat({
             );
           }
         })
-        .catch((err) => {
-          console.error("Erreur chargement conversation:", err);
+        .catch(() => {
+          setError(
+            "Impossible de charger la conversation. Vous pouvez en demarrer une nouvelle.",
+          );
         })
         .finally(() => {
           setIsInitializing(false);
@@ -125,8 +127,10 @@ export function AIChat({
       setConversationId(data.id);
       onConversationCreated?.(data.id);
       return data.id;
-    } catch (err) {
-      console.error("Erreur creation conversation:", err);
+    } catch {
+      setError(
+        "Impossible de creer une nouvelle conversation. Veuillez reessayer.",
+      );
       return null;
     }
   };

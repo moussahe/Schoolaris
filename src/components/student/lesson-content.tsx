@@ -5,6 +5,7 @@ import { CheckCircle2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { markLessonComplete } from "@/app/(dashboard)/student/actions";
 import { XP_REWARDS } from "@/lib/gamification";
+import { sanitizeHtml } from "@/lib/utils";
 
 interface LessonContentProps {
   lesson: {
@@ -61,7 +62,7 @@ export function LessonContent({
         <div className="rounded-2xl bg-white p-6 shadow-sm">
           <div
             className="prose prose-violet max-w-none"
-            dangerouslySetInnerHTML={{ __html: lesson.content }}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(lesson.content) }}
           />
         </div>
       )}

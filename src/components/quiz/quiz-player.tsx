@@ -71,6 +71,7 @@ export function QuizPlayer({
   const [answeredCorrectly, setAnsweredCorrectly] = useState<
     Record<string, boolean>
   >({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const currentQuestion = quiz.questions[currentQuestionIndex];
   const totalQuestions = quiz.questions.length;
@@ -194,6 +195,7 @@ export function QuizPlayer({
 
   const handleSubmit = useCallback(async () => {
     setIsSubmitting(true);
+    setSubmitError(null);
     const quizResult = calculateResults();
     const totalTimeSpent = Math.round((Date.now() - startTime) / 1000);
 
@@ -217,9 +219,17 @@ export function QuizPlayer({
           if (data.aiExplanation) {
             quizResult.feedback = data.aiExplanation;
           }
+        } else {
+          // API returned error but we still show results locally
+          setSubmitError(
+            "La sauvegarde a echoue. Vos resultats sont affiches mais non enregistres.",
+          );
         }
-      } catch (error) {
-        console.error("Failed to submit quiz:", error);
+      } catch {
+        // Network error - still show results but warn user
+        setSubmitError(
+          "Erreur de connexion. Vos resultats sont affiches mais non enregistres. Verifiez votre connexion et reessayez.",
+        );
       }
     }
 
@@ -244,6 +254,7 @@ export function QuizPlayer({
     setResult(null);
     setAnsweredCorrectly({});
     setTimePerQuestion({});
+    setSubmitError(null);
     setAdaptiveState({
       currentDifficulty: "medium",
       consecutiveCorrect: 0,
@@ -253,6 +264,42 @@ export function QuizPlayer({
     });
     setPhase("intro");
   }, []);
+
+  // Retry submission without restarting the quiz
+  const handleRetrySubmit = useCallback(async () => {
+    if (!result || !childId) return;
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+    const totalTimeSpent = Math.round((Date.now() - startTime) / 1000);
+
+    try {
+      const response = await fetch("/api/quizzes/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          quizId: quiz.id,
+          lessonId,
+          childId,
+          answers: selectedAnswers,
+          timeSpent: totalTimeSpent,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.aiExplanation && result) {
+          setResult({ ...result, feedback: data.aiExplanation });
+        }
+      } else {
+        setSubmitError("La sauvegarde a echoue. Veuillez reessayer plus tard.");
+      }
+    } catch {
+      setSubmitError("Erreur de connexion. Verifiez votre connexion internet.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [result, childId, startTime, quiz.id, lessonId, selectedAnswers]);
 
   // Intro Phase
   if (phase === "intro") {
@@ -335,6 +382,8 @@ export function QuizPlayer({
         selectedAnswers={selectedAnswers}
         onRetry={handleRetry}
         adaptiveState={adaptiveMode ? adaptiveState : undefined}
+        submitError={submitError}
+        onRetrySubmit={childId ? handleRetrySubmit : undefined}
       />
     );
   }

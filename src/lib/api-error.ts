@@ -14,7 +14,10 @@ export class ApiError extends Error {
 }
 
 export function handleApiError(error: unknown): NextResponse {
-  console.error("API Error:", error);
+  // Only log detailed errors in development to avoid leaking sensitive data
+  if (process.env.NODE_ENV === "development") {
+    console.error("API Error:", error);
+  }
 
   // Zod validation errors
   if (error instanceof ZodError) {

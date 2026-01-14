@@ -13,8 +13,11 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
-    console.error("Application error:", error);
+    // In production, this would send to an error reporting service like Sentry
+    // For now, only log in development to avoid exposing sensitive data
+    if (process.env.NODE_ENV === "development") {
+      console.error("Application error:", error);
+    }
   }, [error]);
 
   return (

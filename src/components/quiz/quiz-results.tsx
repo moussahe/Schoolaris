@@ -15,6 +15,8 @@ import {
   Sparkles,
   Bot,
   MessageCircle,
+  AlertTriangle,
+  RefreshCw,
 } from "lucide-react";
 import type { Quiz, QuizResult, AdaptiveQuizState } from "@/types/quiz";
 
@@ -25,6 +27,8 @@ interface QuizResultsProps {
   onRetry: () => void;
   adaptiveState?: AdaptiveQuizState;
   onPracticeWithAI?: () => void;
+  submitError?: string | null;
+  onRetrySubmit?: () => void;
 }
 
 export function QuizResults({
@@ -34,6 +38,8 @@ export function QuizResults({
   onRetry,
   adaptiveState,
   onPracticeWithAI,
+  submitError,
+  onRetrySubmit,
 }: QuizResultsProps) {
   const { passed, percentage, correctCount, totalQuestions, feedback } = result;
 
@@ -128,6 +134,35 @@ export function QuizResults({
             : `Il te faut ${quiz.passingScore}% pour reussir. N'abandonne pas !`}
         </p>
       </div>
+
+      {/* Submit Error Banner */}
+      {submitError && (
+        <div
+          className="rounded-xl border border-amber-200 bg-amber-50 p-4"
+          role="alert"
+        >
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="h-5 w-5 shrink-0 text-amber-500" />
+            <div className="flex-1">
+              <p className="font-medium text-amber-800">
+                Probleme de sauvegarde
+              </p>
+              <p className="mt-1 text-sm text-amber-700">{submitError}</p>
+              {onRetrySubmit && (
+                <Button
+                  onClick={onRetrySubmit}
+                  variant="outline"
+                  size="sm"
+                  className="mt-3 gap-2 border-amber-300 text-amber-700 hover:bg-amber-100"
+                >
+                  <RefreshCw className="h-4 w-4" />
+                  Reessayer la sauvegarde
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Stats Cards */}
       <div className="grid grid-cols-3 gap-4">

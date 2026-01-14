@@ -103,8 +103,10 @@ export function AITutorPanel({
 
       setConversationId(data.id);
       return data.id;
-    } catch (err) {
-      console.error("Erreur creation conversation:", err);
+    } catch {
+      setError(
+        "Impossible de demarrer une nouvelle conversation. Veuillez reessayer.",
+      );
       return null;
     }
   };
