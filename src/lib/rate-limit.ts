@@ -40,6 +40,12 @@ export const RATE_LIMITS = {
     window: "1 h" as const,
     prefix: "ratelimit:exercise-gen",
   },
+  // Learning path génération: 10 par heure
+  LEARNING_PATH: {
+    requests: 10,
+    window: "1 h" as const,
+    prefix: "ratelimit:learning-path",
+  },
 } as const;
 
 type RateLimitType = keyof typeof RATE_LIMITS;

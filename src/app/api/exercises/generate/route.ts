@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 import { z } from "zod";
 import { generateExercises, EXERCISE_AI_MODEL } from "@/lib/ai-exercises";
 import type { Difficulty, ExerciseType } from "@/types/exercise";
@@ -35,7 +36,25 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Non autorise" }, { status: 401 });
     }
 
-    // 2. Validate request
+    // 2. Rate limiting (20 exercise generations per hour)
+    const rateLimit = await checkRateLimit(
+      session.user.id,
+      "EXERCISE_GENERATION",
+    );
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        {
+          error: "Limite atteinte. Vous pouvez generer 20 exercices par heure.",
+          retryAfter: rateLimit.retryAfter,
+        },
+        {
+          status: 429,
+          headers: rateLimitHeaders(rateLimit),
+        },
+      );
+    }
+
+    // 3. Validate request
     const body = await req.json();
     const validated = generateSchema.parse(body);
 

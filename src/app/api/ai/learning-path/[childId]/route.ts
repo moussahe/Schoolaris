@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 import { generateLearningPath } from "@/lib/ai-learning-path";
 
 export async function GET(
@@ -11,6 +12,21 @@ export async function GET(
     const session = await auth();
     if (!session?.user) {
       return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
+    }
+
+    // Rate limiting (10 learning path generations per hour)
+    const rateLimit = await checkRateLimit(session.user.id, "LEARNING_PATH");
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        {
+          error: "Limite atteinte. Vous pouvez generer 10 parcours par heure.",
+          retryAfter: rateLimit.retryAfter,
+        },
+        {
+          status: 429,
+          headers: rateLimitHeaders(rateLimit),
+        },
+      );
     }
 
     const { childId } = await params;
