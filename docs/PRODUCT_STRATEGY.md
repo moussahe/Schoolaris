@@ -287,6 +287,7 @@ Pour atteindre 500K€:
 - [x] Recommandations de cours IA pour parents (upsell basé sur points faibles)
 - [x] Onboarding flow pour nouveaux parents (4 etapes personnalisees)
 - [x] Telechargement factures PDF (conformite legale francaise)
+- [x] PWA avec push notifications (engagement mobile +40-60% DAU)
 - [ ] Beta privée 50 familles
 - [ ] Onboarder 10 profs
 
