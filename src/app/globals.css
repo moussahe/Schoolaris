@@ -277,6 +277,23 @@
     scroll-behavior: smooth;
   }
 
+  /* Interactive elements - cursor pointer */
+  button,
+  [role="button"],
+  [type="button"],
+  [type="submit"],
+  [type="reset"],
+  a[href],
+  select,
+  [tabindex]:not([tabindex="-1"]) {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [disabled] {
+    cursor: not-allowed;
+  }
+
   /* Typography defaults */
   h1 {
     @apply text-5xl font-bold tracking-tight leading-tight;

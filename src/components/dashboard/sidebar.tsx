@@ -31,8 +31,7 @@ const teacherNavItems: NavItem[] = [
   { label: "Tableau de bord", href: "/teacher", icon: LayoutDashboard },
   { label: "Mes cours", href: "/teacher/courses", icon: BookOpen },
   { label: "Eleves", href: "/teacher/students", icon: Users },
-  { label: "Revenus", href: "/teacher/revenue", icon: BarChart3 },
-  { label: "Paiements", href: "/teacher/payments", icon: CreditCard },
+  { label: "Analytiques", href: "/teacher/analytics", icon: BarChart3 },
   { label: "Parametres", href: "/teacher/settings", icon: Settings },
 ];
 
@@ -89,13 +88,13 @@ export function DashboardSidebar({ items, role }: SidebarProps) {
 
       {/* Help section */}
       <div className="border-t p-4">
-        <Link
-          href="/help"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+        <a
+          href="mailto:support@schoolaris.fr"
+          className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 transition-colors hover:bg-gray-50 hover:text-gray-900 cursor-pointer"
         >
           <HelpCircle className="h-5 w-5" />
           Aide & Support
-        </Link>
+        </a>
       </div>
     </aside>
   );

@@ -262,14 +262,14 @@ function RegisterForm() {
           <p className="mt-6 text-center text-sm text-gray-500">
             En vous inscrivant, vous acceptez nos{" "}
             <Link
-              href="/terms"
+              href="/conditions"
               className="text-emerald-600 hover:text-emerald-500"
             >
               conditions d&apos;utilisation
             </Link>{" "}
             et notre{" "}
             <Link
-              href="/privacy"
+              href="/confidentialite"
               className="text-emerald-600 hover:text-emerald-500"
             >
               politique de confidentialite
