@@ -98,7 +98,7 @@ function SubjectBadge({ subject, color }: { subject: string; color: string }) {
 
 function TeacherAvatar({ initial }: { initial: string }) {
   return (
-    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[#0B2A4C] text-sm font-bold text-white">
+    <div className="flex h-8 w-8 items-center justify-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-600">
       {initial}
     </div>
   );
@@ -113,13 +113,13 @@ function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
             key={i}
             className={`h-4 w-4 ${
               i < Math.round(rating)
-                ? "fill-[#E8A336] text-[#E8A336]"
-                : "text-gray-300"
+                ? "fill-amber-400 text-amber-400"
+                : "text-gray-200"
             }`}
           />
         ))}
       </div>
-      <span className="text-sm text-[#6B7280]">
+      <span className="text-sm text-gray-500">
         {rating.toFixed(1)} ({reviews} avis)
       </span>
     </div>
@@ -129,9 +129,9 @@ function StarRating({ rating, reviews }: { rating: number; reviews: number }) {
 function CourseCard({ course }: { course: Course }) {
   return (
     <motion.div
-      whileHover={{ y: -4, boxShadow: "0px 10px 25px rgba(0,0,0,0.1)" }}
+      whileHover={{ y: -4 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="flex cursor-pointer flex-col overflow-hidden rounded-xl bg-[#FDFDFD] shadow-[0px_4px_15px_rgba(0,0,0,0.05)]"
+      className="flex cursor-pointer flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="relative h-40">
         <div
@@ -139,9 +139,9 @@ function CourseCard({ course }: { course: Course }) {
         />
         <LevelBadge level={course.level} />
       </div>
-      <div className="flex flex-grow flex-col p-4">
+      <div className="flex flex-grow flex-col p-5">
         <div className="mb-2 flex items-start justify-between">
-          <h3 className="pr-2 text-lg font-bold leading-tight text-[#1A1A1A]">
+          <h3 className="pr-2 text-lg font-bold leading-tight text-gray-900">
             {course.title}
           </h3>
           <SubjectBadge subject={course.subject} color={course.subjectColor} />
@@ -149,7 +149,7 @@ function CourseCard({ course }: { course: Course }) {
 
         <div className="my-2 flex items-center gap-2">
           <TeacherAvatar initial={course.teacher.avatarInitial} />
-          <span className="text-sm font-medium text-[#6B7280]">
+          <span className="text-sm font-medium text-gray-600">
             {course.teacher.name}
           </span>
         </div>
@@ -157,7 +157,7 @@ function CourseCard({ course }: { course: Course }) {
         <div className="mt-auto pt-3">
           <StarRating rating={course.rating} reviews={course.reviews} />
           <div className="mt-3 text-right">
-            <span className="text-2xl font-extrabold text-[#0B2A4C]">
+            <span className="text-2xl font-bold text-gray-900">
               {typeof course.price === "number"
                 ? `${course.price} €`
                 : course.price}
@@ -171,18 +171,18 @@ function CourseCard({ course }: { course: Course }) {
 
 export function FeaturedCourses() {
   return (
-    <section className="bg-[#F4F5F7] py-16 sm:py-24">
+    <section className="bg-gray-50 py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-12 text-center">
-          <h2 className="text-3xl font-extrabold text-[#0B2A4C] sm:text-4xl">
+          <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
             Cours Populaires
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-[#6B7280]">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
             Decouvrez les cours les mieux notes et les plus apprecies par notre
             communaute d&apos;eleves.
           </p>
         </div>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {sampleCourses.map((course) => (
             <CourseCard key={course.id} course={course} />
           ))}
@@ -190,7 +190,7 @@ export function FeaturedCourses() {
         <div className="mt-16 text-center">
           <Link
             href="/courses"
-            className="inline-block rounded-xl bg-[#0B2A4C] px-8 py-3 font-semibold text-white transition-colors duration-300 hover:bg-[#E8A336]"
+            className="inline-block rounded-xl bg-emerald-500 px-8 py-3.5 font-semibold text-white shadow-sm transition-colors duration-300 hover:bg-emerald-600"
           >
             Voir tous les cours
           </Link>

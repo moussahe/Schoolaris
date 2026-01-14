@@ -146,20 +146,20 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
         scale: 1.02,
         transition: { type: "spring", stiffness: 400, damping: 25 },
       }}
-      className={`group relative overflow-hidden rounded-2xl border border-white/50 bg-white/70 backdrop-blur-sm transition-all duration-300 hover:border-white hover:shadow-xl ${sizeClasses[size]}`}
+      className={`group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-md ${sizeClasses[size]}`}
     >
       {/* Gradient Background */}
       <div
-        className={`absolute inset-0 bg-gradient-to-br ${bgGradient} opacity-50 transition-opacity duration-300 group-hover:opacity-80`}
+        className={`absolute inset-0 bg-gradient-to-br ${bgGradient} opacity-30 transition-opacity duration-300 group-hover:opacity-50`}
       />
 
       {/* Animated Glow Effect */}
       <motion.div
         className="absolute -right-20 -top-20 h-40 w-40 rounded-full blur-3xl"
-        style={{ backgroundColor: `${color}30` }}
+        style={{ backgroundColor: `${color}20` }}
         animate={{
           scale: [1, 1.2, 1],
-          opacity: [0.3, 0.5, 0.3],
+          opacity: [0.2, 0.4, 0.2],
         }}
         transition={{
           duration: 4,
@@ -177,7 +177,7 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
         <div className="mb-auto">
           <motion.div
             className={`inline-flex items-center justify-center rounded-xl ${isLarge ? "h-16 w-16" : "h-12 w-12"}`}
-            style={{ backgroundColor: `${color}20` }}
+            style={{ backgroundColor: `${color}15` }}
             whileHover={{ rotate: [0, -10, 10, 0], scale: 1.1 }}
             transition={{ duration: 0.5 }}
           >
@@ -191,7 +191,7 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
         {/* Content */}
         <div className={isLarge ? "mt-8" : "mt-4"}>
           <h3
-            className={`font-bold text-[#0B2A4C] transition-colors group-hover:text-[#0B2A4C] ${isLarge ? "text-2xl" : "text-lg"}`}
+            className={`font-bold text-gray-900 transition-colors ${isLarge ? "text-2xl" : "text-lg"}`}
           >
             {name}
           </h3>
@@ -203,14 +203,14 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
               {courseCount} cours
             </span>
             {isLarge && (
-              <span className="rounded-full bg-[#E8A336]/20 px-2 py-0.5 text-xs font-medium text-[#E8A336]">
+              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
                 Populaire
               </span>
             )}
           </div>
 
           {/* Arrow indicator */}
-          <div className="mt-3 flex items-center gap-1 text-sm font-medium text-[#6B7280] transition-colors group-hover:text-[#0B2A4C]">
+          <div className="mt-3 flex items-center gap-1 text-sm font-medium text-gray-500 transition-colors group-hover:text-emerald-600">
             <span>Explorer</span>
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
           </div>
@@ -219,8 +219,8 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
         {/* Decorative Elements for Large Cards */}
         {isLarge && (
           <>
-            <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-full bg-white/80 px-3 py-1.5 text-xs font-medium text-[#0B2A4C] shadow-sm">
-              <Sparkles className="h-3 w-3 text-[#E8A336]" />
+            <div className="absolute bottom-4 right-4 flex items-center gap-1 rounded-xl bg-white px-3 py-1.5 text-xs font-medium text-gray-700 shadow-sm">
+              <Sparkles className="h-3 w-3 text-amber-500" />
               IA disponible
             </div>
           </>
@@ -232,11 +232,11 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
 
 export function Categories() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#F8F9FB] to-[#F4F5F7] px-4 py-24 sm:px-6 lg:px-8">
+    <section className="relative overflow-hidden bg-white px-4 py-24 sm:px-6 lg:px-8">
       {/* Background Decorations */}
       <div className="absolute left-0 top-0 h-full w-full">
-        <div className="absolute left-1/4 top-10 h-72 w-72 rounded-full bg-[#E8A336]/5 blur-3xl" />
-        <div className="absolute bottom-10 right-1/4 h-96 w-96 rounded-full bg-[#0B2A4C]/5 blur-3xl" />
+        <div className="absolute left-1/4 top-10 h-72 w-72 rounded-full bg-emerald-500/5 blur-3xl" />
+        <div className="absolute bottom-10 right-1/4 h-96 w-96 rounded-full bg-blue-500/5 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-7xl">
@@ -248,14 +248,14 @@ export function Categories() {
           transition={{ duration: 0.6 }}
           className="mb-16 text-center"
         >
-          <span className="inline-flex items-center gap-2 rounded-full bg-[#E8A336]/10 px-4 py-1.5 text-sm font-semibold text-[#E8A336]">
+          <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-sm font-semibold text-emerald-600">
             <Sparkles className="h-4 w-4" />
             Explorez par Matiere
           </span>
-          <h2 className="mt-4 font-serif text-4xl font-bold tracking-tight text-[#0B2A4C] sm:text-5xl">
+          <h2 className="mt-4 text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
             Toutes les matieres, un seul objectif
           </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-[#6B7280]">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
             Des mathematiques a la philosophie, nos professeurs experts
             accompagnent votre enfant vers la reussite.
           </p>
@@ -284,7 +284,7 @@ export function Categories() {
         >
           <Link
             href="/courses"
-            className="group inline-flex items-center gap-2 rounded-full bg-[#0B2A4C] px-8 py-4 text-base font-semibold text-white transition-all hover:bg-[#0B2A4C]/90 hover:shadow-lg"
+            className="group inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 text-base font-semibold text-white shadow-sm transition-all hover:bg-emerald-600 hover:shadow-md"
           >
             Voir tous les cours
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

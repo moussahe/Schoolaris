@@ -41,8 +41,8 @@ const itemVariants = {
 function TrustIndicator({ value, label }: { value: string; label: string }) {
   return (
     <div className="text-center">
-      <p className="text-3xl font-bold text-[#E8A336]">{value}</p>
-      <p className="mt-1 text-sm tracking-wide text-[#0B2A4C]/80">{label}</p>
+      <p className="text-3xl font-bold text-emerald-500">{value}</p>
+      <p className="mt-1 text-sm tracking-wide text-gray-600">{label}</p>
     </div>
   );
 }
@@ -57,11 +57,11 @@ function BenefitCard({
   description: string;
 }) {
   return (
-    <div className="flex items-center gap-4 rounded-xl border border-gray-100 bg-white/80 p-4 shadow-lg backdrop-blur-md">
-      <div className="rounded-full bg-[#E8A336]/10 p-3">{icon}</div>
+    <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+      <div className="rounded-xl bg-emerald-50 p-3">{icon}</div>
       <div>
-        <h3 className="text-sm font-bold text-[#0B2A4C]">{title}</h3>
-        <p className="text-xs text-[#1A1A1A]/70">{description}</p>
+        <h3 className="text-sm font-bold text-gray-900">{title}</h3>
+        <p className="text-xs text-gray-500">{description}</p>
       </div>
     </div>
   );
@@ -74,7 +74,7 @@ export function Hero() {
   return (
     <section
       ref={ref}
-      className="relative w-full overflow-hidden bg-[#FDFDFD] py-20 pt-32 md:py-32 md:pt-40"
+      className="relative w-full overflow-hidden bg-gray-50 py-20 pt-32 md:py-32 md:pt-40"
     >
       {/* Background Shapes - Modern Gradient Blobs */}
       <motion.div
@@ -83,9 +83,9 @@ export function Hero() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5, ease: "easeIn" }}
       >
-        {/* Primary Gold Blob */}
+        {/* Primary Emerald Blob */}
         <motion.div
-          className="absolute left-[-10%] top-[-15%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-[#E8A336]/20 to-[#E8A336]/5 blur-3xl"
+          className="absolute left-[-10%] top-[-15%] h-[600px] w-[600px] rounded-full bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 blur-3xl"
           animate={{
             scale: [1, 1.1, 1],
             x: [0, 20, 0],
@@ -99,7 +99,7 @@ export function Hero() {
         />
         {/* Secondary Blue Blob */}
         <motion.div
-          className="absolute bottom-[-20%] right-[-10%] h-[700px] w-[700px] rounded-full bg-gradient-to-tl from-[#0B2A4C]/15 to-[#0B2A4C]/5 blur-3xl"
+          className="absolute bottom-[-20%] right-[-10%] h-[700px] w-[700px] rounded-full bg-gradient-to-tl from-blue-500/15 to-blue-500/5 blur-3xl"
           animate={{
             scale: [1, 1.15, 1],
             y: [0, -30, 0],
@@ -144,7 +144,7 @@ export function Hero() {
         }}
       >
         <BenefitCard
-          icon={<BookOpenCheck className="h-6 w-6 text-[#E8A336]" />}
+          icon={<BookOpenCheck className="h-6 w-6 text-emerald-500" />}
           title="Pedagogie Active"
           description="Apprentissage par projet"
         />
@@ -164,7 +164,7 @@ export function Hero() {
         }}
       >
         <BenefitCard
-          icon={<ShieldCheck className="h-6 w-6 text-[#E8A336]" />}
+          icon={<ShieldCheck className="h-6 w-6 text-emerald-500" />}
           title="Qualite Garantie"
           description="Enseignants verifies"
         />
@@ -185,7 +185,7 @@ export function Hero() {
         }}
       >
         <BenefitCard
-          icon={<GraduationCap className="h-6 w-6 text-[#E8A336]" />}
+          icon={<GraduationCap className="h-6 w-6 text-emerald-500" />}
           title="Parcours Flexibles"
           description="Rythme personnalise"
         />
@@ -206,12 +206,12 @@ export function Hero() {
           delay: 0.8,
         }}
       >
-        <div className="flex items-center gap-3 rounded-full border border-emerald-200 bg-white/90 px-4 py-2 shadow-lg backdrop-blur-sm">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
-            <Trophy className="h-5 w-5 text-emerald-600" />
+        <div className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
+            <Trophy className="h-5 w-5 text-emerald-500" />
           </div>
           <div>
-            <p className="text-lg font-bold text-emerald-600">98%</p>
+            <p className="text-lg font-bold text-emerald-500">98%</p>
             <p className="text-xs text-gray-500">Satisfaction</p>
           </div>
         </div>
@@ -252,7 +252,7 @@ export function Hero() {
           delay: 1.2,
         }}
       >
-        <div className="flex items-center gap-3 rounded-xl border border-blue-200 bg-white/90 px-4 py-3 shadow-lg backdrop-blur-sm">
+        <div className="flex items-center gap-3 rounded-2xl border border-gray-100 bg-white px-4 py-3 shadow-sm">
           <div className="flex -space-x-2">
             {[...Array(3)].map((_, i) => (
               <div
@@ -264,7 +264,7 @@ export function Hero() {
             ))}
           </div>
           <div>
-            <p className="text-sm font-bold text-gray-800">+50k</p>
+            <p className="text-sm font-bold text-gray-900">+50k</p>
             <p className="text-xs text-gray-500">Eleves actifs</p>
           </div>
         </div>
@@ -284,13 +284,13 @@ export function Hero() {
           delay: 0.3,
         }}
       >
-        <div className="flex items-center gap-2 rounded-full bg-white/90 px-3 py-2 shadow-md backdrop-blur-sm">
+        <div className="flex items-center gap-2 rounded-2xl border border-gray-100 bg-white px-4 py-2.5 shadow-sm">
           <div className="flex">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
             ))}
           </div>
-          <span className="text-sm font-semibold text-gray-700">4.9/5</span>
+          <span className="text-sm font-semibold text-gray-900">4.9/5</span>
         </div>
       </motion.div>
 
@@ -304,7 +304,7 @@ export function Hero() {
           {/* Headline */}
           <motion.h1
             variants={itemVariants}
-            className="font-serif text-4xl font-bold tracking-tight text-[#0B2A4C] sm:text-5xl md:text-6xl lg:text-7xl"
+            className="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl md:text-6xl lg:text-7xl"
           >
             L&apos;atelier de la reussite scolaire.
           </motion.h1>
@@ -312,7 +312,7 @@ export function Hero() {
           {/* Subheadline */}
           <motion.p
             variants={itemVariants}
-            className="mx-auto mt-6 max-w-2xl text-lg text-[#1A1A1A]/80 md:text-xl"
+            className="mx-auto mt-6 max-w-2xl text-lg text-gray-600 md:text-xl"
           >
             Des parcours d&apos;apprentissage sur-mesure, crees par des
             professeurs d&apos;exception. Pour retrouver clarte et confiance.
@@ -324,15 +324,15 @@ export function Hero() {
             className="mx-auto mt-10 max-w-xl"
           >
             <form className="relative flex items-center">
-              <Search className="absolute left-4 h-5 w-5 text-[#6B7280]" />
+              <Search className="absolute left-4 h-5 w-5 text-gray-400" />
               <input
                 type="search"
                 placeholder="Rechercher un cours, une matiere, un professeur..."
-                className="w-full rounded-full border border-gray-200 bg-white py-4 pl-12 pr-36 text-base shadow-sm transition-all duration-300 focus:border-[#E8A336] focus:ring-2 focus:ring-[#E8A336]/20"
+                className="w-full rounded-2xl border border-gray-200 bg-white py-4 pl-12 pr-36 text-base shadow-sm transition-all duration-300 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-[#0B2A4C] px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#0B2A4C]/90"
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl bg-emerald-500 px-6 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
               >
                 Rechercher
               </button>
@@ -346,14 +346,14 @@ export function Hero() {
           >
             <Link
               href="/demo"
-              className="inline-flex transform items-center justify-center rounded-full bg-[#E8A336] px-8 py-3.5 text-base font-bold text-[#0B2A4C] shadow-lg transition-all hover:scale-105 hover:bg-[#D4922E]"
+              className="inline-flex transform items-center justify-center rounded-xl bg-emerald-500 px-8 py-3.5 text-base font-semibold text-white shadow-sm transition-all hover:scale-105 hover:bg-emerald-600"
             >
               Essayer Gratuitement
               <ArrowRight className="ml-2 h-5 w-5" />
             </Link>
             <Link
               href="/courses"
-              className="inline-flex transform items-center justify-center rounded-full border-2 border-[#0B2A4C] bg-white px-8 py-3 text-base font-semibold text-[#0B2A4C] transition-all hover:scale-105 hover:bg-[#0B2A4C]/5"
+              className="inline-flex transform items-center justify-center rounded-xl border border-gray-200 bg-white px-8 py-3.5 text-base font-semibold text-gray-700 transition-all hover:scale-105 hover:bg-gray-50"
             >
               Explorer les cours
             </Link>
@@ -362,7 +362,7 @@ export function Hero() {
           {/* Free Trial Badge */}
           <motion.p
             variants={itemVariants}
-            className="mt-4 text-sm text-[#1A1A1A]/60"
+            className="mt-4 text-sm text-gray-500"
           >
             Testez l&apos;assistant IA gratuitement, sans inscription
           </motion.p>

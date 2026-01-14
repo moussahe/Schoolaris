@@ -55,15 +55,15 @@ function PricingOption({
   return (
     <motion.div
       variants={itemVariants}
-      className={`relative flex flex-col rounded-2xl border-2 p-6 transition-all ${
+      className={`relative flex flex-col rounded-2xl border p-6 transition-all ${
         highlighted
-          ? "border-[#E8A336] bg-white shadow-xl"
-          : "border-gray-100 bg-white/80 hover:border-[#E8A336]/50"
+          ? "border-emerald-200 bg-white shadow-md"
+          : "border-gray-100 bg-white shadow-sm hover:shadow-md"
       }`}
     >
       {badge && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-[#E8A336] px-4 py-1 text-xs font-bold text-white">
+          <span className="inline-flex items-center gap-1 rounded-full bg-amber-500 px-4 py-1 text-xs font-bold text-white">
             <Star className="h-3 w-3" />
             {badge}
           </span>
@@ -71,30 +71,30 @@ function PricingOption({
       )}
 
       <div className="mb-4">
-        <h3 className="text-lg font-bold text-[#0B2A4C]">{name}</h3>
-        <p className="mt-1 text-sm text-[#1A1A1A]/60">{description}</p>
+        <h3 className="text-lg font-bold text-gray-900">{name}</h3>
+        <p className="mt-1 text-sm text-gray-500">{description}</p>
       </div>
 
       <div className="mb-6">
-        <span className="text-4xl font-bold text-[#0B2A4C]">{price}</span>
-        <span className="ml-2 text-sm text-[#1A1A1A]/60">{priceDetail}</span>
+        <span className="text-4xl font-bold text-gray-900">{price}</span>
+        <span className="ml-2 text-sm text-gray-500">{priceDetail}</span>
       </div>
 
       <ul className="mb-6 flex-1 space-y-3">
         {features.map((feature, index) => (
           <li key={index} className="flex items-start gap-2 text-sm">
             <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-500" />
-            <span className="text-[#1A1A1A]/80">{feature}</span>
+            <span className="text-gray-600">{feature}</span>
           </li>
         ))}
       </ul>
 
       <Link
         href={href}
-        className={`inline-flex items-center justify-center rounded-full px-6 py-3 text-sm font-semibold transition-all ${
+        className={`inline-flex items-center justify-center rounded-xl px-6 py-3 text-sm font-semibold transition-all ${
           highlighted
-            ? "bg-[#E8A336] text-[#0B2A4C] hover:bg-[#D4922E]"
-            : "border-2 border-[#0B2A4C] text-[#0B2A4C] hover:bg-[#0B2A4C] hover:text-white"
+            ? "bg-emerald-500 text-white hover:bg-emerald-600"
+            : "border border-gray-200 text-gray-700 hover:bg-gray-50"
         }`}
       >
         {cta}
@@ -109,7 +109,7 @@ export function PricingPreview() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="bg-[#F4F5F7] py-20">
+    <section ref={ref} className="bg-gray-50 py-20">
       <div className="container mx-auto px-4">
         <motion.div
           variants={containerVariants}
@@ -119,16 +119,16 @@ export function PricingPreview() {
         >
           {/* Header */}
           <motion.div variants={itemVariants}>
-            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full bg-[#E8A336]/10 px-4 py-2 text-sm font-medium text-[#E8A336]">
+            <div className="mx-auto mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-600">
               <Sparkles className="h-4 w-4" />
               Tarifs transparents
             </div>
 
-            <h2 className="font-serif text-3xl font-bold tracking-tight text-[#0B2A4C] md:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
               Des formules adaptees a vos besoins
             </h2>
 
-            <p className="mx-auto mt-4 max-w-2xl text-lg text-[#1A1A1A]/70">
+            <p className="mx-auto mt-4 max-w-2xl text-lg text-gray-600">
               Commencez gratuitement, evoluez selon vos besoins. Pas
               d&apos;engagement, pas de surprise.
             </p>
@@ -188,12 +188,12 @@ export function PricingPreview() {
 
           {/* Trust badge */}
           <motion.div variants={itemVariants} className="mt-10">
-            <p className="text-sm text-[#1A1A1A]/60">
+            <p className="text-sm text-gray-500">
               Paiement securise par{" "}
               <span className="font-semibold">Stripe</span>
-              {" • "}
+              {" . "}
               Satisfait ou rembourse sous 14 jours
-              {" • "}
+              {" . "}
               Sans engagement
             </p>
           </motion.div>

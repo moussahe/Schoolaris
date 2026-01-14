@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/courses", label: "Cours" },
-  { href: "/subjects", label: "Matières" },
+  { href: "/subjects", label: "Matieres" },
   { href: "/levels", label: "Niveaux" },
   { href: "/teachers", label: "Enseignants" },
 ];
@@ -43,7 +43,7 @@ export function Header() {
         className={cn(
           "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
           scrolled
-            ? "bg-[#FDFDFD]/95 shadow-[0px_4px_15px_rgba(0,0,0,0.05)] backdrop-blur-sm"
+            ? "bg-white/95 shadow-sm backdrop-blur-sm"
             : "bg-transparent",
         )}
       >
@@ -52,11 +52,13 @@ export function Header() {
             {/* Logo */}
             <Link
               href="/"
-              className="flex items-center gap-2"
+              className="flex items-center gap-3"
               aria-label="Schoolaris Home"
             >
-              <GraduationCap className="h-8 w-8 text-[#E8A336]" />
-              <span className="font-serif text-2xl font-bold text-[#0B2A4C]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500">
+                <GraduationCap className="h-6 w-6 text-white" />
+              </div>
+              <span className="text-xl font-bold text-gray-900">
                 Schoolaris
               </span>
             </Link>
@@ -68,10 +70,10 @@ export function Header() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="group relative text-base font-medium text-[#1A1A1A]"
+                    className="group relative text-sm font-medium text-gray-600 transition-colors hover:text-gray-900"
                   >
                     {link.label}
-                    <span className="absolute bottom-[-4px] left-0 h-0.5 w-full origin-center scale-x-0 bg-[#E8A336] transition-transform duration-300 ease-out group-hover:scale-x-100" />
+                    <span className="absolute bottom-[-4px] left-0 h-0.5 w-full origin-center scale-x-0 bg-emerald-500 transition-transform duration-300 ease-out group-hover:scale-x-100" />
                   </Link>
                 ))}
             </nav>
@@ -92,7 +94,7 @@ export function Header() {
                       <input
                         type="text"
                         placeholder="Rechercher un cours..."
-                        className="w-48 rounded-full border border-[#6B7280] px-4 py-2 text-sm focus:border-[#E8A336] focus:outline-none focus:ring-2 focus:ring-[#E8A336]/20"
+                        className="w-48 rounded-xl border border-gray-200 bg-gray-50 px-4 py-2 text-sm focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                         autoFocus
                       />
                     </motion.div>
@@ -101,7 +103,7 @@ export function Header() {
                 <button
                   onClick={toggleSearch}
                   aria-label="Toggle Search"
-                  className="p-2 text-[#1A1A1A] transition-colors hover:text-[#E8A336]"
+                  className="rounded-xl p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-emerald-600"
                 >
                   {isSearchOpen ? (
                     <X className="h-5 w-5" />
@@ -119,7 +121,7 @@ export function Header() {
                 >
                   <Link
                     href="/demo"
-                    className="rounded-lg border-2 border-[#E8A336] bg-[#E8A336]/10 px-5 py-2 text-sm font-semibold text-[#E8A336] transition-colors hover:bg-[#E8A336] hover:text-white"
+                    className="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-300"
                   >
                     Essai Gratuit
                   </Link>
@@ -130,7 +132,7 @@ export function Header() {
                 >
                   <Link
                     href="/login"
-                    className="rounded-lg border-2 border-[#0B2A4C] px-5 py-2 text-sm font-semibold text-[#0B2A4C] transition-colors hover:bg-[#0B2A4C] hover:text-white"
+                    className="rounded-xl border border-gray-200 bg-white px-5 py-2.5 text-sm font-semibold text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-300"
                   >
                     Connexion
                   </Link>
@@ -141,7 +143,7 @@ export function Header() {
                 >
                   <Link
                     href="/register"
-                    className="rounded-lg bg-[#E8A336] px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#D4922E]"
+                    className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
                   >
                     S&apos;inscrire
                   </Link>
@@ -150,8 +152,12 @@ export function Header() {
 
               {/* Mobile Menu Button */}
               <div className="lg:hidden">
-                <button onClick={toggleMenu} aria-label="Open menu">
-                  <Menu className="h-7 w-7 text-[#1A1A1A]" />
+                <button
+                  onClick={toggleMenu}
+                  aria-label="Open menu"
+                  className="rounded-xl p-2 hover:bg-gray-100"
+                >
+                  <Menu className="h-6 w-6 text-gray-900" />
                 </button>
               </div>
             </div>
@@ -167,23 +173,29 @@ export function Header() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed inset-0 z-50 bg-[#FDFDFD] lg:hidden"
+            className="fixed inset-0 z-50 bg-white lg:hidden"
           >
             <div className="flex h-full flex-col">
               {/* Mobile Header */}
-              <div className="flex items-center justify-between border-b border-[#F4F5F7] p-4">
+              <div className="flex items-center justify-between border-b border-gray-100 p-4">
                 <Link
                   href="/"
-                  className="flex items-center gap-2"
+                  className="flex items-center gap-3"
                   onClick={toggleMenu}
                 >
-                  <GraduationCap className="h-8 w-8 text-[#E8A336]" />
-                  <span className="font-serif text-2xl font-bold text-[#0B2A4C]">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500">
+                    <GraduationCap className="h-6 w-6 text-white" />
+                  </div>
+                  <span className="text-xl font-bold text-gray-900">
                     Schoolaris
                   </span>
                 </Link>
-                <button onClick={toggleMenu} aria-label="Close menu">
-                  <X className="h-7 w-7 text-[#1A1A1A]" />
+                <button
+                  onClick={toggleMenu}
+                  aria-label="Close menu"
+                  className="rounded-xl p-2 hover:bg-gray-100"
+                >
+                  <X className="h-6 w-6 text-gray-900" />
                 </button>
               </div>
 
@@ -199,7 +211,7 @@ export function Header() {
                     <Link
                       href={link.href}
                       onClick={toggleMenu}
-                      className="text-2xl font-medium text-[#1A1A1A] transition-colors hover:text-[#E8A336]"
+                      className="text-2xl font-medium text-gray-900 transition-colors hover:text-emerald-600"
                     >
                       {link.label}
                     </Link>
@@ -208,25 +220,25 @@ export function Header() {
               </nav>
 
               {/* Mobile Auth Buttons */}
-              <div className="flex flex-col gap-4 border-t border-[#F4F5F7] p-6">
+              <div className="flex flex-col gap-3 border-t border-gray-100 p-6">
                 <Link
                   href="/demo"
                   onClick={toggleMenu}
-                  className="w-full rounded-lg border-2 border-[#E8A336] bg-[#E8A336]/10 px-6 py-3 text-center text-lg font-semibold text-[#E8A336] transition-colors hover:bg-[#E8A336] hover:text-white"
+                  className="w-full rounded-xl border border-gray-200 bg-white px-6 py-3.5 text-center text-base font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                 >
                   Essai Gratuit
                 </Link>
                 <Link
                   href="/login"
                   onClick={toggleMenu}
-                  className="w-full rounded-lg border-2 border-[#0B2A4C] px-6 py-3 text-center text-lg font-semibold text-[#0B2A4C] transition-colors hover:bg-[#0B2A4C] hover:text-white"
+                  className="w-full rounded-xl border border-gray-200 bg-white px-6 py-3.5 text-center text-base font-semibold text-gray-700 transition-colors hover:bg-gray-50"
                 >
                   Connexion
                 </Link>
                 <Link
                   href="/register"
                   onClick={toggleMenu}
-                  className="w-full rounded-lg bg-[#E8A336] px-6 py-3 text-center text-lg font-semibold text-white transition-colors hover:bg-[#D4922E]"
+                  className="w-full rounded-xl bg-emerald-500 px-6 py-3.5 text-center text-base font-semibold text-white shadow-sm transition-colors hover:bg-emerald-600"
                 >
                   S&apos;inscrire
                 </Link>
