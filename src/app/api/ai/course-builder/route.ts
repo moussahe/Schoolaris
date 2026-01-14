@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
+import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 import {
   generateCourseStructure,
   type CourseGenerationRequest,
@@ -25,6 +26,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { error: "Acces reserve aux enseignants" },
         { status: 403 },
+      );
+    }
+
+    // Rate limiting (5 course generations per hour)
+    const rateLimit = await checkRateLimit(session.user.id, "COURSE_BUILDER");
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        {
+          error: "Limite atteinte. Vous pouvez generer 5 cours par heure.",
+          retryAfter: rateLimit.retryAfter,
+        },
+        {
+          status: 429,
+          headers: rateLimitHeaders(rateLimit),
+        },
       );
     }
 

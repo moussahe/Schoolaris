@@ -4,6 +4,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 import { z } from "zod";
 import { getAnthropicClient } from "@/lib/ai";
 
@@ -87,6 +88,21 @@ export async function POST(req: NextRequest) {
     const session = await auth();
     if (!session?.user) {
       return NextResponse.json({ error: "Non autorise" }, { status: 401 });
+    }
+
+    // Rate limiting (30 quiz help requests per hour)
+    const rateLimit = await checkRateLimit(session.user.id, "QUIZ_HELP");
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        {
+          error: "Limite atteinte. Vous pouvez demander 30 aides par heure.",
+          retryAfter: rateLimit.retryAfter,
+        },
+        {
+          status: 429,
+          headers: rateLimitHeaders(rateLimit),
+        },
+      );
     }
 
     const body = await req.json();

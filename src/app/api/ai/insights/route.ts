@@ -2,33 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { anthropic } from "@/lib/anthropic";
+import { checkRateLimit, rateLimitHeaders } from "@/lib/rate-limit";
 import { z } from "zod";
 
 const requestSchema = z.object({
   childId: z.string().cuid(),
 });
-
-// Rate limiting simple (a remplacer par Redis en prod)
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT = 5; // 5 generations par heure
-const RATE_LIMIT_WINDOW = 60 * 60 * 1000; // 1 heure
-
-function checkRateLimit(userId: string): boolean {
-  const now = Date.now();
-  const userLimit = rateLimitMap.get(userId);
-
-  if (!userLimit || now > userLimit.resetAt) {
-    rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
-    return true;
-  }
-
-  if (userLimit.count >= RATE_LIMIT) {
-    return false;
-  }
-
-  userLimit.count++;
-  return true;
-}
 
 interface ChildData {
   firstName: string;
@@ -196,14 +175,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Non authentifie" }, { status: 401 });
     }
 
-    // 2. Rate limiting
-    if (!checkRateLimit(session.user.id)) {
+    // 2. Rate limiting (5 insights generations per hour)
+    const rateLimit = await checkRateLimit(session.user.id, "AI_INSIGHTS");
+    if (!rateLimit.success) {
       return NextResponse.json(
         {
           error: "Limite atteinte. Vous pouvez generer 5 analyses par heure.",
-          retryAfter: 3600,
+          retryAfter: rateLimit.retryAfter,
         },
-        { status: 429 },
+        {
+          status: 429,
+          headers: rateLimitHeaders(rateLimit),
+        },
       );
     }
 

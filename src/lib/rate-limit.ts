@@ -46,6 +46,24 @@ export const RATE_LIMITS = {
     window: "1 h" as const,
     prefix: "ratelimit:learning-path",
   },
+  // Quiz help (aide contextuelle pendant quiz): 30 par heure
+  QUIZ_HELP: {
+    requests: 30,
+    window: "1 h" as const,
+    prefix: "ratelimit:quiz-help",
+  },
+  // Course builder (création cours IA pour profs): 5 par heure
+  COURSE_BUILDER: {
+    requests: 5,
+    window: "1 h" as const,
+    prefix: "ratelimit:course-builder",
+  },
+  // AI Insights (analyse enfant pour parents): 5 par heure
+  AI_INSIGHTS: {
+    requests: 5,
+    window: "1 h" as const,
+    prefix: "ratelimit:ai-insights",
+  },
 } as const;
 
 type RateLimitType = keyof typeof RATE_LIMITS;
