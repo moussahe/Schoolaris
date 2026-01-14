@@ -79,7 +79,7 @@ export async function POST(req: NextRequest) {
     }
 
     // 4. Evaluate each answer
-    const questions = validated.questions as ExamQuestion[];
+    const questions: ExamQuestion[] = validated.questions;
     const questionResults: QuestionResult[] = [];
     let totalScore = 0;
     let maxScore = 0;

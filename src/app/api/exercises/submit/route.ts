@@ -13,10 +13,25 @@ import {
 import { addXP, updateStreak, checkAndAwardBadges } from "@/lib/gamification";
 import type { GeneratedExercise, ExerciseType } from "@/types/exercise";
 
+// Exercise answers can be different types based on exercise type:
+// - FILL_IN_BLANK: Record<string, string> (blank_id -> answer)
+// - MATCHING: Record<string, string> (left_id -> right_id)
+// - ORDERING: string[] (ordered item IDs)
+// - SHORT_ANSWER: string
+// - TRUE_FALSE: Record<string, boolean> (statement_id -> true/false)
+// - CALCULATION: number | string (numeric answer, possibly as string)
+const exerciseAnswerSchema = z.union([
+  z.string(),
+  z.number(),
+  z.array(z.string()),
+  z.record(z.string(), z.string()),
+  z.record(z.string(), z.boolean()),
+]);
+
 const submitSchema = z.object({
   exerciseId: z.string().cuid(),
   childId: z.string().cuid(),
-  answer: z.unknown(),
+  answer: exerciseAnswerSchema,
   timeSpent: z.number().min(0).default(0),
 });
 

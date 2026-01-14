@@ -61,9 +61,11 @@ export function xpToNextLevel(xp: number): {
 }
 
 // Add XP to a child and update level
+// Note: _reason parameter is for future XP history/audit logging
 export async function addXP(
   childId: string,
   amount: number,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _reason?: string,
 ): Promise<{ newXP: number; newLevel: number; leveledUp: boolean }> {
   const child = await prisma.child.findUnique({
