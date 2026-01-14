@@ -13,10 +13,23 @@ import {
   BookOpen,
   Minimize2,
   Maximize2,
+  Mic,
+  MicOff,
+  Volume2,
+  VolumeX,
+  Square,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import { useVoiceInput } from "@/hooks/use-voice-input";
+import { useVoiceOutput } from "@/hooks/use-voice-output";
 
 interface Message {
   id?: string;
@@ -77,6 +90,85 @@ export function AITutorPanel({
   const [conversationId, setConversationId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Voice input hook
+  const {
+    isListening,
+    isSupported: isVoiceSupported,
+    interimTranscript,
+    error: voiceError,
+    startListening,
+    stopListening,
+  } = useVoiceInput({
+    language: "fr-FR",
+    continuous: false,
+    interimResults: true,
+    onResult: (text, isFinal) => {
+      if (isFinal) {
+        setInput((prev) => prev + text);
+      }
+    },
+  });
+
+  // Voice output (TTS) hook
+  const [voiceOutputEnabled, setVoiceOutputEnabled] = useState(false);
+  const [currentlySpeakingId, setCurrentlySpeakingId] = useState<string | null>(
+    null,
+  );
+  const {
+    isSpeaking,
+    isSupported: isTTSSupported,
+    speak,
+    stop: stopSpeaking,
+  } = useVoiceOutput({
+    language: "fr-FR",
+    rate: 0.95,
+    onStart: () => {},
+    onEnd: () => setCurrentlySpeakingId(null),
+    onError: () => setCurrentlySpeakingId(null),
+  });
+
+  // Handle speaking a message
+  const handleSpeak = useCallback(
+    (messageId: string | undefined, content: string) => {
+      if (!messageId) return;
+
+      if (isSpeaking && currentlySpeakingId === messageId) {
+        stopSpeaking();
+        setCurrentlySpeakingId(null);
+      } else {
+        stopSpeaking();
+        setCurrentlySpeakingId(messageId);
+        speak(content);
+      }
+    },
+    [isSpeaking, currentlySpeakingId, speak, stopSpeaking],
+  );
+
+  // Auto-speak new AI responses if voice output is enabled
+  useEffect(() => {
+    if (!voiceOutputEnabled || !isTTSSupported) return;
+
+    const lastMessage = messages[messages.length - 1];
+    if (
+      lastMessage?.role === "assistant" &&
+      lastMessage.id &&
+      !lastMessage.isStreaming &&
+      !isSpeaking
+    ) {
+      setCurrentlySpeakingId(lastMessage.id);
+      speak(lastMessage.content);
+    }
+  }, [messages, voiceOutputEnabled, isTTSSupported, isSpeaking, speak]);
+
+  // Handle voice toggle
+  const handleVoiceToggle = useCallback(() => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
+    }
+  }, [isListening, startListening, stopListening]);
 
   const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -265,7 +357,7 @@ export function AITutorPanel({
 
   const welcomeMessage = `Salut ! Je suis ton assistant IA pour t'aider avec cette lecon sur "${context.lessonTitle}".
 
-Pose-moi tes questions ! Je ne te donnerai pas directement les reponses, mais je t'aiderai a comprendre par toi-meme.`;
+Pose-moi tes questions ! Je ne te donnerai pas directement les reponses, mais je t'aiderai a comprendre par toi-meme.${isVoiceSupported ? "\n\n🎤 Tu peux aussi me parler en cliquant sur le micro !" : ""}`;
 
   // Floating button when closed
   if (!isOpen) {
@@ -316,6 +408,42 @@ Pose-moi tes questions ! Je ne te donnerai pas directement les reponses, mais je
             </div>
           </div>
           <div className="flex items-center gap-1">
+            {/* Voice output toggle */}
+            {isTTSSupported && (
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => {
+                        if (isSpeaking) stopSpeaking();
+                        setVoiceOutputEnabled(!voiceOutputEnabled);
+                      }}
+                      className={cn(
+                        "h-8 w-8",
+                        voiceOutputEnabled
+                          ? "bg-white/30 text-white hover:bg-white/40"
+                          : "text-white/80 hover:text-white hover:bg-white/20",
+                      )}
+                    >
+                      {voiceOutputEnabled ? (
+                        <Volume2 className="h-4 w-4" />
+                      ) : (
+                        <VolumeX className="h-4 w-4" />
+                      )}
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">
+                    <p>
+                      {voiceOutputEnabled
+                        ? "Desactiver la lecture vocale"
+                        : "Activer la lecture vocale"}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            )}
             <Button
               variant="ghost"
               size="icon"
@@ -394,20 +522,48 @@ Pose-moi tes questions ! Je ne te donnerai pas directement les reponses, mais je
                     <User className="h-4 w-4 text-white" />
                   )}
                 </div>
-                <div
-                  className={cn(
-                    "max-w-[80%] rounded-2xl px-4 py-3",
-                    message.role === "assistant"
-                      ? "rounded-tl-none bg-gray-100 text-gray-700"
-                      : "rounded-tr-none bg-emerald-500 text-white",
-                  )}
-                >
-                  <p className="whitespace-pre-wrap text-sm">
-                    {message.content}
-                    {message.isStreaming && (
-                      <span className="inline-block w-2 h-4 ml-0.5 bg-violet-500 animate-pulse" />
+                <div className="flex flex-col gap-1">
+                  <div
+                    className={cn(
+                      "max-w-[80%] rounded-2xl px-4 py-3",
+                      message.role === "assistant"
+                        ? "rounded-tl-none bg-gray-100 text-gray-700"
+                        : "rounded-tr-none bg-emerald-500 text-white",
                     )}
-                  </p>
+                  >
+                    <p className="whitespace-pre-wrap text-sm">
+                      {message.content}
+                      {message.isStreaming && (
+                        <span className="inline-block w-2 h-4 ml-0.5 bg-violet-500 animate-pulse" />
+                      )}
+                    </p>
+                  </div>
+                  {/* Speaker button for AI messages */}
+                  {message.role === "assistant" &&
+                    isTTSSupported &&
+                    !message.isStreaming && (
+                      <button
+                        onClick={() => handleSpeak(message.id, message.content)}
+                        className={cn(
+                          "flex items-center gap-1.5 self-start rounded-full px-2 py-1 text-xs transition-all",
+                          currentlySpeakingId === message.id && isSpeaking
+                            ? "bg-violet-100 text-violet-700"
+                            : "text-gray-400 hover:bg-gray-100 hover:text-gray-600",
+                        )}
+                      >
+                        {currentlySpeakingId === message.id && isSpeaking ? (
+                          <>
+                            <Square className="h-3 w-3 fill-current" />
+                            <span>Arreter</span>
+                          </>
+                        ) : (
+                          <>
+                            <Volume2 className="h-3 w-3" />
+                            <span>Ecouter</span>
+                          </>
+                        )}
+                      </button>
+                    )}
                 </div>
               </div>
             ))}
@@ -442,29 +598,99 @@ Pose-moi tes questions ! Je ne te donnerai pas directement les reponses, mais je
 
         {/* Input */}
         <div className="border-t p-3">
-          <div className="flex gap-2">
-            <Textarea
-              ref={textareaRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Pose ta question..."
-              className="min-h-[44px] max-h-[100px] resize-none text-sm"
-              rows={1}
-              disabled={isLoading}
-            />
-            <Button
-              onClick={() => sendMessage()}
-              disabled={!input.trim() || isLoading}
-              size="icon"
-              className="h-11 w-11 shrink-0 bg-violet-600 hover:bg-violet-700"
-            >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Send className="h-4 w-4" />
+          <div className="flex flex-col gap-2">
+            {/* Voice error message */}
+            {voiceError && (
+              <div className="rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                {voiceError}
+              </div>
+            )}
+
+            {/* Voice listening indicator */}
+            {isListening && (
+              <div className="flex items-center gap-2 rounded-lg bg-violet-50 px-3 py-2">
+                <div className="relative flex h-3 w-3">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-violet-400 opacity-75" />
+                  <span className="relative inline-flex h-3 w-3 rounded-full bg-violet-500" />
+                </div>
+                <span className="text-xs font-medium text-violet-700">
+                  Parle maintenant...
+                </span>
+                {interimTranscript && (
+                  <span className="ml-2 text-xs italic text-violet-600 truncate">
+                    &ldquo;{interimTranscript}&rdquo;
+                  </span>
+                )}
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              {/* Voice input button */}
+              {isVoiceSupported && (
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        type="button"
+                        onClick={handleVoiceToggle}
+                        disabled={isLoading}
+                        size="icon"
+                        variant={isListening ? "default" : "outline"}
+                        className={cn(
+                          "h-11 w-11 shrink-0 transition-all",
+                          isListening
+                            ? "bg-violet-600 hover:bg-violet-700 text-white animate-pulse"
+                            : "hover:bg-violet-50 hover:border-violet-300",
+                        )}
+                      >
+                        {isListening ? (
+                          <MicOff className="h-4 w-4" />
+                        ) : (
+                          <Mic className="h-4 w-4 text-violet-600" />
+                        )}
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>
+                        {isListening ? "Arreter l'ecoute" : "Parler au micro"}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
               )}
-            </Button>
+
+              <Textarea
+                ref={textareaRef}
+                value={
+                  isListening && interimTranscript
+                    ? input + interimTranscript
+                    : input
+                }
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={
+                  isListening ? "Parle maintenant..." : "Pose ta question..."
+                }
+                className={cn(
+                  "min-h-[44px] max-h-[100px] resize-none text-sm",
+                  isListening && "border-violet-300 bg-violet-50/50",
+                )}
+                rows={1}
+                disabled={isLoading}
+              />
+              <Button
+                onClick={() => sendMessage()}
+                disabled={!input.trim() || isLoading || isListening}
+                size="icon"
+                className="h-11 w-11 shrink-0 bg-violet-600 hover:bg-violet-700"
+              >
+                {isLoading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Send className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
           </div>
           <p className="mt-2 text-center text-[10px] text-gray-400">
             L&apos;IA te guide sans donner les reponses directement
