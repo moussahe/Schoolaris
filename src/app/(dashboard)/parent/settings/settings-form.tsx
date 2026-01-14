@@ -307,6 +307,33 @@ export function SettingsForm({ user, notificationPrefs }: SettingsFormProps) {
                   onCheckedChange={() => handleTogglePref("quizCompleted")}
                 />
               </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Etapes franchies</p>
+                  <p className="text-sm text-gray-500">
+                    Notification quand un enfant atteint un jalon (50%, 100%
+                    d&apos;un cours).
+                  </p>
+                </div>
+                <Switch
+                  checked={prefs.milestoneReached}
+                  onCheckedChange={() => handleTogglePref("milestoneReached")}
+                />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Scores faibles</p>
+                  <p className="text-sm text-gray-500">
+                    Alerte si un enfant obtient moins de 50% a un quiz.
+                  </p>
+                </div>
+                <Switch
+                  checked={prefs.lowQuizScore}
+                  onCheckedChange={() => handleTogglePref("lowQuizScore")}
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -361,12 +388,68 @@ export function SettingsForm({ user, notificationPrefs }: SettingsFormProps) {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Button
-                variant="outline"
-                className="w-full text-red-600 border-red-200 hover:bg-red-50"
+              <Dialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
               >
-                Supprimer mon compte
-              </Button>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="w-full text-red-600 border-red-200 hover:bg-red-50"
+                  >
+                    Supprimer mon compte
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2 text-red-600">
+                      <AlertTriangle className="h-5 w-5" />
+                      Supprimer votre compte
+                    </DialogTitle>
+                    <DialogDescription>
+                      Cette action est irreversible. Toutes vos donnees
+                      personnelles seront anonymisees conformement au RGPD. Vos
+                      enfants perdront acces a leurs cours.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 py-4">
+                    <p className="text-sm text-gray-600">
+                      Pour confirmer, tapez{" "}
+                      <span className="font-bold">SUPPRIMER</span> ci-dessous:
+                    </p>
+                    <Input
+                      value={deleteConfirmation}
+                      onChange={(e) => setDeleteConfirmation(e.target.value)}
+                      placeholder="SUPPRIMER"
+                      className="border-red-200 focus:border-red-400"
+                    />
+                  </div>
+                  <DialogFooter>
+                    <Button
+                      variant="outline"
+                      onClick={() => setIsDeleteDialogOpen(false)}
+                    >
+                      Annuler
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={handleDeleteAccount}
+                      disabled={
+                        deleteConfirmation !== "SUPPRIMER" || isDeletePending
+                      }
+                    >
+                      {isDeletePending ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          Suppression...
+                        </>
+                      ) : (
+                        "Supprimer definitivement"
+                      )}
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
         </div>
