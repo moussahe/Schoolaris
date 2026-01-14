@@ -43,15 +43,33 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import { LessonForm } from "./lesson-form";
 
+interface QuizOption {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+}
+
+interface QuizQuestion {
+  id: string;
+  question: string;
+  options: QuizOption[];
+  explanation?: string;
+  position: number;
+}
+
 interface Lesson {
   id: string;
   title: string;
   description: string | null;
   contentType: string;
+  content?: string | null;
+  videoUrl?: string | null;
   duration: number | null;
   position: number;
   isPublished: boolean;
   isFreePreview: boolean;
+  quizQuestions?: QuizQuestion[];
+  quizPassingScore?: number;
 }
 
 interface Chapter {
@@ -104,6 +122,61 @@ export function ChapterList({
     lesson: Lesson;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingLesson, setIsLoadingLesson] = useState(false);
+
+  // Fetch full lesson data including quiz questions for editing
+  const handleEditLesson = useCallback(
+    async (chapterId: string, lesson: Lesson) => {
+      // If it's a QUIZ type, fetch the full lesson data with quiz questions
+      if (lesson.contentType === "QUIZ") {
+        setIsLoadingLesson(true);
+        try {
+          const response = await fetch(
+            `/api/courses/${courseId}/chapters/${chapterId}/lessons/${lesson.id}`,
+          );
+          if (!response.ok) throw new Error("Erreur lors du chargement");
+          const fullLesson = await response.json();
+
+          // Transform quiz data to match our interface
+          const quizQuestions: QuizQuestion[] =
+            fullLesson.quizzes?.[0]?.questions?.map(
+              (q: {
+                id: string;
+                question: string;
+                options: QuizOption[];
+                explanation?: string;
+                position: number;
+              }) => ({
+                id: q.id,
+                question: q.question,
+                options: q.options,
+                explanation: q.explanation,
+                position: q.position,
+              }),
+            ) ?? [];
+
+          setEditingLesson({
+            chapterId,
+            lesson: {
+              ...lesson,
+              content: fullLesson.content,
+              videoUrl: fullLesson.videoUrl,
+              quizQuestions,
+              quizPassingScore: fullLesson.quizzes?.[0]?.passingScore ?? 70,
+            },
+          });
+        } catch {
+          toast.error("Erreur lors du chargement de la lecon");
+        } finally {
+          setIsLoadingLesson(false);
+        }
+      } else {
+        // For non-quiz lessons, just open the form directly
+        setEditingLesson({ chapterId, lesson });
+      }
+    },
+    [courseId],
+  );
 
   const toggleChapter = useCallback((chapterId: string) => {
     setExpandedChapters((prev) => {
@@ -501,11 +574,9 @@ export function ChapterList({
                                 <DropdownMenuContent align="end">
                                   <DropdownMenuItem
                                     onClick={() =>
-                                      setEditingLesson({
-                                        chapterId: chapter.id,
-                                        lesson,
-                                      })
+                                      handleEditLesson(chapter.id, lesson)
                                     }
+                                    disabled={isLoadingLesson}
                                   >
                                     <Pencil className="mr-2 h-4 w-4" />
                                     Modifier
