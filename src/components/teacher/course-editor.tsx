@@ -41,6 +41,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { AICourseBuilder } from "./ai-course-builder";
 
 // Schemas
 const courseFormSchema = z.object({
@@ -173,6 +174,48 @@ export function CourseEditor({ initialData }: CourseEditorProps) {
     control: form.control,
     name: "requirements",
   });
+
+  // Handle AI-generated course structure
+  const handleAIStructure = useCallback(
+    (structure: {
+      title: string;
+      subtitle: string;
+      description: string;
+      learningOutcomes: string[];
+      requirements: string[];
+    }) => {
+      form.setValue("title", structure.title);
+      form.setValue("subtitle", structure.subtitle);
+      form.setValue("description", structure.description);
+
+      // Clear and set learning outcomes
+      while (learningOutcomesFields.length > 0) {
+        removeLearningOutcome(0);
+      }
+      structure.learningOutcomes.forEach((outcome) => {
+        appendLearningOutcome({ value: outcome });
+      });
+
+      // Clear and set requirements
+      while (requirementsFields.length > 0) {
+        removeRequirement(0);
+      }
+      structure.requirements.forEach((req) => {
+        appendRequirement({ value: req });
+      });
+
+      toast.success("Structure du cours appliquee !");
+    },
+    [
+      form,
+      learningOutcomesFields.length,
+      requirementsFields.length,
+      appendLearningOutcome,
+      removeLearningOutcome,
+      appendRequirement,
+      removeRequirement,
+    ],
+  );
 
   const handleNext = useCallback(async () => {
     let fieldsToValidate: (keyof CourseFormValues)[] = [];
@@ -319,6 +362,23 @@ export function CourseEditor({ initialData }: CourseEditorProps) {
           {currentStep === 1 && (
             <Card className="rounded-2xl border-0 bg-white shadow-sm">
               <CardContent className="space-y-6 p-6">
+                {/* AI Course Builder */}
+                <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-violet-50 to-purple-50 p-4">
+                  <div>
+                    <p className="font-medium text-gray-900">
+                      Besoin d&apos;aide pour structurer votre cours ?
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      L&apos;IA peut generer une structure complete
+                    </p>
+                  </div>
+                  <AICourseBuilder
+                    onApply={handleAIStructure}
+                    defaultSubject={form.watch("subject")}
+                    defaultGradeLevel={form.watch("gradeLevel")}
+                  />
+                </div>
+
                 <FormField
                   control={form.control}
                   name="title"
