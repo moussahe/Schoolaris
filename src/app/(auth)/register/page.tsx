@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 import {
   passwordSchema,
   PASSWORD_REQUIREMENTS,
@@ -243,7 +244,40 @@ function RegisterForm() {
             </Button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-gray-600">
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-4 text-gray-500">ou</span>
+            </div>
+          </div>
+
+          <GoogleSignInButton
+            callbackUrl="/onboarding"
+            className="h-11 w-full"
+            text="S'inscrire avec Google"
+          />
+
+          <p className="mt-6 text-center text-sm text-gray-500">
+            En vous inscrivant, vous acceptez nos{" "}
+            <Link
+              href="/terms"
+              className="text-emerald-600 hover:text-emerald-500"
+            >
+              conditions d&apos;utilisation
+            </Link>{" "}
+            et notre{" "}
+            <Link
+              href="/privacy"
+              className="text-emerald-600 hover:text-emerald-500"
+            >
+              politique de confidentialite
+            </Link>
+            .
+          </p>
+
+          <p className="mt-4 text-center text-sm text-gray-600">
             Deja un compte ?{" "}
             <Link
               href="/login"

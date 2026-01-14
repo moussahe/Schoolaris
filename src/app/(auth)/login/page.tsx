@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/password-input";
 import { Label } from "@/components/ui/label";
+import { GoogleSignInButton } from "@/components/auth/google-sign-in-button";
 
 const loginSchema = z.object({
   email: z.string().email("Email invalide"),
@@ -191,6 +192,20 @@ function LoginForm() {
               )}
             </Button>
           </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-4 text-gray-500">ou</span>
+            </div>
+          </div>
+
+          <GoogleSignInButton
+            callbackUrl={needsOnboarding ? "/onboarding" : "/dashboard"}
+            className="h-11 w-full"
+          />
 
           <p className="mt-6 text-center text-sm text-gray-600">
             Pas encore de compte ?{" "}
