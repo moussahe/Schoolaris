@@ -134,6 +134,9 @@ model User {
   alerts         Alert[]
   pushSubscriptions PushSubscription[] @relation("UserPushSubscriptions")
   notificationPreferences NotificationPreferences? @relation("UserNotificationPreferences")
+  reportsMade    Report[]         @relation("ReportReporter")
+  reportsAssigned Report[]        @relation("ReportAssignee")
+  moderationReviews ContentModeration[] @relation("ContentReviewer")
 
   @@index([email])
   @@index([role])
@@ -260,6 +263,7 @@ model Course {
   purchases    Purchase[]
   reviews      Review[]
   certificates Certificate[]
+  moderation   ContentModeration?
 
   @@index([slug])
   @@index([gradeLevel])
@@ -1332,4 +1336,123 @@ model QuizHelpRequest {
   @@index([childId])
   @@index([subject])
   @@index([createdAt])
+}
+
+// ============ CONTENT MODERATION & REPORTS ============
+
+enum ReportType {
+  INAPPROPRIATE_CONTENT  // Contenu inapproprie pour mineurs
+  SPAM                   // Spam ou publicite
+  HARASSMENT             // Harcelement
+  MISINFORMATION         // Information fausse ou trompeuse
+  COPYRIGHT              // Violation de droits d'auteur
+  SAFETY_CONCERN         // Probleme de securite enfant
+  OTHER                  // Autre
+}
+
+enum ReportStatus {
+  PENDING     // En attente d'examen
+  UNDER_REVIEW // En cours d'examen
+  RESOLVED    // Resolu
+  DISMISSED   // Rejete
+  ESCALATED   // Escalade
+}
+
+enum ReportTargetType {
+  COURSE
+  LESSON
+  REVIEW
+  FORUM_TOPIC
+  FORUM_REPLY
+  USER
+  LIVE_SESSION
+}
+
+model Report {
+  id              String           @id @default(cuid())
+
+  // Reporter info
+  reporterId      String
+  reporterRole    Role
+
+  // Target info
+  targetType      ReportTargetType
+  targetId        String           // ID of the reported content
+
+  // Report details
+  type            ReportType
+  reason          String           @db.Text
+  evidence        String?          @db.Text // Additional details/screenshots
+
+  // Status & Resolution
+  status          ReportStatus     @default(PENDING)
+  priority        AlertPriority    @default(MEDIUM)
+
+  // Admin handling
+  assignedTo      String?          // Admin user ID
+  reviewedAt      DateTime?
+  resolvedAt      DateTime?
+  resolution      String?          @db.Text // Action taken
+
+  // Internal notes
+  adminNotes      String?          @db.Text
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relations
+  reporter        User             @relation("ReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  assignedAdmin   User?            @relation("ReportAssignee", fields: [assignedTo], references: [id], onDelete: SetNull)
+
+  @@index([reporterId])
+  @@index([targetType])
+  @@index([targetId])
+  @@index([status])
+  @@index([priority])
+  @@index([type])
+  @@index([createdAt])
+  @@index([assignedTo])
+}
+
+// Content moderation queue for course approval
+enum ModerationStatus {
+  PENDING_REVIEW
+  APPROVED
+  REJECTED
+  CHANGES_REQUESTED
+}
+
+model ContentModeration {
+  id              String           @id @default(cuid())
+
+  // Content being moderated
+  courseId        String
+
+  // Moderation details
+  status          ModerationStatus @default(PENDING_REVIEW)
+  submittedAt     DateTime         @default(now())
+
+  // Reviewer info
+  reviewerId      String?          // Admin who reviewed
+  reviewedAt      DateTime?
+
+  // Feedback
+  feedback        String?          @db.Text // Feedback to teacher
+  rejectionReason String?          @db.Text
+
+  // Checklist (JSON: {contentAppropriate: true, noMisinformation: true, etc.})
+  checklistResults Json?
+
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relations
+  course          Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  reviewer        User?            @relation("ContentReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@unique([courseId])
+  @@index([courseId])
+  @@index([status])
+  @@index([reviewerId])
+  @@index([submittedAt])
 }
