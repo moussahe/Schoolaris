@@ -5,11 +5,11 @@ import { motion } from "framer-motion";
 import { CheckCircle } from "lucide-react";
 
 const benefits = [
-  "Publication gratuite",
-  "Outils de creation intuitifs",
+  "70% de commission sur chaque vente",
+  "Publication gratuite et illimitee",
+  "IA pour structurer vos cours",
   "Analytics detaillees",
-  "Paiements rapides et securises",
-  "Support dedie",
+  "Paiements rapides via Stripe",
 ];
 
 export function TeacherCta() {
@@ -25,12 +25,12 @@ export function TeacherCta() {
           className="space-y-6 text-center lg:w-1/2 lg:text-left"
         >
           <h2 className="font-serif text-4xl font-extrabold leading-tight md:text-5xl">
-            Gardez <span className="text-[#E8A336]">85%</span> de vos ventes
+            Gardez <span className="text-[#E8A336]">70%</span> de vos ventes
           </h2>
           <p className="text-lg opacity-90 md:text-xl">
-            Maximisez vos revenus en partageant votre expertise. Notre
-            plateforme vous offre une flexibilite totale et une remuneration
-            competitive.
+            Creez vos cours une fois, vendez-les a des milliers d&apos;eleves.
+            Notre plateforme gere les paiements, vous gardez 70% de chaque
+            vente.
           </p>
 
           {/* Benefits List */}
@@ -71,16 +71,22 @@ export function TeacherCta() {
         >
           <div className="w-full max-w-sm rounded-xl bg-white p-8 text-center text-[#0B2A4C] shadow-2xl">
             <p className="text-sm font-semibold uppercase text-[#6B7280]">
-              Revenus moyens par mois
+              Exemple de revenus
             </p>
-            <p className="mt-2 text-6xl font-extrabold text-[#E8A336]">2450€</p>
+            <p className="mt-2 text-6xl font-extrabold text-[#E8A336]">
+              1 400€
+            </p>
             <p className="mt-4 text-lg font-medium">
-              en partageant vos cours avec{" "}
-              <span className="font-bold">Schoolaris</span>.
+              pour un cours a <span className="font-bold">29€</span> vendu a{" "}
+              <span className="font-bold">70 eleves</span>
             </p>
-            <p className="mt-2 text-sm text-[#6B7280]">
-              Base sur les donnees de nos enseignants performants.
-            </p>
+            <div className="mt-4 rounded-lg bg-gray-50 p-3">
+              <p className="text-xs text-[#6B7280]">
+                Prix cours : 29€ x 70 ventes = 2 030€
+                <br />
+                Votre part (70%) = <span className="font-bold">1 421€</span>
+              </p>
+            </div>
           </div>
         </motion.div>
       </div>
