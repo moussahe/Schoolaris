@@ -154,14 +154,15 @@ Attentes:
 
 ### Phase 2: Engagement (M4-M6) 🟡 IMPORTANT
 
-| Feature                   | Impact           | Status  |
-| ------------------------- | ---------------- | ------- |
-| Gamification (XP, badges) | Retention        | ✅ Done |
-| Parcours IA personnalisé  | Efficacité       | ✅ Done |
-| Rapports hebdo parents    | Satisfaction     | ✅ Done |
-| Exercices génératifs IA   | Pratique infinie | ✅ Done |
-| Classement (Leaderboard)  | Compétition      | ✅ Done |
-| Objectifs d'étude         | Engagement +35%  | ✅ Done |
+| Feature                   | Impact            | Status  |
+| ------------------------- | ----------------- | ------- |
+| Gamification (XP, badges) | Retention         | ✅ Done |
+| Parcours IA personnalisé  | Efficacité        | ✅ Done |
+| Rapports hebdo parents    | Satisfaction      | ✅ Done |
+| Exercices génératifs IA   | Pratique infinie  | ✅ Done |
+| Classement (Leaderboard)  | Compétition       | ✅ Done |
+| Objectifs d'étude         | Engagement +35%   | ✅ Done |
+| **Analyse Predictive IA** | Anticipation +40% | ✅ Done |
 
 ### Phase 3: Scale (M7-M12) 🟢 NICE TO HAVE
 

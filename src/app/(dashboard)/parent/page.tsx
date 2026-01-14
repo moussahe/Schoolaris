@@ -21,6 +21,7 @@ import { WeeklyReportCard } from "@/components/parent/weekly-report-card";
 import { WeakAreasPanel } from "@/components/parent/weak-areas-panel";
 import { CourseRecommendationsPanel } from "@/components/parent/course-recommendations-panel";
 import { GoalsPanel } from "@/components/goals";
+import { PredictiveAnalyticsPanel } from "@/components/parent/predictive-analytics-panel";
 
 async function getParentStats(userId: string) {
   const [children, purchases, recentProgress] = await Promise.all([
@@ -736,6 +737,35 @@ async function StudyGoalsSection({ userId }: { userId: string }) {
   );
 }
 
+async function PredictiveAnalyticsSection({ userId }: { userId: string }) {
+  // Get children for this parent
+  const children = await prisma.child.findMany({
+    where: { parentId: userId },
+    select: { id: true, firstName: true },
+  });
+
+  if (children.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-4">
+      <h2 className="text-lg font-semibold text-gray-900">
+        Previsions et Analyse Predictive
+      </h2>
+      <div className="grid gap-4 lg:grid-cols-2">
+        {children.map((child) => (
+          <PredictiveAnalyticsPanel
+            key={child.id}
+            childId={child.id}
+            childName={child.firstName}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function formatRelativeTime(date: Date): string {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
@@ -804,6 +834,11 @@ export default async function ParentDashboardPage() {
       {/* Alerts */}
       <Suspense fallback={null}>
         <AlertsSection userId={userId} />
+      </Suspense>
+
+      {/* Predictive Analytics - NEW: AI-powered forecasting */}
+      <Suspense fallback={<Skeleton className="h-64 rounded-2xl" />}>
+        <PredictiveAnalyticsSection userId={userId} />
       </Suspense>
 
       {/* AI Insights */}
