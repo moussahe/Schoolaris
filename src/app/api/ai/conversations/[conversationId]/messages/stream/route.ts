@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { anthropic, getHomeworkHelperPrompt } from "@/lib/anthropic";
 import { z } from "zod";
+import { addXP, XP_REWARDS, updateStreak } from "@/lib/gamification";
 
 // Schema pour envoyer un message avec streaming
 const streamMessageSchema = z.object({
@@ -62,7 +63,13 @@ export async function POST(
           error: "Limite atteinte. Vous pouvez poser 20 questions par heure.",
           retryAfter: 3600,
         }),
-        { status: 429, headers: { "Content-Type": "application/json" } },
+        {
+          status: 429,
+          headers: {
+            "Content-Type": "application/json",
+            "Retry-After": "3600",
+          },
+        },
       );
     }
 
@@ -96,6 +103,11 @@ export async function POST(
           select: {
             role: true,
             content: true,
+          },
+        },
+        child: {
+          select: {
+            id: true,
           },
         },
       },
@@ -260,6 +272,26 @@ export async function POST(
             data: { updatedAt: new Date() },
           });
 
+          // Recompenser l'eleve avec des XP pour avoir pose une question
+          let xpAwarded = 0;
+          let leveledUp = false;
+          if (conversation.child?.id) {
+            try {
+              const xpResult = await addXP(
+                conversation.child.id,
+                XP_REWARDS.AI_CHAT_QUESTION,
+                "Question posee au tuteur IA",
+              );
+              xpAwarded = XP_REWARDS.AI_CHAT_QUESTION;
+              leveledUp = xpResult.leveledUp;
+
+              // Mettre a jour le streak d'activite
+              await updateStreak(conversation.child.id);
+            } catch {
+              // Ignorer les erreurs de gamification pour ne pas bloquer le chat
+            }
+          }
+
           // Envoyer l'evenement de fin
           const doneEvent = {
             type: "done",
@@ -268,6 +300,10 @@ export async function POST(
             usage: {
               inputTokens,
               outputTokens,
+            },
+            gamification: {
+              xpAwarded,
+              leveledUp,
             },
           };
           controller.enqueue(

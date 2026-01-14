@@ -39,6 +39,7 @@ interface ParentMobileNavProps {
 const navigation = [
   { name: "Tableau de bord", href: "/parent", icon: LayoutDashboard },
   { name: "Mes Enfants", href: "/parent/children", icon: Users },
+  { name: "Conversations IA", href: "/parent/conversations", icon: Sparkles },
   { name: "Mes Achats", href: "/parent/purchases", icon: ShoppingBag },
   { name: "Parametres", href: "/parent/settings", icon: Settings },
 ];
