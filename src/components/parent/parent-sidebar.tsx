@@ -9,6 +9,8 @@ import {
   Settings,
   BookOpen,
   GraduationCap,
+  Play,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -25,7 +27,7 @@ interface ParentSidebarProps {
 const navigation = [
   { name: "Tableau de bord", href: "/parent", icon: LayoutDashboard },
   { name: "Mes Enfants", href: "/parent/children", icon: Users },
-  { name: "Mes Achats", href: "/parent/purchases", icon: ShoppingBag },
+  { name: "Cours Achetes", href: "/parent/purchases", icon: ShoppingBag },
   { name: "Parametres", href: "/parent/settings", icon: Settings },
 ];
 
@@ -76,14 +78,25 @@ export function ParentSidebar({ user }: ParentSidebarProps) {
         })}
       </nav>
 
-      {/* Browse Courses Link */}
+      {/* Learning Space - Access child interface */}
       <div className="border-t px-4 py-4">
+        <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Espace Apprentissage
+        </p>
+        <Link
+          href="/student"
+          className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 px-4 py-3 text-sm font-medium text-white shadow-md transition-all hover:shadow-lg hover:from-violet-600 hover:to-purple-700"
+        >
+          <Play className="h-5 w-5" />
+          Acceder aux cours
+          <Sparkles className="ml-auto h-4 w-4 opacity-70" />
+        </Link>
         <Link
           href="/courses"
-          className="flex items-center gap-3 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-emerald-600"
+          className="mt-2 flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
         >
           <BookOpen className="h-5 w-5" />
-          Parcourir les cours
+          Acheter des cours
         </Link>
       </div>
 

@@ -15,13 +15,38 @@ import {
 } from "@/types/exam";
 import { checkAndAwardBadges, awardXP } from "@/lib/gamification";
 
+// Zod schema for ExamQuestion - matching TypeScript ExamQuestion type
+const examQuestionOptionSchema = z.object({
+  id: z.string(),
+  text: z.string(),
+  isCorrect: z.boolean(),
+});
+
+const examQuestionSolutionSchema = z.object({
+  correctAnswer: z.union([z.string(), z.number(), z.array(z.string())]),
+  explanation: z.string(),
+  keyPoints: z.array(z.string()),
+  commonMistakes: z.array(z.string()).optional(),
+});
+
+const examQuestionSchema = z.object({
+  id: z.string(),
+  type: z.enum(["mcq", "short_answer", "problem_solving", "essay"]),
+  question: z.string(),
+  points: z.number(),
+  timeEstimate: z.number(),
+  options: z.array(examQuestionOptionSchema).optional(),
+  steps: z.array(z.string()).optional(),
+  solution: examQuestionSolutionSchema,
+});
+
 const submitExamSchema = z.object({
   sessionId: z.string(),
   childId: z.string().cuid(),
   examType: z.string(),
   subject: z.string(),
   gradeLevel: z.string(),
-  questions: z.array(z.any()), // ExamQuestion[]
+  questions: z.array(examQuestionSchema),
   answers: z.record(
     z.string(),
     z.union([z.string(), z.number(), z.array(z.string())]),

@@ -12,6 +12,8 @@ import {
   BookOpen,
   GraduationCap,
   LogOut,
+  Play,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -124,16 +126,32 @@ export function ParentMobileNav({ user }: ParentMobileNavProps) {
             })}
           </nav>
 
-          {/* Actions */}
+          {/* Espace Apprentissage */}
           <div className="border-t p-4 space-y-2">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
+              Espace Apprentissage
+            </p>
+            <Link
+              href="/student"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 px-4 py-3 text-sm font-medium text-white shadow-md transition-all"
+            >
+              <Play className="h-5 w-5" />
+              Acceder aux cours
+              <Sparkles className="ml-auto h-4 w-4 opacity-70" />
+            </Link>
             <Link
               href="/courses"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-3 rounded-xl bg-emerald-500 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-emerald-600"
+              className="flex items-center gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700 transition-colors hover:bg-emerald-100"
             >
               <BookOpen className="h-5 w-5" />
-              Parcourir les cours
+              Acheter des cours
             </Link>
+          </div>
+
+          {/* Deconnexion */}
+          <div className="border-t p-4">
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"

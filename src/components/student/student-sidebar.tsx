@@ -14,6 +14,7 @@ import {
   Award,
   ClipboardList,
   Brain,
+  ArrowLeft,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -134,6 +135,14 @@ export function StudentSidebar({ child }: StudentSidebarProps) {
             <p className="text-xs text-muted-foreground">Eleve</p>
           </div>
         </div>
+        {/* Back to Parent Dashboard */}
+        <Link
+          href="/parent"
+          className="mt-3 flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Retour espace parent
+        </Link>
       </div>
     </aside>
   );

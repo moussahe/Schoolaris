@@ -11,7 +11,6 @@ import {
   GraduationCap,
   Sparkles,
   Trophy,
-  Users,
   Star,
 } from "lucide-react";
 

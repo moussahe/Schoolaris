@@ -25,6 +25,17 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
+  // Redirect to role-specific dashboard
+  if (session.user.role === "PARENT") {
+    redirect("/parent");
+  }
+
+  if (session.user.role === "TEACHER") {
+    redirect("/teacher");
+  }
+
+  // For STUDENT role (direct student accounts, not children)
+  // they would see their own courses
   const quickActions = [
     {
       icon: GraduationCap,
