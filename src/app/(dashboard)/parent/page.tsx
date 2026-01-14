@@ -23,6 +23,7 @@ import { CourseRecommendationsPanel } from "@/components/parent/course-recommend
 import { GoalsPanel } from "@/components/goals";
 import { PredictiveAnalyticsPanel } from "@/components/parent/predictive-analytics-panel";
 import { AITutorMonitoringPanel } from "@/components/parent/ai-tutor-monitoring-panel";
+import { ReferralPanel } from "@/components/parent/referral-panel";
 
 async function getParentStats(userId: string) {
   const [children, purchases, recentProgress] = await Promise.all([
@@ -909,6 +910,8 @@ export default async function ParentDashboardPage() {
             <RecentActivity userId={userId} />
           </Suspense>
           <QuickLinks />
+          {/* Referral Program */}
+          <ReferralPanel />
         </div>
 
         {/* Right Column */}

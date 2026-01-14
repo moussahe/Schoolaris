@@ -9,6 +9,7 @@ const registerSchema = z.object({
   email: z.string().email("Email invalide"),
   password: passwordSchema,
   role: z.enum(["PARENT", "TEACHER"]),
+  referralCode: z.string().optional(),
 });
 
 export async function POST(req: NextRequest) {
@@ -31,6 +32,26 @@ export async function POST(req: NextRequest) {
     // Hash password
     const hashedPassword = await bcrypt.hash(validated.password, 12);
 
+    // Handle referral code if provided
+    let referral = null;
+    if (validated.referralCode) {
+      referral = await prisma.referral.findUnique({
+        where: { referrerCode: validated.referralCode.toUpperCase() },
+      });
+
+      // Validate referral
+      if (referral) {
+        // Check if expired
+        if (referral.expiresAt && referral.expiresAt < new Date()) {
+          referral = null;
+        }
+        // Check if already used (by this email or has a referred user)
+        if (referral?.referredId) {
+          referral = null;
+        }
+      }
+    }
+
     // Create user
     const user = await prisma.user.create({
       data: {
@@ -47,11 +68,41 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    // Process referral if valid
+    let referralBonus = 0;
+    if (referral) {
+      // Update referral with referred user
+      await prisma.referral.update({
+        where: { id: referral.id },
+        data: {
+          referredId: user.id,
+          referredEmail: validated.email,
+          status: "SIGNED_UP",
+          signedUpAt: new Date(),
+        },
+      });
+
+      // Give signup bonus to new user
+      if (referral.referredReward > 0) {
+        await prisma.referralCredit.create({
+          data: {
+            userId: user.id,
+            amount: referral.referredReward,
+            source: "signup_bonus",
+            referralId: referral.id,
+            expiresAt: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000), // 90 days
+          },
+        });
+        referralBonus = referral.referredReward;
+      }
+    }
+
     // Return with onboarding flag for parents
     return NextResponse.json(
       {
         ...user,
         needsOnboarding: validated.role === "PARENT",
+        referralBonus,
       },
       { status: 201 },
     );

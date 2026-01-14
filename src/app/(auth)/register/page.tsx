@@ -13,6 +13,7 @@ import {
   BookOpen,
   Check,
   X,
+  Gift,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,6 +39,11 @@ function RegisterForm() {
   const searchParams = useSearchParams();
   const initialRole =
     searchParams.get("role") === "teacher" ? "TEACHER" : "PARENT";
+
+  // Referral params
+  const referralCode = searchParams.get("ref");
+  const referralDiscount = searchParams.get("discount");
+  const referralFrom = searchParams.get("from");
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -66,7 +72,11 @@ function RegisterForm() {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, role: selectedRole }),
+        body: JSON.stringify({
+          ...data,
+          role: selectedRole,
+          referralCode: referralCode || undefined,
+        }),
       });
 
       if (!response.ok) {
@@ -114,6 +124,27 @@ function RegisterForm() {
               Rejoignez Schoolaris gratuitement
             </p>
           </div>
+
+          {/* Referral Banner */}
+          {referralCode && referralDiscount && (
+            <div className="mb-6 rounded-xl border border-orange-200 bg-gradient-to-r from-orange-50 to-rose-50 p-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-orange-100">
+                  <Gift className="h-5 w-5 text-orange-600" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    {referralFrom
+                      ? `${decodeURIComponent(referralFrom)} vous offre ${referralDiscount}€ !`
+                      : `${referralDiscount}€ de reduction offerts !`}
+                  </p>
+                  <p className="text-xs text-gray-600">
+                    Credits utilisables sur votre premier achat
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
 
           {/* Role Selection */}
           <div className="mb-6 grid grid-cols-2 gap-4">

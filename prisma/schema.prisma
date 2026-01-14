@@ -137,6 +137,9 @@ model User {
   reportsMade    Report[]         @relation("ReportReporter")
   reportsAssigned Report[]        @relation("ReportAssignee")
   moderationReviews ContentModeration[] @relation("ContentReviewer")
+  referralsMade  Referral[]       @relation("UserReferrals")
+  referredByReferrals Referral[]  @relation("ReferredBy")
+  referralCredits ReferralCredit[] @relation("UserCredits")
 
   @@index([email])
   @@index([role])
@@ -1455,6 +1458,83 @@ model ContentModeration {
   @@index([status])
   @@index([reviewerId])
   @@index([submittedAt])
+}
+
+// ============ REFERRAL PROGRAM ============
+
+enum ReferralStatus {
+  PENDING         // Referral link created but not yet used
+  SIGNED_UP       // Referred user signed up but hasn't purchased
+  CONVERTED       // Referred user made a purchase
+  REWARDED        // Rewards given to both parties
+  EXPIRED         // Link expired without conversion
+}
+
+model Referral {
+  id              String         @id @default(cuid())
+
+  // Referrer (user who shared the link)
+  referrerId      String
+  referrerCode    String         @unique // Unique code like "MARIE2024"
+
+  // Referred user (user who signed up via the link)
+  referredId      String?        // Populated when someone signs up
+  referredEmail   String?        // Track email even before sign up
+
+  // Status tracking
+  status          ReferralStatus @default(PENDING)
+  signedUpAt      DateTime?      // When referred user created account
+  convertedAt     DateTime?      // When referred user made first purchase
+  rewardedAt      DateTime?      // When rewards were distributed
+
+  // Rewards
+  referrerReward  Int            @default(0) // Credits in cents (e.g., 500 = 5€)
+  referredReward  Int            @default(0) // Discount in cents for referred user
+  referrerPaid    Boolean        @default(false)
+  referredApplied Boolean        @default(false)
+
+  // Attribution
+  purchaseId      String?        // First purchase that triggered conversion
+  courseId        String?        // Course purchased for conversion
+
+  // Link tracking
+  clickCount      Int            @default(0)
+  lastClickAt     DateTime?
+
+  // Expiration
+  expiresAt       DateTime?      // Link expiration date
+
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  // Relations
+  referrer        User           @relation("UserReferrals", fields: [referrerId], references: [id], onDelete: Cascade)
+  referred        User?          @relation("ReferredBy", fields: [referredId], references: [id], onDelete: SetNull)
+
+  @@index([referrerId])
+  @@index([referredId])
+  @@index([referrerCode])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// User's referral credits balance
+model ReferralCredit {
+  id              String   @id @default(cuid())
+  userId          String
+  amount          Int      // Amount in cents
+  source          String   // "referral_reward", "signup_bonus", "manual"
+  referralId      String?  // Link to the referral that generated this credit
+  usedAt          DateTime?
+  usedForPurchaseId String?
+  expiresAt       DateTime?
+  createdAt       DateTime @default(now())
+
+  user            User     @relation("UserCredits", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([usedAt])
+  @@index([expiresAt])
 }
 
 // ============ COURSE ANALYTICS ============

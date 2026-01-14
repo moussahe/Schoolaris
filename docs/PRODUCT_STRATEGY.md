@@ -300,6 +300,7 @@ Pour atteindre 500K€:
 - [x] Onboarding flow pour nouveaux parents (4 etapes personnalisees)
 - [x] Telechargement factures PDF (conformite legale francaise)
 - [x] PWA avec push notifications (engagement mobile +40-60% DAU)
+- [x] Programme de parrainage (referral) - acquisition virale +25-35%
 - [ ] Beta privée 50 familles
 - [ ] Onboarder 10 profs
 

@@ -184,6 +184,9 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
     });
   }
 
+  // Process referral rewards
+  await processReferralReward(buyerId, courseId);
+
   // Send confirmation email
   await sendPurchaseConfirmationEmail({
     buyerId,
@@ -259,6 +262,78 @@ async function sendPurchaseConfirmationEmail(data: {
     console.log(`[Email] Purchase confirmation sent to ${buyer.email}`);
   } catch (error) {
     console.error("[Email] Failed to send purchase confirmation:", error);
+  }
+}
+
+/**
+ * Process referral reward when user makes their first purchase
+ */
+async function processReferralReward(buyerId: string, courseId: string) {
+  try {
+    // Check if buyer has a referral (was referred by someone)
+    const referral = await prisma.referral.findFirst({
+      where: {
+        referredId: buyerId,
+        status: "SIGNED_UP", // Only process if not already converted
+      },
+    });
+
+    if (!referral) {
+      return; // User was not referred or already converted
+    }
+
+    // Check if this is their first purchase
+    const purchaseCount = await prisma.purchase.count({
+      where: {
+        userId: buyerId,
+        status: "COMPLETED",
+      },
+    });
+
+    // Only reward on first purchase
+    if (purchaseCount > 1) {
+      return;
+    }
+
+    // Update referral status
+    await prisma.referral.update({
+      where: { id: referral.id },
+      data: {
+        status: "CONVERTED",
+        convertedAt: new Date(),
+        purchaseId: courseId,
+        courseId: courseId,
+      },
+    });
+
+    // Give reward to referrer
+    if (referral.referrerReward > 0) {
+      await prisma.referralCredit.create({
+        data: {
+          userId: referral.referrerId,
+          amount: referral.referrerReward,
+          source: "referral_reward",
+          referralId: referral.id,
+          expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year
+        },
+      });
+
+      // Mark referral as rewarded
+      await prisma.referral.update({
+        where: { id: referral.id },
+        data: {
+          status: "REWARDED",
+          rewardedAt: new Date(),
+          referrerPaid: true,
+        },
+      });
+
+      console.log(
+        `Referral reward: ${referral.referrerReward} credits given to user ${referral.referrerId}`,
+      );
+    }
+  } catch (error) {
+    console.error("Error processing referral reward:", error);
   }
 }
 
