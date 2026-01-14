@@ -10,6 +10,7 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  Users,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -24,6 +25,11 @@ const navigation = [
     name: "Mes cours",
     href: "/teacher/courses",
     icon: GraduationCap,
+  },
+  {
+    name: "Mes etudiants",
+    href: "/teacher/students",
+    icon: Users,
   },
   {
     name: "Analytiques",
