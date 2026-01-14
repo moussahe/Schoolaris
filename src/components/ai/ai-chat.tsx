@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils";
 import { useStreamingMessage } from "@/hooks/use-ai-chat";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useVoiceOutput } from "@/hooks/use-voice-output";
+import { HomeworkPhotoUpload } from "@/components/ai/homework-photo-upload";
 
 interface Message {
   id?: string;
@@ -627,6 +628,32 @@ Pose-moi tes questions et je te guiderai vers la solution. Je ne te donnerai pas
           )}
 
           <div className="flex w-full gap-2">
+            {/* Photo upload button for homework */}
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <HomeworkPhotoUpload
+                    context={context}
+                    disabled={isLoading || isStreaming}
+                    onPhotoAnalyzed={(response) => {
+                      // Add the AI response as a message
+                      setMessages((prev) => [
+                        ...prev,
+                        {
+                          id: `photo-response-${Date.now()}`,
+                          role: "assistant" as const,
+                          content: response,
+                        },
+                      ]);
+                    }}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Envoyer une photo de devoir</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
             {/* Voice input button */}
             {isVoiceSupported && (
               <TooltipProvider>

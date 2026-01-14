@@ -30,6 +30,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useVoiceInput } from "@/hooks/use-voice-input";
 import { useVoiceOutput } from "@/hooks/use-voice-output";
+import { HomeworkPhotoUpload } from "@/components/ai/homework-photo-upload";
 
 interface Message {
   id?: string;
@@ -625,6 +626,37 @@ Pose-moi tes questions ! Je ne te donnerai pas directement les reponses, mais je
             )}
 
             <div className="flex gap-2">
+              {/* Photo upload button */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <HomeworkPhotoUpload
+                      context={{
+                        level: context.level,
+                        subject: context.subject,
+                        courseTitle: context.courseTitle,
+                        lessonTitle: context.lessonTitle,
+                      }}
+                      disabled={isLoading}
+                      onPhotoAnalyzed={(response) => {
+                        // Add the AI response as a message
+                        setMessages((prev) => [
+                          ...prev,
+                          {
+                            id: `photo-response-${Date.now()}`,
+                            role: "assistant" as const,
+                            content: response,
+                          },
+                        ]);
+                      }}
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent side="top">
+                    <p>Photo de devoir</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
               {/* Voice input button */}
               {isVoiceSupported && (
                 <TooltipProvider>
