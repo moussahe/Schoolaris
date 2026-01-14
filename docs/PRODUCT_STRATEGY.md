@@ -284,6 +284,7 @@ Pour atteindre 500K€:
 - [x] Envoi automatique rapports hebdomadaires
 - [x] Rate limiting Redis (Upstash) pour production
 - [x] Recommandations de cours IA pour parents (upsell basé sur points faibles)
+- [x] Onboarding flow pour nouveaux parents (4 etapes personnalisees)
 - [ ] Beta privée 50 familles
 - [ ] Onboarder 10 profs
 
