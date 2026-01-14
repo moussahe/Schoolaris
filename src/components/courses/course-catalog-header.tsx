@@ -1,37 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
+import { useState } from "react";
 import Link from "next/link";
-import { GraduationCap, Search, Menu, X } from "lucide-react";
+import { GraduationCap, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { SearchWithSuggestions } from "@/components/search/search-with-suggestions";
 
 export function CourseCatalogHeader() {
-  const router = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      if (value === "") {
-        params.delete(name);
-      } else {
-        params.set(name, value);
-      }
-      return params.toString();
-    },
-    [searchParams],
-  );
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    const queryString = createQueryString("q", searchQuery);
-    router.push(`${pathname}${queryString ? `?${queryString}` : ""}`);
-  };
 
   return (
     <header className="bg-card border-b sticky top-0 z-50">
@@ -47,22 +23,13 @@ export function CourseCatalogHeader() {
             </span>
           </Link>
 
-          {/* Search Bar - Desktop */}
-          <form
-            onSubmit={handleSearch}
-            className="hidden md:flex flex-1 max-w-xl mx-4"
-          >
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Rechercher un cours, une matiere..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-10 w-full pl-10 pr-4 bg-muted focus:bg-background"
-              />
-            </div>
-          </form>
+          {/* Search Bar - Desktop with Autocomplete */}
+          <div className="hidden md:flex flex-1 max-w-xl mx-4">
+            <SearchWithSuggestions
+              className="w-full"
+              placeholder="Rechercher un cours, une matiere..."
+            />
+          </div>
 
           {/* Navigation - Desktop */}
           <nav className="hidden md:flex items-center gap-6">
@@ -104,19 +71,13 @@ export function CourseCatalogHeader() {
           </button>
         </div>
 
-        {/* Search Bar - Mobile */}
-        <form onSubmit={handleSearch} className="md:hidden pb-3">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Rechercher un cours..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="h-10 w-full pl-10 pr-4 bg-muted"
-            />
-          </div>
-        </form>
+        {/* Search Bar - Mobile with Autocomplete */}
+        <div className="md:hidden pb-3">
+          <SearchWithSuggestions
+            className="w-full"
+            placeholder="Rechercher un cours..."
+          />
+        </div>
       </div>
 
       {/* Mobile Menu */}

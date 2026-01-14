@@ -380,10 +380,10 @@ Recherche instantanee avec autocomplete et filtres avances.
 
 **Acceptance Criteria**:
 
-- [ ] Recherche full-text dans titre et description
-- [ ] Autocomplete en < 200ms
-- [ ] Filtres: niveau, matiere, prix (gratuit/payant), note
-- [ ] Tri: pertinence, popularite, note, date
+- [x] Recherche full-text dans titre et description
+- [x] Autocomplete en < 200ms
+- [x] Filtres: niveau, matiere, prix (gratuit/payant), note
+- [x] Tri: pertinence, popularite, note, date
 - [ ] Historique des recherches recentes
 - [ ] Tolerance aux fautes de frappe
 - [ ] Recherche vocale (mobile)
