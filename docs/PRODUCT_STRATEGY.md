@@ -161,6 +161,7 @@ Attentes:
 | Rapports hebdo parents    | Satisfaction     | ✅ Done |
 | Exercices génératifs IA   | Pratique infinie | ✅ Done |
 | Classement (Leaderboard)  | Compétition      | ✅ Done |
+| Objectifs d'étude         | Engagement +35%  | ✅ Done |
 
 ### Phase 3: Scale (M7-M12) 🟢 NICE TO HAVE
 
