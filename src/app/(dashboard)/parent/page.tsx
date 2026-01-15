@@ -47,7 +47,7 @@ async function getOnboardingStatus(userId: string) {
 
 async function getParentStats(userId: string) {
   const [children, purchases, recentProgress] = await Promise.all([
-    // Get children with their progress
+    // Get children with ALL their progress (not just 5) for accurate calculation
     prisma.child.findMany({
       where: { parentId: userId },
       include: {
@@ -64,12 +64,23 @@ async function getParentStats(userId: string) {
             },
           },
           orderBy: { lastAccessedAt: "desc" },
-          take: 5,
         },
         purchases: {
           where: { status: "COMPLETED" },
           include: {
-            course: true,
+            course: {
+              include: {
+                chapters: {
+                  where: { isPublished: true },
+                  include: {
+                    lessons: {
+                      where: { isPublished: true },
+                      select: { id: true },
+                    },
+                  },
+                },
+              },
+            },
           },
         },
       },
@@ -113,21 +124,19 @@ async function getParentStats(userId: string) {
     children.flatMap((child) => child.purchases.map((p) => p.courseId)),
   ).size;
 
-  // Calculate average progress
+  // Calculate average progress - NO MORE N+1!
+  // Total lessons are now included in course.chapters.lessons
   let totalProgress = 0;
   let progressCount = 0;
   for (const child of children) {
     for (const purchase of child.purchases) {
       const courseId = purchase.courseId;
-      const courseLessons = await prisma.lesson.count({
-        where: {
-          chapter: {
-            courseId,
-            isPublished: true,
-          },
-          isPublished: true,
-        },
-      });
+      // Count lessons from the included data
+      const courseLessons = purchase.course.chapters.reduce(
+        (sum, ch) => sum + ch.lessons.length,
+        0,
+      );
+      // Count completed from already loaded progress
       const completedLessons = child.progress.filter(
         (p) => p.isCompleted && p.lesson.chapter.courseId === courseId,
       ).length;
@@ -159,7 +168,7 @@ async function generateAlerts(userId: string): Promise<Alert[]> {
   const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000);
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
 
-  // Get children with their recent activity and quiz results
+  // Get children with their activity, quiz results, and course structure (NO N+1!)
   const children = await prisma.child.findMany({
     where: { parentId: userId },
     include: {
@@ -175,7 +184,21 @@ async function generateAlerts(userId: string): Promise<Alert[]> {
       },
       purchases: {
         where: { status: "COMPLETED" },
-        include: { course: true },
+        include: {
+          course: {
+            include: {
+              chapters: {
+                where: { isPublished: true },
+                include: {
+                  lessons: {
+                    where: { isPublished: true },
+                    select: { id: true },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     },
   });
@@ -242,24 +265,18 @@ async function generateAlerts(userId: string): Promise<Alert[]> {
       });
     }
 
-    // Alert: Course completion milestone
+    // Alert: Course completion milestone - NO MORE N+1!
     for (const purchase of child.purchases) {
       const courseId = purchase.courseId;
-      const [totalLessons, completedLessons] = await Promise.all([
-        prisma.lesson.count({
-          where: {
-            chapter: { courseId, isPublished: true },
-            isPublished: true,
-          },
-        }),
-        prisma.progress.count({
-          where: {
-            childId: child.id,
-            isCompleted: true,
-            lesson: { chapter: { courseId } },
-          },
-        }),
-      ]);
+      // Count lessons from included data
+      const totalLessons = purchase.course.chapters.reduce(
+        (sum, ch) => sum + ch.lessons.length,
+        0,
+      );
+      // Count completed from already loaded progress
+      const completedLessons = child.progress.filter(
+        (p) => p.isCompleted && p.lesson.chapter.courseId === courseId,
+      ).length;
 
       if (totalLessons > 0) {
         const progressPercent = Math.round(

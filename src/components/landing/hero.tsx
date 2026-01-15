@@ -264,7 +264,7 @@ export function Hero() {
             ))}
           </div>
           <div>
-            <p className="text-sm font-bold text-gray-900">+50k</p>
+            <p className="text-sm font-bold text-gray-900">+15k</p>
             <p className="text-xs text-gray-500">Eleves actifs</p>
           </div>
         </div>

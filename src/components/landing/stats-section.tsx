@@ -20,7 +20,7 @@ const stats = [
     color: "blue",
   },
   {
-    value: "50,000+",
+    value: "15,000+",
     label: "Eleves accompagnes",
     icon: GraduationCap,
     description: "Dans toute la France",

@@ -25,12 +25,21 @@ import {
   PASSWORD_REQUIREMENTS,
 } from "@/lib/validations/password";
 
-const registerSchema = z.object({
-  name: z.string().min(2, "Minimum 2 caracteres"),
-  email: z.string().email("Email invalide"),
-  password: passwordSchema,
-  role: z.enum(["PARENT", "TEACHER"]),
-});
+const registerSchema = z
+  .object({
+    name: z.string().min(2, "Minimum 2 caracteres"),
+    email: z.string().email("Email invalide"),
+    password: passwordSchema,
+    confirmPassword: z.string().min(1, "Confirmez votre mot de passe"),
+    role: z.enum(["PARENT", "TEACHER"]),
+    acceptCGU: z.boolean().refine((val) => val === true, {
+      message: "Vous devez accepter les conditions",
+    }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Les mots de passe ne correspondent pas",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -259,6 +268,54 @@ function RegisterForm() {
               </div>
             </div>
 
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
+              <PasswordInput
+                id="confirmPassword"
+                placeholder="••••••••"
+                className="h-11"
+                {...register("confirmPassword")}
+              />
+              {errors.confirmPassword && (
+                <p className="text-sm text-red-600">
+                  {errors.confirmPassword.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="acceptCGU"
+                className="mt-1 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                {...register("acceptCGU")}
+              />
+              <Label
+                htmlFor="acceptCGU"
+                className="text-sm text-gray-600 font-normal cursor-pointer"
+              >
+                J&apos;accepte les{" "}
+                <Link
+                  href="/conditions"
+                  className="text-emerald-600 hover:text-emerald-500 underline"
+                  target="_blank"
+                >
+                  conditions d&apos;utilisation
+                </Link>{" "}
+                et la{" "}
+                <Link
+                  href="/confidentialite"
+                  className="text-emerald-600 hover:text-emerald-500 underline"
+                  target="_blank"
+                >
+                  politique de confidentialite
+                </Link>
+              </Label>
+            </div>
+            {errors.acceptCGU && (
+              <p className="text-sm text-red-600">{errors.acceptCGU.message}</p>
+            )}
+
             <Button
               type="submit"
               className="h-11 w-full bg-emerald-600 hover:bg-emerald-700"
@@ -290,25 +347,7 @@ function RegisterForm() {
             text="S'inscrire avec Google"
           />
 
-          <p className="mt-6 text-center text-sm text-gray-500">
-            En vous inscrivant, vous acceptez nos{" "}
-            <Link
-              href="/conditions"
-              className="text-emerald-600 hover:text-emerald-500"
-            >
-              conditions d&apos;utilisation
-            </Link>{" "}
-            et notre{" "}
-            <Link
-              href="/confidentialite"
-              className="text-emerald-600 hover:text-emerald-500"
-            >
-              politique de confidentialite
-            </Link>
-            .
-          </p>
-
-          <p className="mt-4 text-center text-sm text-gray-600">
+          <p className="mt-6 text-center text-sm text-gray-600">
             Deja un compte ?{" "}
             <Link
               href="/login"
