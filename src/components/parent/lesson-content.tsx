@@ -1,7 +1,7 @@
 "use client";
 
 import { QuizPlayer } from "@/components/quiz";
-import { sanitizeHtml } from "@/lib/utils";
+import { sanitizeHtml } from "@/lib/sanitize";
 import type {
   Quiz as QuizType,
   QuizQuestion as QuizQuestionType,

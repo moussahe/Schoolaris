@@ -5,7 +5,7 @@ import { CheckCircle2, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { markLessonComplete } from "@/app/(dashboard)/student/actions";
 import { XP_REWARDS } from "@/lib/gamification";
-import { sanitizeHtml } from "@/lib/utils";
+import { sanitizeHtml } from "@/lib/sanitize";
 
 interface LessonContentProps {
   lesson: {
