@@ -171,7 +171,7 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
 
       <Link
         href={`/courses?category=${slug}`}
-        className={`relative flex h-full flex-col justify-between ${isLarge ? "p-8" : isMedium ? "p-6" : "p-5"}`}
+        className={`relative flex h-full flex-col justify-between ${isLarge ? "p-8 lg:p-10" : isMedium ? "p-6 lg:p-8" : "p-6"}`}
       >
         {/* Icon Container */}
         <div className="mb-auto">
@@ -189,30 +189,30 @@ function SubjectCard({ subject, index }: { subject: Subject; index: number }) {
         </div>
 
         {/* Content */}
-        <div className={isLarge ? "mt-8" : "mt-4"}>
+        <div className={isLarge ? "mt-8" : "mt-6"}>
           <h3
-            className={`font-bold text-gray-900 transition-colors ${isLarge ? "text-2xl" : "text-lg"}`}
+            className={`font-bold leading-tight text-gray-900 transition-colors ${isLarge ? "text-2xl" : "text-xl"}`}
           >
             {name}
           </h3>
-          <div className="mt-2 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2">
             <span
-              className={`font-semibold ${isLarge ? "text-lg" : "text-sm"}`}
+              className={`font-semibold ${isLarge ? "text-lg" : "text-base"}`}
               style={{ color }}
             >
               {courseCount} cours
             </span>
             {isLarge && (
-              <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
+              <span className="rounded-full bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">
                 Populaire
               </span>
             )}
           </div>
 
           {/* Arrow indicator */}
-          <div className="mt-3 flex items-center gap-1 text-sm font-medium text-gray-500 transition-colors group-hover:text-emerald-600">
+          <div className="mt-4 flex items-center gap-1.5 text-base font-medium text-gray-500 transition-colors group-hover:text-emerald-600">
             <span>Explorer</span>
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </div>
         </div>
 
@@ -267,7 +267,7 @@ export function Categories() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
-          className="grid auto-rows-[140px] grid-cols-1 gap-4 sm:grid-cols-2 lg:auto-rows-[160px] lg:grid-cols-4"
+          className="grid auto-rows-[180px] grid-cols-1 gap-6 sm:grid-cols-2 lg:auto-rows-[200px] lg:grid-cols-4 lg:gap-8"
         >
           {subjects.map((subject, index) => (
             <SubjectCard key={subject.slug} subject={subject} index={index} />

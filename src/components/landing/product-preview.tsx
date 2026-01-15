@@ -277,8 +277,8 @@ export function ProductPreview() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="bg-white py-20">
-      <div className="container mx-auto px-4">
+    <section ref={ref} className="bg-white py-24">
+      <div className="container mx-auto max-w-7xl px-4">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -302,18 +302,18 @@ export function ProductPreview() {
           </motion.div>
 
           {/* Previews */}
-          <div className="mt-16 grid gap-8 lg:grid-cols-2">
+          <div className="mt-20 grid gap-10 lg:grid-cols-2 lg:gap-12">
             {/* Course Preview */}
             <motion.div variants={itemVariants}>
-              <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
-                  <BookOpen className="h-5 w-5 text-emerald-600" />
+              <div className="mb-6 flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">
+                  <BookOpen className="h-6 w-6 text-emerald-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     Interface de cours
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-base text-gray-500">
                     Vidéos, exercices et suivi de progression
                   </p>
                 </div>
@@ -323,15 +323,15 @@ export function ProductPreview() {
 
             {/* AI Preview */}
             <motion.div variants={itemVariants}>
-              <div className="mb-4 flex items-center gap-2">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
-                  <Sparkles className="h-5 w-5 text-purple-600" />
+              <div className="mb-6 flex items-center gap-4">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-purple-100">
+                  <Sparkles className="h-6 w-6 text-purple-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="text-lg font-semibold text-gray-900">
                     Assistant IA intégré
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-base text-gray-500">
                     Aide personnalisée 24h/24
                   </p>
                 </div>
@@ -343,7 +343,7 @@ export function ProductPreview() {
           {/* Features */}
           <motion.div
             variants={itemVariants}
-            className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+            className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
           >
             {[
               {
@@ -369,16 +369,18 @@ export function ProductPreview() {
             ].map((feature) => (
               <div
                 key={feature.title}
-                className="flex items-start gap-3 rounded-xl border border-gray-100 bg-gray-50 p-4"
+                className="flex items-start gap-4 rounded-xl border border-gray-100 bg-gray-50 p-6"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
-                  <feature.icon className="h-5 w-5 text-emerald-500" />
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm">
+                  <feature.icon className="h-6 w-6 text-emerald-500" />
                 </div>
                 <div>
-                  <h4 className="font-semibold text-gray-900">
+                  <h4 className="text-lg font-semibold text-gray-900">
                     {feature.title}
                   </h4>
-                  <p className="text-sm text-gray-500">{feature.description}</p>
+                  <p className="mt-1 text-base leading-relaxed text-gray-500">
+                    {feature.description}
+                  </p>
                 </div>
               </div>
             ))}

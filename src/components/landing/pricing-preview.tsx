@@ -110,24 +110,26 @@ function CourseCard({
   return (
     <motion.div
       variants={itemVariants}
-      className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:shadow-md"
+      className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md"
     >
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-4">
         <div
-          className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl ${color} text-white`}
+          className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl ${color} text-white`}
         >
-          <BookOpen className="h-5 w-5" />
+          <BookOpen className="h-6 w-6" />
         </div>
         <div className="flex-1 min-w-0">
-          <h4 className="font-semibold text-gray-900 truncate">{title}</h4>
-          <p className="text-xs text-gray-500">
+          <h4 className="text-base font-semibold leading-tight text-gray-900">
+            {title}
+          </h4>
+          <p className="mt-1 text-sm text-gray-500">
             {subject} • {level}
           </p>
         </div>
       </div>
-      <div className="mt-3 flex items-center justify-between">
-        <span className="text-xl font-bold text-emerald-600">{price}</span>
-        <span className="text-xs text-gray-400">Accès à vie</span>
+      <div className="mt-5 flex items-center justify-between border-t border-gray-50 pt-4">
+        <span className="text-2xl font-bold text-emerald-600">{price}</span>
+        <span className="text-sm text-gray-400">Accès à vie</span>
       </div>
     </motion.div>
   );
@@ -149,29 +151,29 @@ function CarnetCard({
   return (
     <motion.div
       variants={itemVariants}
-      className={`relative rounded-2xl border p-5 text-center transition-all ${
+      className={`relative min-h-[220px] rounded-2xl border p-8 text-center transition-all ${
         popular
           ? "border-emerald-200 bg-emerald-50 shadow-md"
           : "border-gray-100 bg-white shadow-sm hover:shadow-md"
       }`}
     >
       {popular && (
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-white">
-            <Sparkles className="h-3 w-3" />
+        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-emerald-500 px-4 py-1.5 text-sm font-bold text-white">
+            <Sparkles className="h-4 w-4" />
             Meilleur choix
           </span>
         </div>
       )}
-      <h4 className="text-lg font-bold text-gray-900">{name}</h4>
-      <p className="mt-1 text-sm text-gray-500">
+      <h4 className="text-xl font-bold text-gray-900">{name}</h4>
+      <p className="mt-2 text-base text-gray-500">
         Valeur <span className="line-through">{credits}</span>
       </p>
-      <p className="mt-2 text-3xl font-bold text-emerald-600">{price}</p>
-      <span className="mt-1 inline-block rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+      <p className="mt-4 text-4xl font-bold text-emerald-600">{price}</p>
+      <span className="mt-3 inline-block rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">
         {discount}
       </span>
-      <p className="mt-3 text-xs text-gray-500">Validité 2 ans</p>
+      <p className="mt-4 text-sm text-gray-500">Validité 2 ans</p>
     </motion.div>
   );
 }
@@ -181,8 +183,8 @@ export function PricingPreview() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="bg-gray-50 py-20">
-      <div className="container mx-auto px-4">
+    <section ref={ref} className="bg-gray-50 py-24">
+      <div className="container mx-auto max-w-6xl px-4">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -206,11 +208,11 @@ export function PricingPreview() {
           </motion.div>
 
           {/* Exemples de cours */}
-          <motion.div variants={itemVariants} className="mt-12">
-            <h3 className="mb-6 text-center text-sm font-semibold uppercase tracking-wider text-gray-500">
+          <motion.div variants={itemVariants} className="mt-16">
+            <h3 className="mb-8 text-center text-sm font-semibold uppercase tracking-wider text-gray-500">
               Exemples de cours populaires
             </h3>
-            <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {coursExamples.map((course) => (
                 <CourseCard key={course.title} {...course} />
               ))}
@@ -220,22 +222,22 @@ export function PricingPreview() {
           {/* Avantages clés */}
           <motion.div
             variants={itemVariants}
-            className="mx-auto mt-12 flex max-w-3xl flex-wrap items-center justify-center gap-6 text-sm"
+            className="mx-auto mt-14 flex flex-wrap items-center justify-center gap-8 text-base"
           >
-            <div className="flex items-center gap-2 text-gray-600">
-              <Check className="h-5 w-5 text-emerald-500" />
+            <div className="flex items-center gap-3 text-gray-600">
+              <Check className="h-6 w-6 flex-shrink-0 text-emerald-500" />
               <span>Pas d&apos;abonnement</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <Check className="h-5 w-5 text-emerald-500" />
+            <div className="flex items-center gap-3 text-gray-600">
+              <Check className="h-6 w-6 flex-shrink-0 text-emerald-500" />
               <span>Accès illimité à vie</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <Check className="h-5 w-5 text-emerald-500" />
+            <div className="flex items-center gap-3 text-gray-600">
+              <Check className="h-6 w-6 flex-shrink-0 text-emerald-500" />
               <span>70% reversés au professeur</span>
             </div>
-            <div className="flex items-center gap-2 text-gray-600">
-              <Check className="h-5 w-5 text-emerald-500" />
+            <div className="flex items-center gap-3 text-gray-600">
+              <Check className="h-6 w-6 flex-shrink-0 text-emerald-500" />
               <span>Satisfait ou remboursé 14j</span>
             </div>
           </motion.div>
@@ -243,29 +245,29 @@ export function PricingPreview() {
           {/* Carnets de cours */}
           <motion.div
             variants={itemVariants}
-            className="mx-auto mt-16 max-w-3xl rounded-3xl border border-emerald-100 bg-white p-8 shadow-sm"
+            className="mx-auto mt-20 rounded-3xl border border-emerald-100 bg-white p-8 shadow-sm lg:p-12"
           >
-            <div className="mb-6 flex items-center justify-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100">
-                <GraduationCap className="h-6 w-6 text-emerald-600" />
+            <div className="mb-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100">
+                <GraduationCap className="h-7 w-7 text-emerald-600" />
               </div>
-              <div>
-                <h3 className="text-xl font-bold text-gray-900">
+              <div className="text-center sm:text-left">
+                <h3 className="text-2xl font-bold text-gray-900">
                   Carnet de Cours
                 </h3>
-                <p className="text-sm text-gray-500">
+                <p className="mt-1 text-base text-gray-500">
                   Économisez en achetant des crédits
                 </p>
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-3 lg:gap-8">
               {carnets.map((carnet) => (
                 <CarnetCard key={carnet.name} {...carnet} />
               ))}
             </div>
 
-            <p className="mt-6 text-center text-sm text-gray-500">
+            <p className="mt-8 text-center text-base leading-relaxed text-gray-500">
               Les crédits s&apos;adaptent au prix du cours. Utilisez-les quand
               vous voulez, pour n&apos;importe quel cours.
             </p>
@@ -274,12 +276,14 @@ export function PricingPreview() {
           {/* Pack Fratrie teaser */}
           <motion.div
             variants={itemVariants}
-            className="mx-auto mt-8 flex max-w-2xl items-center justify-center gap-4 rounded-2xl border border-blue-100 bg-blue-50 p-4"
+            className="mx-auto mt-10 flex max-w-2xl flex-col items-center justify-center gap-4 rounded-2xl border border-blue-100 bg-blue-50 p-6 sm:flex-row sm:gap-6"
           >
-            <Users className="h-8 w-8 text-blue-500" />
-            <div>
-              <p className="font-semibold text-gray-900">Plusieurs enfants ?</p>
-              <p className="text-sm text-gray-600">
+            <Users className="h-10 w-10 flex-shrink-0 text-blue-500" />
+            <div className="text-center sm:text-left">
+              <p className="text-lg font-semibold text-gray-900">
+                Plusieurs enfants ?
+              </p>
+              <p className="mt-1 text-base leading-relaxed text-gray-600">
                 Pack Fratrie : -20% pour le 2ème enfant, -30% pour le 3ème sur
                 le même cours
               </p>

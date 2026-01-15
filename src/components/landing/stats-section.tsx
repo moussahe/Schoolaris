@@ -77,7 +77,7 @@ export function StatsSection() {
         </motion.div>
 
         {/* Stats Grid - Full Width */}
-        <div className="grid grid-cols-2 gap-6 lg:grid-cols-4 lg:gap-8">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {stats.map((stat, index) => {
             const colors =
               colorClasses[stat.color as keyof typeof colorClasses];
@@ -87,13 +87,13 @@ export function StatsSection() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative flex flex-col items-center rounded-2xl bg-white p-6 text-center shadow-sm transition-shadow hover:shadow-md border border-gray-100"
+                className="group relative flex min-h-[200px] flex-col items-center justify-center rounded-2xl bg-white p-8 text-center shadow-sm transition-shadow hover:shadow-md border border-gray-100"
               >
                 {/* Icon */}
                 <div
-                  className={`mb-4 flex h-14 w-14 items-center justify-center rounded-xl ${colors.bg} transition-colors`}
+                  className={`mb-5 flex h-16 w-16 items-center justify-center rounded-xl ${colors.bg} transition-colors`}
                 >
-                  <stat.icon className={`h-7 w-7 ${colors.icon}`} />
+                  <stat.icon className={`h-8 w-8 ${colors.icon}`} />
                 </div>
 
                 {/* Value */}
@@ -105,18 +105,18 @@ export function StatsSection() {
                     stiffness: 100,
                     delay: index * 0.1 + 0.2,
                   }}
-                  className="text-3xl font-bold text-gray-900 sm:text-4xl"
+                  className="text-4xl font-bold text-gray-900 sm:text-5xl"
                 >
                   {stat.value}
                 </motion.span>
 
                 {/* Label */}
-                <span className="mt-2 text-base font-semibold text-gray-900">
+                <span className="mt-3 text-lg font-semibold leading-relaxed text-gray-900">
                   {stat.label}
                 </span>
 
                 {/* Description */}
-                <span className="mt-1 text-sm text-gray-500">
+                <span className="mt-2 text-base leading-relaxed text-gray-500">
                   {stat.description}
                 </span>
               </motion.div>

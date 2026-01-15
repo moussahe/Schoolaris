@@ -51,8 +51,8 @@ export function HowItWorks() {
   const isInView = useInView(ref, { once: true, amount: 0.3 });
 
   return (
-    <section ref={ref} className="bg-[#FDFDFD] py-20 sm:py-28">
-      <div className="container mx-auto max-w-6xl px-4">
+    <section ref={ref} className="bg-[#FDFDFD] py-24 sm:py-32">
+      <div className="container mx-auto max-w-5xl px-4">
         {/* Header */}
         <div className="mb-16 text-center">
           <motion.h2
@@ -82,7 +82,7 @@ export function HowItWorks() {
           />
 
           <motion.div
-            className="grid grid-cols-1 gap-12 md:grid-cols-3 md:gap-8"
+            className="grid grid-cols-1 gap-16 md:grid-cols-3 md:gap-12"
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
@@ -94,24 +94,24 @@ export function HowItWorks() {
                 variants={itemVariants}
               >
                 {/* Icon Circle */}
-                <div className="relative mb-6">
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-white shadow-[0px_4px_15px_rgba(0,0,0,0.05)]">
+                <div className="relative mb-8">
+                  <div className="flex h-28 w-28 items-center justify-center rounded-full bg-white shadow-[0px_4px_15px_rgba(0,0,0,0.05)]">
                     <step.icon
-                      className="h-12 w-12 text-[#0B2A4C]"
+                      className="h-14 w-14 text-[#0B2A4C]"
                       strokeWidth={1.5}
                     />
                   </div>
                   {/* Number Badge */}
-                  <span className="absolute -right-2 -top-2 flex h-10 w-10 items-center justify-center rounded-full bg-[#E8A336] font-bold text-white">
+                  <span className="absolute -right-2 -top-2 flex h-12 w-12 items-center justify-center rounded-full bg-[#E8A336] text-lg font-bold text-white">
                     0{index + 1}
                   </span>
                 </div>
 
                 {/* Text */}
-                <h3 className="mb-3 text-2xl font-semibold text-[#0B2A4C]">
+                <h3 className="mb-4 text-2xl font-semibold leading-tight text-[#0B2A4C]">
                   {step.title}
                 </h3>
-                <p className="max-w-xs text-base text-[#1A1A1A]/80">
+                <p className="min-h-[60px] max-w-sm text-lg leading-relaxed text-[#1A1A1A]/80">
                   {step.description}
                 </p>
               </motion.div>

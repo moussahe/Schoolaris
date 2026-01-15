@@ -130,51 +130,53 @@ function TestimonialCard({
   return (
     <motion.div
       variants={itemVariants}
-      className="relative flex flex-col rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-shadow hover:shadow-md"
+      className="relative flex min-h-[320px] flex-col rounded-2xl border border-gray-100 bg-white p-8 shadow-sm transition-shadow hover:shadow-md"
     >
       {/* Type badge */}
       <span
-        className={`absolute -top-3 left-4 rounded-full px-3 py-1 text-xs font-semibold ${typeInfo.color}`}
+        className={`absolute -top-3 left-6 rounded-full px-4 py-1.5 text-sm font-semibold ${typeInfo.color}`}
       >
         {typeInfo.label}
       </span>
 
       {/* Quote Icon */}
-      <div className="absolute right-4 top-4 text-gray-200">
-        <Quote className="h-8 w-8" />
+      <div className="absolute right-6 top-6 text-gray-200">
+        <Quote className="h-10 w-10" />
       </div>
 
       {/* Star Rating */}
-      <div className="mb-4 mt-2 flex">
+      <div className="mb-5 mt-3 flex gap-1">
         {[...Array(5)].map((_, i) => (
-          <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+          <Star key={i} className="h-5 w-5 fill-amber-400 text-amber-400" />
         ))}
       </div>
 
       {/* Quote */}
-      <p className="mb-6 flex-1 text-gray-700">&ldquo;{quote}&rdquo;</p>
+      <p className="mb-6 flex-1 text-lg leading-relaxed text-gray-700">
+        &ldquo;{quote}&rdquo;
+      </p>
 
       {/* Stats badge */}
       {stats && (
-        <div className="mb-4">
-          <span className="inline-flex items-center gap-1 rounded-lg bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700">
-            <Star className="h-3.5 w-3.5 fill-emerald-500 text-emerald-500" />
+        <div className="mb-5">
+          <span className="inline-flex items-center gap-2 rounded-lg bg-gray-50 px-4 py-2 text-base font-medium text-gray-700">
+            <Star className="h-4 w-4 fill-emerald-500 text-emerald-500" />
             {stats}
           </span>
         </div>
       )}
 
       {/* Author */}
-      <div className="flex items-center gap-3 border-t border-gray-100 pt-4">
+      <div className="flex items-center gap-4 border-t border-gray-100 pt-5">
         {/* Avatar avec gradient et icône */}
         <div
-          className={`flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br ${avatarColors} shadow-lg`}
+          className={`flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br ${avatarColors} shadow-lg`}
         >
-          <Icon className="h-6 w-6 text-white" />
+          <Icon className="h-7 w-7 text-white" />
         </div>
         <div>
-          <p className="font-semibold text-gray-900">{name}</p>
-          <p className="text-sm text-gray-500">{role}</p>
+          <p className="text-lg font-semibold text-gray-900">{name}</p>
+          <p className="text-base text-gray-500">{role}</p>
         </div>
       </div>
     </motion.div>
@@ -186,8 +188,8 @@ export function Testimonials() {
   const isInView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="bg-gray-50 py-20">
-      <div className="container mx-auto px-4">
+    <section ref={ref} className="bg-gray-50 py-24">
+      <div className="container mx-auto max-w-7xl px-4">
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -211,7 +213,7 @@ export function Testimonials() {
           </motion.div>
 
           {/* Testimonial Cards - Grid responsive */}
-          <div className="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((testimonial) => (
               <TestimonialCard key={testimonial.name} {...testimonial} />
             ))}
@@ -220,39 +222,41 @@ export function Testimonials() {
           {/* Trust Stats */}
           <motion.div
             variants={itemVariants}
-            className="mt-16 flex flex-wrap items-center justify-center gap-8"
+            className="mt-20 flex flex-wrap items-center justify-center gap-10 lg:gap-16"
           >
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-pink-100">
-                <Users className="h-6 w-6 text-pink-600" />
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-pink-100">
+                <Users className="h-7 w-7 text-pink-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">15 000+</p>
-                <p className="text-sm text-gray-500">Familles inscrites</p>
+                <p className="text-3xl font-bold text-gray-900">15 000+</p>
+                <p className="text-base text-gray-500">Familles inscrites</p>
               </div>
             </div>
 
-            <div className="h-12 w-px bg-gray-200 hidden sm:block" />
+            <div className="h-14 w-px bg-gray-200 hidden sm:block" />
 
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">
-                <BookOpen className="h-6 w-6 text-emerald-600" />
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-emerald-100">
+                <BookOpen className="h-7 w-7 text-emerald-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">300+</p>
-                <p className="text-sm text-gray-500">Professeurs vérifiés</p>
+                <p className="text-3xl font-bold text-gray-900">300+</p>
+                <p className="text-base text-gray-500">Professeurs vérifiés</p>
               </div>
             </div>
 
-            <div className="h-12 w-px bg-gray-200 hidden sm:block" />
+            <div className="h-14 w-px bg-gray-200 hidden sm:block" />
 
-            <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-violet-100">
-                <GraduationCap className="h-6 w-6 text-violet-600" />
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-violet-100">
+                <GraduationCap className="h-7 w-7 text-violet-600" />
               </div>
               <div>
-                <p className="text-2xl font-bold text-gray-900">95%</p>
-                <p className="text-sm text-gray-500">Recommandent Schoolaris</p>
+                <p className="text-3xl font-bold text-gray-900">95%</p>
+                <p className="text-base text-gray-500">
+                  Recommandent Schoolaris
+                </p>
               </div>
             </div>
           </motion.div>
