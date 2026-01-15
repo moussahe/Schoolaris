@@ -20,9 +20,8 @@ import {
   ChevronDown,
   ChevronUp,
 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, formatWeekRange } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { formatWeekRange } from "@/lib/ai-weekly-report";
 
 interface Recommendation {
   title: string;

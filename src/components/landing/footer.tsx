@@ -21,29 +21,28 @@ const footerLinks = {
     title: "Plateforme",
     links: [
       { href: "/courses", label: "Tous les cours" },
-      { href: "/courses?free=true", label: "Cours gratuits" },
-      { href: "/subjects", label: "Par matiere" },
-      { href: "/levels", label: "Par niveau" },
-      { href: "/teachers", label: "Nos enseignants" },
+      { href: "/courses?prix=0", label: "Cours gratuits" },
+      { href: "/courses?matiere=MATHEMATIQUES", label: "Mathematiques" },
+      { href: "/courses?matiere=FRANCAIS", label: "Francais" },
+      { href: "/community", label: "Communaute" },
     ],
   },
   teachers: {
     title: "Enseignants",
     links: [
       { href: "/register/teacher", label: "Devenir createur" },
-      { href: "/teacher/resources", label: "Centre de ressources" },
-      { href: "/teacher/success", label: "Histoires de succes" },
-      { href: "/teacher/faq", label: "FAQ Enseignants" },
+      { href: "/teacher", label: "Espace enseignant" },
+      { href: "/teacher/courses", label: "Mes cours" },
+      { href: "/teacher/analytics", label: "Statistiques" },
     ],
   },
-  company: {
-    title: "Entreprise",
+  parents: {
+    title: "Parents",
     links: [
-      { href: "/about", label: "A propos" },
-      { href: "/careers", label: "Carrieres" },
-      { href: "/press", label: "Presse" },
-      { href: "/blog", label: "Blog" },
-      { href: "/contact", label: "Contact" },
+      { href: "/register", label: "Creer un compte" },
+      { href: "/parent", label: "Espace parent" },
+      { href: "/parent/children", label: "Mes enfants" },
+      { href: "/parent/purchases", label: "Mes achats" },
     ],
   },
   legal: {
@@ -51,8 +50,6 @@ const footerLinks = {
     links: [
       { href: "/conditions", label: "Conditions d'utilisation" },
       { href: "/confidentialite", label: "Politique de confidentialite" },
-      { href: "/cookies", label: "Gestion des cookies" },
-      { href: "/accessibility", label: "Accessibilite" },
     ],
   },
 };
