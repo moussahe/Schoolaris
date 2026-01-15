@@ -1,6 +1,10 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
 
+// Force dynamic generation at runtime (not during build)
+// This prevents database access errors during Railway build phase
+export const dynamic = "force-dynamic";
+
 const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://schoolaris.fr";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
