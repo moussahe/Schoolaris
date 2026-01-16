@@ -1,12 +1,17 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Clock, Calendar, TrendingUp } from "lucide-react";
 import Link from "next/link";
 
+interface ExamInfo {
+  name: string;
+  daysLeft: number;
+}
+
 // Calculate days until next exam date
-function getNextExamDate(): { name: string; date: Date; daysLeft: number } {
+function getNextExamDate(): ExamInfo {
   const now = new Date();
   const currentYear = now.getFullYear();
 
@@ -47,61 +52,71 @@ function getNextExamDate(): { name: string; date: Date; daysLeft: number } {
     (nextExam.date.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
   );
 
-  return { ...nextExam, daysLeft };
+  return { name: nextExam.name, daysLeft };
 }
 
-// Check if banner was dismissed (client-side only)
-function wasBannerDismissed(): boolean {
-  if (typeof window === "undefined") return false;
-  const dismissed = localStorage.getItem("urgency_banner_dismissed");
-  if (!dismissed) return false;
-
-  const dismissedDate = new Date(dismissed);
-  const hoursSince = (Date.now() - dismissedDate.getTime()) / (1000 * 60 * 60);
-  // Show again after 24 hours
-  return hoursSince < 24;
-}
-
-// Compute students online (stable per session)
+// Compute students online (stable per day)
 function getStudentsOnline(): number {
-  // Use day of year as seed for consistent number during the day
+  const now = new Date();
   const dayOfYear = Math.floor(
-    (Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) /
-      86400000,
+    (now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / 86400000,
   );
   return 150 + (dayOfYear % 200);
 }
 
+// Check if banner was dismissed
+function wasBannerDismissed(): boolean {
+  try {
+    const dismissed = localStorage.getItem("urgency_banner_dismissed");
+    if (!dismissed) return false;
+
+    const dismissedDate = new Date(dismissed);
+    const hoursSince =
+      (Date.now() - dismissedDate.getTime()) / (1000 * 60 * 60);
+    // Show again after 24 hours
+    return hoursSince < 24;
+  } catch {
+    return false;
+  }
+}
+
 export function UrgencyBanner() {
-  // Compute initial state synchronously
-  const examInfo = useMemo(() => {
-    const exam = getNextExamDate();
-    return { name: exam.name, daysLeft: exam.daysLeft };
-  }, []);
-
-  const studentsOnline = useMemo(() => getStudentsOnline(), []);
-
-  // Track visibility state (starts true, user can dismiss)
+  // Start with null to avoid hydration mismatch - don't render until client
+  const [mounted, setMounted] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
+  const [examInfo, setExamInfo] = useState<ExamInfo | null>(null);
+  const [studentsOnline, setStudentsOnline] = useState(0);
 
-  // Check localStorage on first render via useMemo
-  const initiallyHidden = useMemo(() => {
-    if (typeof window === "undefined") return false;
-    return wasBannerDismissed();
+  // Only run on client after hydration - this pattern is intentional
+  // to avoid hydration mismatches with localStorage and Date
+  useEffect(() => {
+    // Check if previously dismissed and initialize state
+    const dismissed = wasBannerDismissed();
+    const exam = getNextExamDate();
+    const students = getStudentsOnline();
+
+    // Batch all state updates - intentional client-side initialization
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsDismissed(dismissed);
+    setExamInfo(exam);
+    setStudentsOnline(students);
+    setMounted(true);
   }, []);
 
   const handleDismiss = () => {
     setIsDismissed(true);
-    if (typeof window !== "undefined") {
+    try {
       localStorage.setItem(
         "urgency_banner_dismissed",
         new Date().toISOString(),
       );
+    } catch {
+      // localStorage might not be available
     }
   };
 
-  // Don't render if dismissed or initially hidden
-  if (isDismissed || initiallyHidden) return null;
+  // Don't render anything on server or if dismissed
+  if (!mounted || isDismissed || !examInfo) return null;
 
   return (
     <AnimatePresence>
@@ -137,7 +152,7 @@ export function UrgencyBanner() {
               <TrendingUp className="h-4 w-4 text-emerald-400" />
               <span>
                 <strong className="text-emerald-400">{studentsOnline}+</strong>{" "}
-                élèves actifs maintenant
+                eleves actifs maintenant
               </span>
             </div>
 

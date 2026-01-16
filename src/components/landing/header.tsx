@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 
 const navLinks = [
   { href: "/courses", label: "Cours" },
-  { href: "/subjects", label: "Matières" },
-  { href: "/levels", label: "Niveaux" },
-  { href: "/teachers", label: "Enseignants" },
+  { href: "/courses#subjects", label: "Matières" },
+  { href: "/courses#levels", label: "Niveaux" },
+  { href: "/courses#teachers", label: "Enseignants" },
 ];
 
 export function Header() {

@@ -94,16 +94,11 @@ const testimonials: Testimonial[] = [
   },
 ];
 
-function getAvatarIcon(type: Testimonial["type"]) {
-  switch (type) {
-    case "parent":
-      return Users;
-    case "teacher":
-      return BookOpen;
-    case "student":
-      return GraduationCap;
-  }
-}
+const AVATAR_ICONS = {
+  parent: Users,
+  teacher: BookOpen,
+  student: GraduationCap,
+} as const;
 
 function getTypeLabel(type: Testimonial["type"]) {
   switch (type) {
@@ -124,7 +119,7 @@ function TestimonialCard({
   avatarColors,
   stats,
 }: Testimonial) {
-  const Icon = getAvatarIcon(type);
+  const Icon = AVATAR_ICONS[type];
   const typeInfo = getTypeLabel(type);
 
   return (

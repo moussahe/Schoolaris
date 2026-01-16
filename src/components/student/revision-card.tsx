@@ -78,7 +78,7 @@ export function RevisionCard({
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<ReviewResult | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [startTime, setStartTime] = useState<number>(Date.now());
+  const [startTime, setStartTime] = useState<number>(0);
   const [showHint, setShowHint] = useState(false);
 
   // Load question on mount
