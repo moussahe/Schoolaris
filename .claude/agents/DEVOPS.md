@@ -51,7 +51,7 @@ jobs:
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: schoolaris_test
+          POSTGRES_DB: kursus_test
         ports:
           - 5432:5432
         options: >-
@@ -76,12 +76,12 @@ jobs:
       - name: Setup test DB
         run: pnpm db:push
         env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/schoolaris_test
+          DATABASE_URL: postgresql://test:test@localhost:5432/kursus_test
 
       - name: Run tests with coverage
         run: pnpm test --coverage
         env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/schoolaris_test
+          DATABASE_URL: postgresql://test:test@localhost:5432/kursus_test
 
   build:
     name: Build
@@ -185,7 +185,7 @@ pnpm lint-staged
 
 ```env
 # .env.example
-DATABASE_URL="postgresql://user:password@localhost:5432/schoolaris"
+DATABASE_URL="postgresql://user:password@localhost:5432/kursus"
 NEXTAUTH_URL="http://localhost:3000"
 NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
 

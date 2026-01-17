@@ -1,6 +1,6 @@
 # Recherche Design - Top 10 Sites Educatifs
 
-> Analyse approfondie des meilleurs sites web educatifs pour inspirer Schoolaris
+> Analyse approfondie des meilleurs sites web educatifs pour inspirer Kursus
 
 ---
 
@@ -19,7 +19,7 @@
    - [Maven](#9-maven)
    - [Podia](#10-podia)
 3. [Patterns UI/UX Communs](#patterns-uiux-communs)
-4. [Recommandations pour Schoolaris](#recommandations-pour-schoolaris)
+4. [Recommandations pour Kursus](#recommandations-pour-kursus)
 
 ---
 
@@ -612,7 +612,7 @@ the homepage because of its impressive ebony background."
 
 ---
 
-## Recommandations pour Schoolaris
+## Recommandations pour Kursus
 
 ### Palette de Couleurs Proposee
 
@@ -700,7 +700,7 @@ the homepage because of its impressive ebony background."
 
 ### Composants UI Prioritaires
 
-#### 1. Course Card Schoolaris
+#### 1. Course Card Kursus
 
 ```tsx
 // Inspiration: Udemy + Domestika + Khan Academy
@@ -745,7 +745,7 @@ the homepage because of its impressive ebony background."
 - **Classements**: Par classe, ecole, global
 - **Celebrations**: Confettis, animations succes
 
-### Hero Section Schoolaris
+### Hero Section Kursus
 
 ```tsx
 <Hero>
@@ -822,7 +822,7 @@ the homepage because of its impressive ebony background."
 
 ## Conclusion
 
-Pour Schoolaris, la strategie design recommandee combine:
+Pour Kursus, la strategie design recommandee combine:
 
 1. **Confiance** (Coursera, Khan Academy): Palette bleue, design clean
 2. **Engagement** (Duolingo): Gamification, mascotte, celebrations
@@ -838,4 +838,4 @@ L'objectif est de creer une experience qui:
 ---
 
 _Document genere le 2025-01-08_
-_Pour Schoolaris - Plateforme EdTech francaise_
+_Pour Kursus - Plateforme EdTech francaise_

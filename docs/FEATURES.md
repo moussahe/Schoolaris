@@ -1,4 +1,4 @@
-# SCHOOLARIS - Features Roadmap
+# KURSUS - Features Roadmap
 
 > Liste priorisee des features a implementer
 
@@ -461,4 +461,4 @@ Recherche instantanee avec autocomplete et filtres avances.
 ---
 
 _Features Roadmap v1.0_
-_Schoolaris - Janvier 2026_
+_Kursus - Janvier 2026_

@@ -1,6 +1,6 @@
 # Research Tech - Tendances LMS/EdTech 2025
 
-> Recherche effectuee le 8 janvier 2026 pour Schoolaris - Plateforme EdTech francaise
+> Recherche effectuee le 8 janvier 2026 pour Kursus - Plateforme EdTech francaise
 
 ---
 
@@ -317,7 +317,7 @@ export function VerificationCode() {
 
 // Text shadows (v4.1)
 <h1 className="text-shadow-lg text-shadow-black/25">
-  Bienvenue sur Schoolaris
+  Bienvenue sur Kursus
 </h1>
 
 // Proprietes logiques pour RTL
@@ -452,7 +452,7 @@ export function HeroSection() {
       style={{ opacity, scale }}
       className="sticky top-0 h-screen flex items-center justify-center"
     >
-      <h1 className="text-6xl font-bold">Apprenez avec Schoolaris</h1>
+      <h1 className="text-6xl font-bold">Apprenez avec Kursus</h1>
     </motion.div>
   );
 }
@@ -685,7 +685,7 @@ export async function POST(req: Request) {
     include: { chapter: { include: { course: true } } },
   });
 
-  const systemPrompt = `Tu es un tuteur IA pour Schoolaris, une plateforme educative francaise.
+  const systemPrompt = `Tu es un tuteur IA pour Kursus, une plateforme educative francaise.
 Tu aides un eleve sur la lecon "${lesson?.title}" du cours "${lesson?.chapter.course.title}".
 
 Regles pedagogiques:
@@ -849,7 +849,7 @@ Format JSON:
 
 ## 5. Video Streaming
 
-### HLS vs DASH - Choix pour Schoolaris
+### HLS vs DASH - Choix pour Kursus
 
 | Critere         | HLS              | DASH         |
 | --------------- | ---------------- | ------------ |
@@ -859,7 +859,7 @@ Format JSON:
 | Segments        | 6-10s            | 2-4s         |
 | Recommandation  | Cours VOD        | Live events  |
 
-**Recommandation pour Schoolaris** : HLS pour les cours pre-enregistres, DASH pour les sessions live.
+**Recommandation pour Kursus** : HLS pour les cours pre-enregistres, DASH pour les sessions live.
 
 ### Video.js avec React
 
@@ -1126,7 +1126,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "images.schoolaris.fr",
+        hostname: "images.kursus.fr",
         pathname: "/**",
       },
       {
@@ -1378,7 +1378,7 @@ export function HeroImage({ src, alt }: { src: string; alt: string }) {
 
 ---
 
-## Recommandations pour Schoolaris
+## Recommandations pour Kursus
 
 ### Stack Recommandee
 

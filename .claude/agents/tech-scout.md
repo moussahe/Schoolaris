@@ -23,7 +23,7 @@ Read, Write, WebSearch, WebFetch
 
 Pour chaque innovation trouvée, évalue :
 
-- **Pertinence** Schoolaris (1-10)
+- **Pertinence** Kursus (1-10)
 - **Effort** implémentation (1-10)
 - **Impact** utilisateur (1-10)
 - **PRIORITÉ** = (Pertinence × Impact) / Effort

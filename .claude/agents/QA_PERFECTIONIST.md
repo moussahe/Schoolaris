@@ -440,7 +440,7 @@ test.describe("Critical User Flows", () => {
   test("Teacher: Create Course Flow", async ({ page }) => {
     // Login as teacher
     await page.goto("/login");
-    await page.fill('input[name="email"]', "teacher@schoolaris.fr");
+    await page.fill('input[name="email"]', "teacher@kursus.fr");
     await page.fill('input[name="password"]', "password123");
     await page.click('button[type="submit"]');
     await expect(page).toHaveURL("/teacher");
@@ -472,7 +472,7 @@ test.describe("Critical User Flows", () => {
   test("Parent: Add Child Flow", async ({ page }) => {
     // Login as parent
     await page.goto("/login");
-    await page.fill('input[name="email"]', "parent@schoolaris.fr");
+    await page.fill('input[name="email"]', "parent@kursus.fr");
     await page.fill('input[name="password"]', "password123");
     await page.click('button[type="submit"]');
 

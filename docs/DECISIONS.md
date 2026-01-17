@@ -1,6 +1,6 @@
 # Architecture Decision Records (ADR)
 
-> Documentation des decisions architecturales majeures pour Schoolaris
+> Documentation des decisions architecturales majeures pour Kursus
 
 ---
 
@@ -491,5 +491,5 @@ Motivation des eleves via systeme de progression, badges, et classements.
 
 ---
 
-_Document maintenu par l'equipe technique Schoolaris_
+_Document maintenu par l'equipe technique Kursus_
 _Derniere mise a jour: Janvier 2026_

@@ -51,7 +51,7 @@ jobs:
         env:
           POSTGRES_USER: test
           POSTGRES_PASSWORD: test
-          POSTGRES_DB: schoolaris_test
+          POSTGRES_DB: kursus_test
         ports:
           - 5432:5432
         options: >-
@@ -80,14 +80,14 @@ jobs:
       - name: Setup test DB
         run: pnpm db:push
         env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/schoolaris_test
-          DIRECT_URL: postgresql://test:test@localhost:5432/schoolaris_test
+          DATABASE_URL: postgresql://test:test@localhost:5432/kursus_test
+          DIRECT_URL: postgresql://test:test@localhost:5432/kursus_test
 
       - name: Run tests with coverage
         run: pnpm test:run --coverage
         env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/schoolaris_test
-          DIRECT_URL: postgresql://test:test@localhost:5432/schoolaris_test
+          DATABASE_URL: postgresql://test:test@localhost:5432/kursus_test
+          DIRECT_URL: postgresql://test:test@localhost:5432/kursus_test
 
       - name: Upload coverage
         uses: codecov/codecov-action@v4

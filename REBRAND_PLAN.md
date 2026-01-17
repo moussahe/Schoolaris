@@ -1,7 +1,7 @@
-# REBRAND PLAN: Schoolaris → Kursus
+# REBRAND PLAN: Kursus → Kursus
 
 **Date**: 2026-01-17
-**Objectif**: Transformer Schoolaris en Kursus avec un design premium inspire de nvg8.io
+**Objectif**: Transformer Kursus en Kursus avec un design premium inspire de nvg8.io
 
 ---
 
@@ -9,9 +9,9 @@
 
 ### Changements Majeurs
 
-| Aspect                 | Avant (Schoolaris)        | Apres (Kursus)       |
+| Aspect                 | Avant (Kursus)            | Apres (Kursus)       |
 | ---------------------- | ------------------------- | -------------------- |
-| **Nom**                | Schoolaris                | Kursus               |
+| **Nom**                | Kursus                    | Kursus               |
 | **Mode par defaut**    | Light mode                | Dark mode            |
 | **Couleur primaire**   | Blue oklch(0.55 0.2 250)  | Orange #ff6d38       |
 | **Couleur secondaire** | Green oklch(0.6 0.17 160) | Lime #c7ff69         |
@@ -21,7 +21,7 @@
 
 ### Scope
 
-- **122 fichiers** contenant "Schoolaris" a renommer
+- **122 fichiers** contenant "Kursus" a renommer
 - **1 fichier CSS** (globals.css) - refonte complete
 - **28 composants UI** - adaptation dark mode
 - **5 bugs P1** a corriger
@@ -197,7 +197,7 @@ h3: clamp(1.5rem, 4vw, 2.5rem);
 
 ### 3.7 Autres (48 fichiers)
 
-- API routes avec mentions Schoolaris
+- API routes avec mentions Kursus
 - Composants UI avec branding
 - Documentation (docs/)
 - Tests
@@ -366,16 +366,16 @@ acceptTerms: z.boolean().refine(val => val === true, {
 
 ```bash
 # Cas principal
-Schoolaris → Kursus
+Kursus → Kursus
 
 # Lowercase
-schoolaris → kursus
+kursus → kursus
 
 # Domaines
-schoolaris.fr → kursus.fr
+kursus.fr → kursus.fr
 
 # Emails
-@schoolaris.fr → @kursus.fr
+@kursus.fr → @kursus.fr
 ```
 
 ### Fichiers a exclure du replace
@@ -396,7 +396,7 @@ schoolaris.fr → kursus.fr
 - [ ] `pnpm build` - Success
 - [ ] Dark mode teste sur toutes les pages
 - [ ] Mobile responsive verifie
-- [ ] Tous les textes "Schoolaris" remplaces
+- [ ] Tous les textes "Kursus" remplaces
 - [ ] Emails envoyes avec bon branding
 
 ---
@@ -423,7 +423,7 @@ schoolaris.fr → kursus.fr
 
 | Risque                              | Impact | Mitigation                     |
 | ----------------------------------- | ------ | ------------------------------ |
-| Oubli de texte Schoolaris           | Medium | Grep final avant merge         |
+| Oubli de texte Kursus               | Medium | Grep final avant merge         |
 | Dark mode casse certains composants | High   | Tester chaque composant        |
 | SEO impact (changement URL)         | High   | Redirects 301 + Search Console |
 | Cache navigateur                    | Low    | Cache-bust des assets          |

@@ -1,6 +1,6 @@
 # Agent UX Designer - Design & Accessibilite
 
-## Design System Schoolaris
+## Design System Kursus
 
 ### Couleurs
 

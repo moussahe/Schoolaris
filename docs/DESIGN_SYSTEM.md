@@ -1,4 +1,4 @@
-# SCHOOLARIS - Design System
+# KURSUS - Design System
 
 > Design system moderne inspire de Linear, Stripe, Vercel et Duolingo
 
@@ -869,7 +869,7 @@ export function HeroSection() {
             <div className="relative">
               <Image
                 src="/hero-dashboard.png"
-                alt="Dashboard Schoolaris"
+                alt="Dashboard Kursus"
                 width={800}
                 height={600}
                 className="rounded-2xl shadow-2xl"
@@ -994,5 +994,5 @@ pnpm add @radix-ui/react-avatar @radix-ui/react-progress
 
 ---
 
-_Design System Schoolaris v1.0_
+_Design System Kursus v1.0_
 _Cree le 08 Janvier 2026_

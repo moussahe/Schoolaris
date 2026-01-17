@@ -1,14 +1,14 @@
-# Schoolaris Design System by Gemini
+# Kursus Design System by Gemini
 
 ## Phase 1: Creative Vision
 
 ### 1. The Core Emotion: "Clarte et Confiance" (Clarity and Confidence)
 
-When a user lands on Schoolaris, they should feel an immediate sense of calm and clarity. The journey of education can be overwhelming. Our design will be a breath of fresh air. It tells them: "You are in the right place. It will be easy to find what you need. You can trust the quality here." This feeling of **confidence**--in themselves and in our platform--is the goal.
+When a user lands on Kursus, they should feel an immediate sense of calm and clarity. The journey of education can be overwhelming. Our design will be a breath of fresh air. It tells them: "You are in the right place. It will be easy to find what you need. You can trust the quality here." This feeling of **confidence**--in themselves and in our platform--is the goal.
 
 ### 2. The Unique Identity: The Curated Educational Atelier
 
-Unlike the sprawling, impersonal "supermarkets" of courses, Schoolaris is an **Atelier**. It's a curated workshop where passionate experts (our teachers) meet dedicated learners. We don't just sell courses; we facilitate connections. Our uniqueness comes from this curation and the human element.
+Unlike the sprawling, impersonal "supermarkets" of courses, Kursus is an **Atelier**. It's a curated workshop where passionate experts (our teachers) meet dedicated learners. We don't just sell courses; we facilitate connections. Our uniqueness comes from this curation and the human element.
 
 **Our Visual Personality:**
 

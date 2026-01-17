@@ -1,4 +1,4 @@
-# Plan de Completion Schoolaris
+# Plan de Completion Kursus
 
 ## Date d'audit : 2026-01-15
 
@@ -311,7 +311,7 @@ VAPID_PRIVATE_KEY=
 
 ## Conclusion
 
-Le projet Schoolaris est **pret pour la production** a 95%. Les elements restants sont:
+Le projet Kursus est **pret pour la production** a 95%. Les elements restants sont:
 
 1. **Tests E2E** - Pour valider les parcours critiques automatiquement
 2. **Migrations** - Pour un deploiement production-ready

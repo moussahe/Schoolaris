@@ -22,17 +22,17 @@ pnpm build
 ### 2. Production API Tests
 
 ```bash
-curl -s https://schoolaris-production.up.railway.app/api/health | jq .
-curl -s https://schoolaris-production.up.railway.app/api/courses | jq .
-curl -s "https://schoolaris-production.up.railway.app/api/search?q=math" | jq .
+curl -s https://kursus-production.up.railway.app/api/health | jq .
+curl -s https://kursus-production.up.railway.app/api/courses | jq .
+curl -s "https://kursus-production.up.railway.app/api/search?q=math" | jq .
 ```
 
 ### 3. Page Status Tests
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}" https://schoolaris-production.up.railway.app/
-curl -s -o /dev/null -w "%{http_code}" https://schoolaris-production.up.railway.app/courses
-curl -s -o /dev/null -w "%{http_code}" https://schoolaris-production.up.railway.app/login
+curl -s -o /dev/null -w "%{http_code}" https://kursus-production.up.railway.app/
+curl -s -o /dev/null -w "%{http_code}" https://kursus-production.up.railway.app/courses
+curl -s -o /dev/null -w "%{http_code}" https://kursus-production.up.railway.app/login
 ```
 
 ### 4. Functional Checklist

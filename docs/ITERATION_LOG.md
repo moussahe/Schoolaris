@@ -1,4 +1,4 @@
-# Schoolaris - Log des Itérations
+# Kursus - Log des Itérations
 
 > Boucle d'amélioration continue - Objectif: 20+ itérations
 

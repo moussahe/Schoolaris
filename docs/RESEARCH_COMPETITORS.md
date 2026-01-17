@@ -11,7 +11,7 @@ _Document genere le 08 Janvier 2026_
 3. [Analyse Detaillee des Concurrents](#analyse-detaillee-des-concurrents)
 4. [Matrice Comparative](#matrice-comparative)
 5. [Opportunites Non Exploitees](#opportunites-non-exploitees)
-6. [Recommandations Strategiques pour Schoolaris](#recommandations-strategiques-pour-schoolaris)
+6. [Recommandations Strategiques pour Kursus](#recommandations-strategiques-pour-kursus)
 7. [Sources](#sources)
 
 ---
@@ -470,13 +470,13 @@ Le marche EdTech francais represente **1,6 milliard d'euros** en 2023 avec une c
 
 ---
 
-## Recommandations Strategiques pour Schoolaris
+## Recommandations Strategiques pour Kursus
 
 ### Positionnement Recommande
 
 **"La plateforme EdTech IA-first pour les scolaires francais"**
 
-Schoolaris doit se differencier en etant le premier acteur a integrer veritablement l'IA generative au coeur de l'experience d'apprentissage, tout en maintenant une approche humaine et ludique.
+Kursus doit se differencier en etant le premier acteur a integrer veritablement l'IA generative au coeur de l'experience d'apprentissage, tout en maintenant une approche humaine et ludique.
 
 ### Avantages Competitifs a Developper
 
@@ -608,4 +608,4 @@ Schoolaris doit se differencier en etant le premier acteur a integrer veritablem
 
 ---
 
-_Document elabore pour Schoolaris - Confidentiel_
+_Document elabore pour Kursus - Confidentiel_

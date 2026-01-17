@@ -1,4 +1,4 @@
-# SCHOOLARIS - Vision Produit
+# KURSUS - Vision Produit
 
 > **La plateforme EdTech marketplace #1 en France pour les scolaires (CP -> Terminale)**
 
@@ -35,7 +35,7 @@ Democratiser l'acces a une education de qualite en connectant les meilleurs ense
 │                    FLUX FINANCIER                           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│   Eleve/Parent ──$100──> Schoolaris                         │
+│   Eleve/Parent ──$100──> Kursus                         │
 │                              │                              │
 │                              ├──$85──> Enseignant           │
 │                              │         (Stripe Connect)     │
@@ -66,7 +66,7 @@ Democratiser l'acces a une education de qualite en connectant les meilleurs ense
 
 ### 1. IA-First (Pas IA en option)
 
-Contrairement aux concurrents (Kartable, SchoolMouv) qui ont une IA "limitee", Schoolaris integre Claude au coeur de l'experience:
+Contrairement aux concurrents (Kartable, SchoolMouv) qui ont une IA "limitee", Kursus integre Claude au coeur de l'experience:
 
 - **Tuteur IA Socratique**: Guide vers la solution, ne donne pas les reponses
 - **Generation de quiz adaptatives**: Exercices personnalises selon les lacunes
@@ -179,7 +179,7 @@ Inspire de Duolingo, mais adapte au scolaire francais:
                     PERSONNALISATION IA
                            HIGH
                             │
-              SCHOOLARIS ★  │
+              KURSUS ★  │
                             │
     Prix      ─────────────┼─────────────  Prix
     Eleve                   │               Premium
@@ -192,7 +192,7 @@ Inspire de Duolingo, mais adapte au scolaire francais:
 
 ### Avantages vs Concurrents
 
-| Critere         | Schoolaris                 | Kartable      | SchoolMouv    | Les Bons Profs |
+| Critere         | Kursus                     | Kartable      | SchoolMouv    | Les Bons Profs |
 | --------------- | -------------------------- | ------------- | ------------- | -------------- |
 | Modele          | Marketplace (achat unique) | Abonnement    | Abonnement    | Abonnement     |
 | Part enseignant | 85%                        | N/A           | N/A           | N/A            |
@@ -277,4 +277,4 @@ Inspire de Duolingo, mais adapte au scolaire francais:
 ---
 
 _Document cree le 08 Janvier 2026_
-_Version 1.0 - Schoolaris_
+_Version 1.0 - Kursus_

@@ -1,4 +1,4 @@
-# Schoolaris - Product Strategy & Market Research
+# Kursus - Product Strategy & Market Research
 
 > Document de référence pour le développement produit
 
@@ -195,7 +195,7 @@ Attentes:
 ```
 MARKETPLACE (Principal)
 ├── Cours à l'unité: 15-50€
-├── Commission Schoolaris: 30%
+├── Commission Kursus: 30%
 └── Revenus prof: 70%
 
 PREMIUM (Optionnel)
@@ -311,7 +311,7 @@ Pour atteindre 500K€:
 
 ## Conclusion
 
-Schoolaris peut devenir le leader en combinant trois éléments qu'aucun concurrent n'a ensemble:
+Kursus peut devenir le leader en combinant trois éléments qu'aucun concurrent n'a ensemble:
 
 ```
 ┌─────────────────────────────────────────┐

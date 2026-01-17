@@ -12,7 +12,7 @@ Expert backend Next.js API Routes / Server Actions / Prisma / PostgreSQL pour la
 - Implementer la logique metier
 - Integrer Stripe Connect pour les paiements
 
-## Business Logic Schoolaris
+## Business Logic Kursus
 
 ### Modele Marketplace
 

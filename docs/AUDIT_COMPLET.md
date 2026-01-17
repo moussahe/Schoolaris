@@ -1,4 +1,4 @@
-# Audit Complet Schoolaris
+# Audit Complet Kursus
 
 **Date**: 2026-01-15
 **Auditeur**: CTO Audit Bot (Gemini + Tests HTTP)
@@ -242,7 +242,7 @@
 
 ## Conclusion
 
-Le projet Schoolaris est **globalement excellent** avec un score moyen de **7.9/10**.
+Le projet Kursus est **globalement excellent** avec un score moyen de **7.9/10**.
 
 ### Forces
 

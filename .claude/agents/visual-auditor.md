@@ -13,7 +13,7 @@ Read, Write, Bash, WebFetch
 ### 1. Fetch Production Pages
 
 ```bash
-curl -s https://schoolaris-production.up.railway.app/ | head -500
+curl -s https://kursus-production.up.railway.app/ | head -500
 ```
 
 ### 2. Analyze HTML Structure
@@ -36,7 +36,7 @@ curl -s https://schoolaris-production.up.railway.app/ | head -500
 ### 4. Asset Verification
 
 ```bash
-curl -I https://schoolaris-production.up.railway.app/_next/static/...
+curl -I https://kursus-production.up.railway.app/_next/static/...
 ```
 
 ## Output Format

@@ -69,7 +69,7 @@
 
 ### 2.1 Health Check
 
-**URL:** `https://schoolaris-production.up.railway.app/api/health`
+**URL:** `https://kursus-production.up.railway.app/api/health`
 **Resultat:** PASS
 
 ```json
@@ -85,7 +85,7 @@
 
 ### 2.2 API Courses
 
-**URL:** `https://schoolaris-production.up.railway.app/api/courses`
+**URL:** `https://kursus-production.up.railway.app/api/courses`
 **Resultat:** PASS (mais donnees vides)
 
 ```json
@@ -249,7 +249,7 @@
 
 ## Conclusion
 
-L'application Schoolaris est dans un **bon etat fonctionnel**. Tous les tests critiques passent, l'API et les pages sont accessibles en production. Les principaux points d'amelioration concernent le nettoyage du code (warnings lint) et l'ajout de contenu en production.
+L'application Kursus est dans un **bon etat fonctionnel**. Tous les tests critiques passent, l'API et les pages sont accessibles en production. Les principaux points d'amelioration concernent le nettoyage du code (warnings lint) et l'ajout de contenu en production.
 
 **Score Final: 7/10**
 

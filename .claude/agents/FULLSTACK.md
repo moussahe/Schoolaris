@@ -538,7 +538,7 @@ export async function askAITutor(
 ) {
   const anthropic = getAnthropic();
 
-  const systemPrompt = `Tu es un tuteur IA pour Schoolaris.
+  const systemPrompt = `Tu es un tuteur IA pour Kursus.
 Tu aides un eleve de niveau ${studentLevel}.
 
 REGLES PEDAGOGIQUES:

@@ -1,4 +1,4 @@
-# Stratégie de Fidélisation Schoolaris
+# Stratégie de Fidélisation Kursus
 
 ## Étude de Marché - Concurrents EdTech
 
@@ -173,7 +173,7 @@ Gamification du parcours d'apprentissage avec des récompenses concrètes.
 
 ## Recommandation Finale
 
-### Combinaison Optimale pour Schoolaris
+### Combinaison Optimale pour Kursus
 
 **Implémenter en priorité :**
 
@@ -194,7 +194,7 @@ Gamification du parcours d'apprentissage avec des récompenses concrètes.
 
 ### Message Marketing Suggéré
 
-> **"Chez Schoolaris, pas d'abonnement qui dort."**
+> **"Chez Kursus, pas d'abonnement qui dort."**
 >
 > Achetez uniquement les cours dont vous avez besoin.
 > Économisez avec nos Carnets de Cours.

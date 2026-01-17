@@ -2,13 +2,13 @@
 
 **Date**: 8 janvier 2026
 **Version**: 1.0
-**Objectif**: Analyse des tendances EdTech 2025 et benchmark concurrentiel pour Schoolaris
+**Objectif**: Analyse des tendances EdTech 2025 et benchmark concurrentiel pour Kursus
 
 ---
 
 ## Executive Summary
 
-Le marche EdTech francais connait une croissance significative avec plus de 600 startups actives. Les tendances 2025 montrent une convergence vers l'IA adaptative, la gamification avancee et le "phygital learning". Les plateformes qui reussissent combinent personnalisation, engagement ludique et suivi parental transparent. Schoolaris a une opportunite unique de se positionner sur le creneau scolaire francais (CP-Terminale) en combinant le meilleur des pratiques internationales avec les specificites du programme de l'Education nationale.
+Le marche EdTech francais connait une croissance significative avec plus de 600 startups actives. Les tendances 2025 montrent une convergence vers l'IA adaptative, la gamification avancee et le "phygital learning". Les plateformes qui reussissent combinent personnalisation, engagement ludique et suivi parental transparent. Kursus a une opportunite unique de se positionner sur le creneau scolaire francais (CP-Terminale) en combinant le meilleur des pratiques internationales avec les specificites du programme de l'Education nationale.
 
 **Score Innovation Global: 8.5/10** - Fort potentiel de differenciation
 
@@ -18,7 +18,7 @@ Le marche EdTech francais connait une croissance significative avec plus de 600 
 
 ### 1.1 Tendances Technologiques Majeures
 
-| Tendance              | Description                                 | Impact pour Schoolaris   |
+| Tendance              | Description                                 | Impact pour Kursus       |
 | --------------------- | ------------------------------------------- | ------------------------ |
 | **IA Adaptative**     | Personnalisation des parcours en temps reel | CRITIQUE - A implementer |
 | **Phygital Learning** | Fusion numerique/physique                   | MOYEN - Version 2.0      |
@@ -43,7 +43,7 @@ Axes prioritaires du gouvernement:
 3. Accompagnement des enseignants
 4. Transformation du systeme d'information
 
-**Opportunite Schoolaris**: Alignement avec les programmes officiels = argument commercial fort
+**Opportunite Kursus**: Alignement avec les programmes officiels = argument commercial fort
 
 ---
 
@@ -237,7 +237,7 @@ Axes prioritaires du gouvernement:
 
 ---
 
-## 4. Top 5 Features a Implementer pour Schoolaris
+## 4. Top 5 Features a Implementer pour Kursus
 
 ### Feature #1: Systeme de Gamification "Aventure Scolaire"
 
@@ -488,13 +488,13 @@ SECTIONS
 
 ### 6.2 Differenciateurs vs Concurrence
 
-| Differenciateur      | Kartable | Maxicours | Schoolaris |
-| -------------------- | -------- | --------- | ---------- |
-| Gamification avancee | Basique  | Non       | Full       |
-| IA Tuteur            | Non      | Non       | Oui        |
-| Dashboard parent IA  | Basique  | Non       | Avance     |
-| Garantie resultats   | Non      | Non       | Oui        |
-| Design moderne       | Moyen    | Date      | Premium    |
+| Differenciateur      | Kartable | Maxicours | Kursus  |
+| -------------------- | -------- | --------- | ------- |
+| Gamification avancee | Basique  | Non       | Full    |
+| IA Tuteur            | Non      | Non       | Oui     |
+| Dashboard parent IA  | Basique  | Non       | Avance  |
+| Garantie resultats   | Non      | Non       | Oui     |
+| Design moderne       | Moyen    | Date      | Premium |
 
 ### 6.3 Roadmap Suggeree
 
@@ -591,5 +591,5 @@ SECTIONS
 
 ---
 
-_Rapport genere le 8 janvier 2026 pour Schoolaris_
+_Rapport genere le 8 janvier 2026 pour Kursus_
 _Prochaine iteration: apres validation des features Phase 1_

@@ -1,6 +1,6 @@
 # Recherche UX - Plateformes de Cours en Ligne
 
-> Document de recherche pour Schoolaris - Meilleures pratiques UX EdTech
+> Document de recherche pour Kursus - Meilleures pratiques UX EdTech
 > Date: Janvier 2026
 
 ## Table des Matieres
@@ -11,7 +11,7 @@
 4. [Experience d'Apprentissage](#4-experience-dapprentissage)
 5. [Experience Mobile](#5-experience-mobile)
 6. [Considerations Specifiques Enfants](#6-considerations-specifiques-enfants)
-7. [Recommandations Actionnables](#7-recommandations-actionnables-pour-schoolaris)
+7. [Recommandations Actionnables](#7-recommandations-actionnables-pour-kursus)
 
 ---
 
@@ -32,7 +32,7 @@
 
 Pas deux utilisateurs ne sont identiques. Adapter l'experience d'onboarding au role, niveau ou objectif de l'utilisateur.
 
-**Implementation recommandee pour Schoolaris:**
+**Implementation recommandee pour Kursus:**
 
 - Question initiale: "Qui etes-vous?" (Parent / Eleve / Enseignant)
 - Pour parents: "Quel est le niveau de votre enfant?" (CP -> Terminale)
@@ -58,7 +58,7 @@ Duolingo est le meilleur exemple: l'utilisateur commence a apprendre AVANT de cr
 
 > "La strategie 'jouer d'abord, profil ensuite' est l'une des decisions UX les plus intelligentes de Duolingo. Ils demontrent la valeur en 15 minutes: lecon complete, XP gagnes, 10% de progression." - [Usability Geek](https://usabilitygeek.com/ux-case-study-duolingo/)
 
-**Pour Schoolaris:**
+**Pour Kursus:**
 
 - Permettre un quiz ou mini-lecon AVANT l'inscription
 - Montrer les resultats et progression potentielle
@@ -107,7 +107,7 @@ Les utilisateurs aiment savoir ou ils en sont dans le processus.
 
 Les filtres doivent s'adapter au contexte de recherche.
 
-**Filtres recommandes pour Schoolaris:**
+**Filtres recommandes pour Kursus:**
 
 - Niveau scolaire (CP, CE1, CE2, CM1, CM2, 6e, 5e, 4e, 3e, 2nde, 1ere, Terminale)
 - Matiere (Maths, Francais, Histoire-Geo, Sciences, Langues...)
@@ -206,7 +206,7 @@ Les filtres doivent s'adapter au contexte de recherche.
 3. **Ancrage de Prix**
    Afficher un plan premium a cote du plan standard fait paraitre le standard plus abordable.
 
-#### Recommandations pour Schoolaris
+#### Recommandations pour Kursus
 
 - **Trial optimal:** 7 jours pour abonnement mensuel, 14 jours pour annuel
 - **Collecter paiement upfront:** Convertit 5x mieux que "payer apres"
@@ -232,7 +232,7 @@ Les filtres doivent s'adapter au contexte de recherche.
 
    > "Le terme 'FREE QUOTE' capture le plus efficacement l'attention." - [WiseVu](https://www.wisevu.com/blog/cta-button-text-a-b-testing-case-study/)
 
-2. **Formulations recommandees pour Schoolaris:**
+2. **Formulations recommandees pour Kursus:**
    - "Commencer gratuitement"
    - "Essayer ce cours"
    - "Rejoindre 10,000 eleves" (social proof + action)
@@ -448,7 +448,7 @@ Les filtres doivent s'adapter au contexte de recherche.
 
 ---
 
-## 7. Recommandations Actionnables pour Schoolaris
+## 7. Recommandations Actionnables pour Kursus
 
 ### Phase 1: Foundation (Sprint 1-2)
 

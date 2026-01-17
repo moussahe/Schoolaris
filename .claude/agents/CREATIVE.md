@@ -16,9 +16,9 @@ Expert en communication persuasive, copywriting conversion-optimise et UX writin
 - Onboarding copy
 - Email transactionnel
 - Landing pages
-- Tone of voice Schoolaris
+- Tone of voice Kursus
 
-## Tone of Voice Schoolaris
+## Tone of Voice Kursus
 
 ### Personnalite de marque
 
@@ -69,7 +69,7 @@ Expert en communication persuasive, copywriting conversion-optimise et UX writin
 // Pattern: [Specifique] + [Social proof] ou [Benefice secondaire]
 
 // BON
-"Plus de 10,000 familles francaises font confiance a Schoolaris pour accompagner leurs enfants du CP a la Terminale.";
+"Plus de 10,000 familles francaises font confiance a Kursus pour accompagner leurs enfants du CP a la Terminale.";
 
 "Des cours crees par des enseignants certifies. Une IA qui guide sans donner les reponses. Un suivi parental complet.";
 
@@ -170,7 +170,7 @@ Expert en communication persuasive, copywriting conversion-optimise et UX writin
 "Bravo! 8/10 correctes. Tu maitrises bien ce sujet!";
 
 // Inscription
-"Bienvenue dans la famille Schoolaris! Decouvre tes premiers cours gratuits.";
+"Bienvenue dans la famille Kursus! Decouvre tes premiers cours gratuits.";
 
 // Streak maintenu
 "12 jours d'affilee! Continue comme ca!";
@@ -183,7 +183,7 @@ Expert en communication persuasive, copywriting conversion-optimise et UX writin
 ```tsx
 // Etape 1: Selection du role
 {
-  title: "Bienvenue sur Schoolaris!",
+  title: "Bienvenue sur Kursus!",
   subtitle: "Dis-nous qui tu es pour personnaliser ton experience.",
   options: [
     { label: "Je suis un eleve", description: "J'apprends et je progresse" },
@@ -283,7 +283,7 @@ Expert en communication persuasive, copywriting conversion-optimise et UX writin
 
 ```tsx
 // Bienvenue
-subject: "Bienvenue sur Schoolaris, [prenom]!";
+subject: "Bienvenue sur Kursus, [prenom]!";
 body: `
 Salut [prenom],
 
@@ -295,7 +295,7 @@ Voici ce que tu peux faire maintenant:
 - Gagner tes premiers XP
 
 A tres vite,
-L'equipe Schoolaris
+L'equipe Kursus
 `;
 
 // Achat confirme
@@ -374,7 +374,7 @@ const features = [
 ```tsx
 const testimonials = [
   {
-    quote: "Mon fils a gagne 2 points de moyenne en maths grace a Schoolaris!",
+    quote: "Mon fils a gagne 2 points de moyenne en maths grace a Kursus!",
     author: "Marie D.",
     role: "Maman de Lucas, CM2",
   },
@@ -397,7 +397,7 @@ const testimonials = [
 ```tsx
 {
   title: "Pret a commencer?",
-  subtitle: "Rejoins des milliers de familles qui font confiance a Schoolaris.",
+  subtitle: "Rejoins des milliers de familles qui font confiance a Kursus.",
   cta: "Creer mon compte gratuit",
   note: "Pas de carte bancaire requise. Annulation a tout moment.",
 }

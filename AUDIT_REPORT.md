@@ -1,4 +1,4 @@
-# SCHOOLARIS - Audit Exhaustif du Projet
+# KURSUS - Audit Exhaustif du Projet
 
 **Date**: 2026-01-17
 **Auditeur**: Claude Code (Opus 4.5)
@@ -69,7 +69,7 @@ Le projet est remarquablement complet avec toutes les fonctionnalites business i
 ## 2. Structure du Projet
 
 ```
-schoolaris/
+kursus/
 ├── src/
 │   ├── app/                    # Next.js App Router (58 pages)
 │   │   ├── (auth)/            # Auth routes (8 pages)
@@ -594,7 +594,7 @@ Non mesure. Recommandation: `pnpm build && npx @next/bundle-analyzer`
 
 ### Verdict
 
-**Le projet Schoolaris est PRET POUR PRODUCTION** apres correction des 2 bugs de performance P1 et creation de la migration Prisma baseline.
+**Le projet Kursus est PRET POUR PRODUCTION** apres correction des 2 bugs de performance P1 et creation de la migration Prisma baseline.
 
 Temps estime pour les corrections P1: 1-2 jours de travail.
 

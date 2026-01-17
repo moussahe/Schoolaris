@@ -51,10 +51,10 @@
 
 ### Comptes de Test Crees (Production)
 
-| Role       | Email                      | Password  |
-| ---------- | -------------------------- | --------- |
-| Enseignant | teacher@test.schoolaris.fr | Test1234! |
-| Parent     | parent@test.schoolaris.fr  | Test1234! |
+| Role       | Email                  | Password  |
+| ---------- | ---------------------- | --------- |
+| Enseignant | teacher@test.kursus.fr | Test1234! |
+| Parent     | parent@test.kursus.fr  | Test1234! |
 
 ---
 

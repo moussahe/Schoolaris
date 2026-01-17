@@ -1,4 +1,4 @@
-# SCHOOLARIS - Architecture Technique
+# KURSUS - Architecture Technique
 
 > Architecture moderne, scalable et performante pour une plateforme EdTech
 
@@ -1069,7 +1069,7 @@ const anthropic = new Anthropic({
 
 // System prompts par contexte
 const SYSTEM_PROMPTS = {
-  tutor: `Tu es un tuteur IA pour Schoolaris, une plateforme educative francaise.
+  tutor: `Tu es un tuteur IA pour Kursus, une plateforme educative francaise.
 Tu aides les eleves du CP a la Terminale.
 
 Regles pedagogiques:
@@ -1091,7 +1091,7 @@ Regles:
 4. Explication pedagogique pour chaque reponse
 5. Niveau de difficulte adapte au niveau scolaire`,
 
-  exerciseGenerator: `Tu es un generateur d'exercices pour Schoolaris.
+  exerciseGenerator: `Tu es un generateur d'exercices pour Kursus.
 Tu crees des exercices varies et engageants.
 
 Types d'exercices:
@@ -1403,7 +1403,7 @@ export const config = {
 DATABASE_URL="postgresql://..."
 
 # Auth
-NEXTAUTH_URL="https://schoolaris.fr"
+NEXTAUTH_URL="https://kursus.fr"
 NEXTAUTH_SECRET="..."
 GOOGLE_CLIENT_ID="..."
 GOOGLE_CLIENT_SECRET="..."
@@ -1463,4 +1463,4 @@ jobs:
 ---
 
 _Architecture Document v1.0_
-_Schoolaris - Janvier 2026_
+_Kursus - Janvier 2026_

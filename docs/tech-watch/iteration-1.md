@@ -1,7 +1,7 @@
 # Veille Technologique - Iteration 1
 
 **Date**: 8 Janvier 2026
-**Projet**: Schoolaris - Plateforme EdTech francaise
+**Projet**: Kursus - Plateforme EdTech francaise
 **Stack**: Next.js 15, React, TailwindCSS, shadcn/ui
 
 ---
@@ -66,7 +66,7 @@
 - Les typed routes sont maintenant stables dans Next.js 15.5
 - Type safety sur toutes les navigations = moins de bugs en production
 - Compatible avec Turbopack
-- Particulierement important pour Schoolaris avec ses nombreuses routes dynamiques (cours, eleves, etc.)
+- Particulierement important pour Kursus avec ses nombreuses routes dynamiques (cours, eleves, etc.)
 
 **Implementation**:
 
@@ -100,7 +100,7 @@ import Link from 'next/link';
 
 - **Calendar Blocks**: 30+ blocs calendrier pre-construits, essentiels pour la planification des cours et le suivi de progression des eleves
 - **assistant-ui**: Composants React pour chat IA, parfaitement alignes avec la Phase 5 (Assistant IA Claude) du projet
-- Les deux s'integrent nativement avec shadcn/ui deja utilise dans Schoolaris
+- Les deux s'integrent nativement avec shadcn/ui deja utilise dans Kursus
 
 **Implementation Calendar**:
 
