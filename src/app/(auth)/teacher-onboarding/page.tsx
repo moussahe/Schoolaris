@@ -84,8 +84,8 @@ const INITIAL_DATA: TeacherOnboardingData = {
 
 function LoadingFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-gray-50 to-emerald-50">
-      <Loader2 className="h-8 w-8 animate-spin text-emerald-600" />
+    <div className="flex min-h-screen items-center justify-center bg-[var(--kursus-bg)]">
+      <Loader2 className="h-8 w-8 animate-spin text-[#ff6d38]" />
     </div>
   );
 }
@@ -202,7 +202,7 @@ function TeacherOnboardingContent() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50">
+    <div className="min-h-screen bg-[var(--kursus-bg)]">
       {/* Confetti */}
       <Confetti active={showConfetti} />
 
@@ -213,10 +213,10 @@ function TeacherOnboardingContent() {
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className="mx-auto mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2 text-sm font-medium text-emerald-700"
+              className="mx-auto mb-3 inline-flex items-center gap-2 rounded-full bg-[#ff6d38]/10 px-4 py-2 text-sm font-medium text-[#ff6d38]"
             >
               <GraduationCap className="h-4 w-4" />
-              Devenir Professeur Schoolaris
+              Devenir Professeur Kursus
             </motion.div>
           </div>
         )}
@@ -232,7 +232,7 @@ function TeacherOnboardingContent() {
         )}
 
         {/* Step Content */}
-        <div className="overflow-hidden rounded-2xl bg-white shadow-xl">
+        <div className="overflow-hidden rounded-2xl border border-[var(--kursus-border)] bg-[var(--kursus-bg-elevated)] shadow-xl">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={currentStep}
@@ -293,12 +293,15 @@ function TeacherOnboardingContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5 }}
-            className="mt-6 rounded-xl border border-emerald-100 bg-emerald-50 p-4 text-center"
+            className="mt-6 rounded-xl border border-[#c7ff69]/30 bg-[#c7ff69]/10 p-4 text-center"
           >
-            <p className="text-sm text-emerald-800">
+            <p className="text-sm text-[var(--kursus-text)]">
               <strong>Astuce :</strong> Les professeurs qui publient leur
               premier cours aujourd&apos;hui gagnent en moyenne{" "}
-              <span className="font-bold">3x plus</span> le premier mois.
+              <span className="font-bold text-[var(--kursus-lime-text)]">
+                3x plus
+              </span>{" "}
+              le premier mois.
             </p>
           </motion.div>
         )}

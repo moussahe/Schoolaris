@@ -11,11 +11,19 @@ import {
   BarChart3,
   ArrowUpRight,
   TrendingUp,
+  Sparkles,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+
+// Kursus Brand Colors
+const KURSUS = {
+  orange: "#ff6d38",
+  lime: "#c7ff69",
+  purple: "#7a78ff",
+};
 
 function formatCurrency(cents: number): string {
   return new Intl.NumberFormat("fr-FR", {
@@ -99,6 +107,8 @@ export default async function TeacherDashboardPage() {
       description: "Ce mois",
       trend: "+12.5%",
       trendUp: true,
+      color: KURSUS.orange,
+      bgColor: `${KURSUS.orange}15`,
     },
     {
       name: "Étudiants",
@@ -107,6 +117,8 @@ export default async function TeacherDashboardPage() {
       description: "Total inscrits",
       trend: "+3.2%",
       trendUp: true,
+      color: KURSUS.purple,
+      bgColor: `${KURSUS.purple}15`,
     },
     {
       name: "Cours",
@@ -115,6 +127,8 @@ export default async function TeacherDashboardPage() {
       description: "Publies / Total",
       trend: null,
       trendUp: null,
+      color: KURSUS.lime,
+      bgColor: `${KURSUS.lime}15`,
     },
     {
       name: "Note moyenne",
@@ -123,6 +137,8 @@ export default async function TeacherDashboardPage() {
       description: "Sur 5 etoiles",
       trend: "+0.2",
       trendUp: true,
+      color: "#fbbf24",
+      bgColor: "#fbbf2415",
     },
   ];
 
@@ -131,15 +147,25 @@ export default async function TeacherDashboardPage() {
       {/* Welcome Section */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full bg-[var(--kursus-bg-elevated)] px-3 py-1">
+            <Sparkles className="h-4 w-4 text-[#ff6d38]" />
+            <span className="text-sm text-[var(--kursus-text-muted)]">
+              Dashboard Enseignant
+            </span>
+          </div>
+          <h1 className="text-2xl font-black tracking-tight text-[var(--kursus-text)] sm:text-3xl">
             Bonjour, {session.user.name?.split(" ")[0] ?? "Professeur"} !
           </h1>
-          <p className="mt-1 text-gray-500">
+          <p className="mt-1 text-[var(--kursus-text-muted)]">
             Voici un apercu de vos performances
           </p>
         </div>
         <div className="flex gap-3">
-          <Button asChild variant="outline" className="rounded-xl">
+          <Button
+            asChild
+            variant="outline"
+            className="rounded-xl border-[var(--kursus-border)] bg-transparent text-[var(--kursus-text)] hover:bg-[var(--kursus-bg-elevated)]"
+          >
             <Link href="/teacher/analytics">
               <BarChart3 className="mr-2 h-4 w-4" />
               Analytiques
@@ -147,7 +173,8 @@ export default async function TeacherDashboardPage() {
           </Button>
           <Button
             asChild
-            className="rounded-xl bg-emerald-500 hover:bg-emerald-600"
+            className="rounded-xl text-black"
+            style={{ background: KURSUS.orange }}
           >
             <Link href="/teacher/courses/new">
               <Plus className="mr-2 h-4 w-4" />
@@ -162,25 +189,34 @@ export default async function TeacherDashboardPage() {
         {stats.map((stat) => (
           <Card
             key={stat.name}
-            className="rounded-2xl border-0 bg-white shadow-sm"
+            className="rounded-2xl border-[var(--kursus-border)] bg-[var(--kursus-bg-elevated)]"
           >
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-gray-500">
+              <CardTitle className="text-sm font-medium text-[var(--kursus-text-muted)]">
                 {stat.name}
               </CardTitle>
-              <div className="rounded-xl bg-emerald-50 p-2">
-                <stat.icon className="h-4 w-4 text-emerald-500" />
+              <div
+                className="rounded-xl p-2"
+                style={{ background: stat.bgColor }}
+              >
+                <stat.icon className="h-4 w-4" style={{ color: stat.color }} />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
+              <div
+                className="text-2xl font-black"
+                style={{ color: stat.color }}
+              >
+                {stat.value}
+              </div>
               <div className="flex items-center gap-2">
-                <p className="text-xs text-gray-500">{stat.description}</p>
+                <p className="text-xs text-[var(--kursus-text-muted)]">
+                  {stat.description}
+                </p>
                 {stat.trend && (
                   <span
-                    className={`flex items-center text-xs font-medium ${
-                      stat.trendUp ? "text-emerald-600" : "text-red-600"
-                    }`}
+                    className="flex items-center text-xs font-medium"
+                    style={{ color: KURSUS.lime }}
                   >
                     <TrendingUp
                       className={`mr-0.5 h-3 w-3 ${!stat.trendUp && "rotate-180"}`}
@@ -196,13 +232,16 @@ export default async function TeacherDashboardPage() {
 
       <div className="grid gap-6 lg:grid-cols-2">
         {/* Recent Sales */}
-        <Card className="rounded-2xl border-0 bg-white shadow-sm">
+        <Card className="rounded-2xl border-[var(--kursus-border)] bg-[var(--kursus-bg-elevated)]">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg font-semibold">
+            <CardTitle className="text-lg font-bold text-[var(--kursus-text)]">
               Ventes recentes
             </CardTitle>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/teacher/analytics" className="text-emerald-600">
+              <Link
+                href="/teacher/analytics"
+                className="text-[#ff6d38] hover:text-[#ff5722]"
+              >
                 Voir tout
                 <ArrowUpRight className="ml-1 h-4 w-4" />
               </Link>
@@ -210,7 +249,7 @@ export default async function TeacherDashboardPage() {
           </CardHeader>
           <CardContent>
             {recentSales.length === 0 ? (
-              <p className="py-8 text-center text-gray-500">
+              <p className="py-8 text-center text-[var(--kursus-text-muted)]">
                 Aucune vente pour le moment
               </p>
             ) : (
@@ -218,7 +257,7 @@ export default async function TeacherDashboardPage() {
                 {recentSales.map((sale) => (
                   <div
                     key={sale.id}
-                    className="flex items-center justify-between rounded-xl bg-gray-50 p-4"
+                    className="flex items-center justify-between rounded-xl bg-[var(--kursus-bg)] p-4"
                   >
                     <div className="flex items-center gap-3">
                       <Avatar className="h-10 w-10">
@@ -226,7 +265,10 @@ export default async function TeacherDashboardPage() {
                           src={sale.user.image ?? undefined}
                           alt={sale.user.name ?? "User"}
                         />
-                        <AvatarFallback className="bg-emerald-100 text-emerald-700">
+                        <AvatarFallback
+                          className="text-white"
+                          style={{ background: KURSUS.purple }}
+                        >
                           {sale.user.name
                             ?.split(" ")
                             .map((n) => n[0])
@@ -235,19 +277,19 @@ export default async function TeacherDashboardPage() {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-[var(--kursus-text)]">
                           {sale.user.name ?? "Utilisateur"}
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-[var(--kursus-text-muted)]">
                           {sale.course.title}
                         </p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-semibold text-emerald-600">
+                      <p className="font-bold" style={{ color: KURSUS.lime }}>
                         +{formatCurrency(sale.teacherRevenue)}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-[var(--kursus-text-muted)]">
                         {formatDate(sale.createdAt)}
                       </p>
                     </div>
@@ -259,11 +301,16 @@ export default async function TeacherDashboardPage() {
         </Card>
 
         {/* Quick Actions / Recent Courses */}
-        <Card className="rounded-2xl border-0 bg-white shadow-sm">
+        <Card className="rounded-2xl border-[var(--kursus-border)] bg-[var(--kursus-bg-elevated)]">
           <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle className="text-lg font-semibold">Mes cours</CardTitle>
+            <CardTitle className="text-lg font-bold text-[var(--kursus-text)]">
+              Mes cours
+            </CardTitle>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/teacher/courses" className="text-emerald-600">
+              <Link
+                href="/teacher/courses"
+                className="text-[#ff6d38] hover:text-[#ff5722]"
+              >
                 Voir tout
                 <ArrowUpRight className="ml-1 h-4 w-4" />
               </Link>
@@ -272,11 +319,14 @@ export default async function TeacherDashboardPage() {
           <CardContent>
             {courses.length === 0 ? (
               <div className="py-8 text-center">
-                <BookOpen className="mx-auto mb-3 h-12 w-12 text-gray-300" />
-                <p className="text-gray-500">Aucun cours cree</p>
+                <BookOpen className="mx-auto mb-3 h-12 w-12 text-[var(--kursus-text-muted)]" />
+                <p className="text-[var(--kursus-text-muted)]">
+                  Aucun cours cree
+                </p>
                 <Button
                   asChild
-                  className="mt-4 rounded-xl bg-emerald-500 hover:bg-emerald-600"
+                  className="mt-4 rounded-xl text-black"
+                  style={{ background: KURSUS.orange }}
                 >
                   <Link href="/teacher/courses/new">
                     <Plus className="mr-2 h-4 w-4" />
@@ -290,17 +340,23 @@ export default async function TeacherDashboardPage() {
                   <Link
                     key={course.id}
                     href={`/teacher/courses/${course.id}`}
-                    className="flex items-center justify-between rounded-xl bg-gray-50 p-4 transition-colors hover:bg-gray-100"
+                    className="flex items-center justify-between rounded-xl bg-[var(--kursus-bg)] p-4 transition-colors hover:bg-[var(--kursus-border)]"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">
-                        <BookOpen className="h-6 w-6 text-emerald-600" />
+                      <div
+                        className="flex h-12 w-12 items-center justify-center rounded-xl"
+                        style={{ background: `${KURSUS.purple}20` }}
+                      >
+                        <BookOpen
+                          className="h-6 w-6"
+                          style={{ color: KURSUS.purple }}
+                        />
                       </div>
                       <div>
-                        <p className="font-medium text-gray-900 line-clamp-1">
+                        <p className="font-medium text-[var(--kursus-text)] line-clamp-1">
                           {course.title}
                         </p>
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
+                        <div className="flex items-center gap-2 text-sm text-[var(--kursus-text-muted)]">
                           <span>{course._count.purchases} étudiants</span>
                           <span>-</span>
                           <span>{formatCurrency(course.price)}</span>
@@ -310,8 +366,16 @@ export default async function TeacherDashboardPage() {
                     <Badge
                       className={
                         course.isPublished
-                          ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
-                          : "bg-amber-100 text-amber-700 hover:bg-amber-100"
+                          ? "border-0 text-black"
+                          : "border-0 bg-amber-500/20 text-amber-500"
+                      }
+                      style={
+                        course.isPublished
+                          ? {
+                              background: `${KURSUS.lime}30`,
+                              color: KURSUS.lime,
+                            }
+                          : undefined
                       }
                     >
                       {course.isPublished ? "Publie" : "Brouillon"}

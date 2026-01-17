@@ -1,45 +1,56 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Home, Search, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
+  const router = useRouter();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="max-w-md w-full text-center">
+    <div className="flex min-h-screen items-center justify-center bg-[var(--kursus-bg)] px-4">
+      <div className="w-full max-w-md text-center">
         <div className="mb-8">
-          <span className="text-8xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-[#ff6d38] to-[#fbbf24] bg-clip-text text-8xl font-black text-transparent">
             404
           </span>
         </div>
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+        <h1 className="mb-2 text-2xl font-bold text-[var(--kursus-text)]">
           Page introuvable
         </h1>
-        <p className="text-gray-600 mb-8">
+        <p className="mb-8 text-[var(--kursus-text-muted)]">
           Desolee, la page que vous recherchez n&apos;existe pas ou a ete
           deplacee.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col justify-center gap-4 sm:flex-row">
           <Link href="/">
-            <Button className="gap-2 bg-emerald-600 hover:bg-emerald-700 w-full sm:w-auto">
+            <Button
+              className="w-full gap-2 sm:w-auto"
+              style={{ background: "#ff6d38" }}
+            >
               <Home className="h-4 w-4" />
               Accueil
             </Button>
           </Link>
           <Link href="/courses">
-            <Button variant="outline" className="gap-2 w-full sm:w-auto">
+            <Button
+              variant="outline"
+              className="w-full gap-2 border-[var(--kursus-border)] text-[var(--kursus-text)] hover:bg-[var(--kursus-bg-elevated)] sm:w-auto"
+            >
               <Search className="h-4 w-4" />
               Explorer les cours
             </Button>
           </Link>
         </div>
         <div className="mt-8">
-          <Link
-            href="javascript:history.back()"
-            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-emerald-600"
+          <button
+            onClick={() => router.back()}
+            className="inline-flex items-center gap-2 text-sm text-[var(--kursus-text-muted)] hover:text-[#ff6d38]"
           >
             <ArrowLeft className="h-4 w-4" />
             Retour a la page precedente
-          </Link>
+          </button>
         </div>
       </div>
     </div>
