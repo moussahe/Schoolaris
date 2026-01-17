@@ -129,10 +129,12 @@ const TESTIMONIALS = [
 // REVENUE CALCULATOR
 // ============================================================================
 function RevenueCalculator() {
-  const [coursePrice, setCoursePrice] = useState(29);
-  const [studentsPerMonth, setStudentsPerMonth] = useState(50);
+  const [numberOfCourses, setNumberOfCourses] = useState(3);
+  const [avgCoursePrice, setAvgCoursePrice] = useState(5);
+  const [totalSalesPerMonth, setTotalSalesPerMonth] = useState(100);
 
-  const monthlyRevenue = coursePrice * studentsPerMonth * COMMISSION_RATE;
+  const revenuePerSale = avgCoursePrice * COMMISSION_RATE;
+  const monthlyRevenue = revenuePerSale * totalSalesPerMonth;
   const yearlyRevenue = monthlyRevenue * 12;
 
   return (
@@ -146,93 +148,171 @@ function RevenueCalculator() {
         </div>
         <div>
           <h3 className="text-xl font-bold text-[var(--kursus-text)]">
-            Calculateur de revenus
+            Simulateur de revenus
           </h3>
           <p className="text-sm text-[var(--kursus-text-muted)]">
-            Estimez vos gains mensuels
+            Combien pouvez-vous gagner ?
           </p>
         </div>
       </div>
 
       <div className="space-y-6">
-        {/* Price Slider */}
+        {/* Number of Courses Slider */}
         <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label className="text-sm font-medium text-[var(--kursus-text)]">
-              Prix de votre cours
-            </label>
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <label className="text-sm font-medium text-[var(--kursus-text)]">
+                Nombre de cours publiés
+              </label>
+              <p className="text-xs text-[var(--kursus-text-muted)]">
+                Combien de cours vous proposez
+              </p>
+            </div>
             <span
-              className="text-lg font-bold"
-              style={{ color: KURSUS.orange }}
+              className="rounded-lg px-3 py-1 text-xl font-black"
+              style={{ background: `${KURSUS.purple}20`, color: KURSUS.purple }}
             >
-              {coursePrice}€
+              {numberOfCourses}
             </span>
           </div>
           <input
             type="range"
-            min="5"
-            max="99"
-            value={coursePrice}
-            onChange={(e) => setCoursePrice(Number(e.target.value))}
-            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-[var(--kursus-border)]"
-            style={{
-              accentColor: KURSUS.orange,
-            }}
-          />
-          <div className="mt-1 flex justify-between text-xs text-[var(--kursus-text-muted)]">
-            <span>5€</span>
-            <span>99€</span>
-          </div>
-        </div>
-
-        {/* Students Slider */}
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label className="text-sm font-medium text-[var(--kursus-text)]">
-              Ventes par mois
-            </label>
-            <span
-              className="text-lg font-bold"
-              style={{ color: KURSUS.purple }}
-            >
-              {studentsPerMonth} élèves
-            </span>
-          </div>
-          <input
-            type="range"
-            min="10"
-            max="200"
-            step="10"
-            value={studentsPerMonth}
-            onChange={(e) => setStudentsPerMonth(Number(e.target.value))}
+            min="1"
+            max="10"
+            value={numberOfCourses}
+            onChange={(e) => setNumberOfCourses(Number(e.target.value))}
             className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-[var(--kursus-border)]"
             style={{
               accentColor: KURSUS.purple,
             }}
           />
           <div className="mt-1 flex justify-between text-xs text-[var(--kursus-text-muted)]">
-            <span>10</span>
-            <span>200</span>
+            <span>1 cours</span>
+            <span>10 cours</span>
+          </div>
+        </div>
+
+        {/* Average Price Slider */}
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <label className="text-sm font-medium text-[var(--kursus-text)]">
+                Prix moyen de vos cours
+              </label>
+              <p className="text-xs text-[var(--kursus-text-muted)]">
+                Entre 2€ et 30€ par cours
+              </p>
+            </div>
+            <span
+              className="rounded-lg px-3 py-1 text-xl font-black"
+              style={{ background: `${KURSUS.orange}20`, color: KURSUS.orange }}
+            >
+              {avgCoursePrice}€
+            </span>
+          </div>
+          <input
+            type="range"
+            min="2"
+            max="30"
+            value={avgCoursePrice}
+            onChange={(e) => setAvgCoursePrice(Number(e.target.value))}
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-[var(--kursus-border)]"
+            style={{
+              accentColor: KURSUS.orange,
+            }}
+          />
+          <div className="mt-1 flex justify-between text-xs text-[var(--kursus-text-muted)]">
+            <span>2€</span>
+            <span>30€</span>
+          </div>
+        </div>
+
+        {/* Total Sales Slider */}
+        <div>
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <label className="text-sm font-medium text-[var(--kursus-text)]">
+                Ventes totales par mois
+              </label>
+              <p className="text-xs text-[var(--kursus-text-muted)]">
+                Sur l&apos;ensemble de vos {numberOfCourses} cours
+              </p>
+            </div>
+            <span
+              className="rounded-lg px-3 py-1 text-xl font-black"
+              style={{
+                background: `${KURSUS.lime}20`,
+                color: "var(--kursus-lime-text)",
+              }}
+            >
+              {totalSalesPerMonth}
+            </span>
+          </div>
+          <input
+            type="range"
+            min="10"
+            max="500"
+            step="10"
+            value={totalSalesPerMonth}
+            onChange={(e) => setTotalSalesPerMonth(Number(e.target.value))}
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-[var(--kursus-border)]"
+            style={{
+              accentColor: KURSUS.lime,
+            }}
+          />
+          <div className="mt-1 flex justify-between text-xs text-[var(--kursus-text-muted)]">
+            <span>10 ventes</span>
+            <span>500 ventes</span>
+          </div>
+        </div>
+
+        {/* Calculation breakdown */}
+        <div
+          className="rounded-xl p-4"
+          style={{
+            background: `${KURSUS.lime}10`,
+            border: `1px solid ${KURSUS.lime}30`,
+          }}
+        >
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="text-[var(--kursus-text-muted)]">
+                Vous gagnez par vente :
+              </span>
+              <span
+                className="font-bold"
+                style={{ color: "var(--kursus-lime-text)" }}
+              >
+                {avgCoursePrice}€ × 70% = {revenuePerSale.toFixed(1)}€
+              </span>
+            </div>
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-[var(--kursus-text-muted)]">
+                Soit ~{Math.round(totalSalesPerMonth / numberOfCourses)}{" "}
+                ventes/mois par cours
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Results */}
         <div className="rounded-2xl border border-[var(--kursus-border)] bg-[var(--kursus-bg)] p-6">
-          <div className="mb-4 text-center">
-            <p className="text-sm text-[var(--kursus-text-muted)]">
-              Vos revenus estimés
-            </p>
-          </div>
+          <p className="mb-4 text-center text-sm font-medium text-[var(--kursus-text)]">
+            Vos revenus estimés
+          </p>
           <div className="grid grid-cols-2 gap-4">
-            <div className="text-center">
-              <p className="text-3xl font-black" style={{ color: KURSUS.lime }}>
+            <div className="rounded-xl bg-[var(--kursus-bg-elevated)] p-4 text-center">
+              <p
+                className="text-3xl font-black"
+                style={{ color: "var(--kursus-lime-text)" }}
+              >
                 {Math.round(monthlyRevenue).toLocaleString("fr-FR")}€
               </p>
               <p className="text-sm text-[var(--kursus-text-muted)]">
                 par mois
               </p>
             </div>
-            <div className="text-center">
+            <div className="rounded-xl bg-[var(--kursus-bg-elevated)] p-4 text-center">
               <p
                 className="text-3xl font-black"
                 style={{ color: KURSUS.orange }}
@@ -242,11 +322,10 @@ function RevenueCalculator() {
               <p className="text-sm text-[var(--kursus-text-muted)]">par an</p>
             </div>
           </div>
-          <div className="mt-4 rounded-xl bg-[var(--kursus-bg-elevated)] p-3 text-center text-sm text-[var(--kursus-text-muted)]">
-            <span className="font-medium text-[var(--kursus-text)]">70%</span>{" "}
-            de {coursePrice}€ × {studentsPerMonth} ventes ={" "}
-            {Math.round(monthlyRevenue)}€
-          </div>
+          <p className="mt-4 text-center text-xs text-[var(--kursus-text-muted)]">
+            {revenuePerSale.toFixed(1)}€ × {totalSalesPerMonth} ventes ={" "}
+            {Math.round(monthlyRevenue)}€/mois
+          </p>
         </div>
       </div>
     </div>
